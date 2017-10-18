@@ -120,10 +120,11 @@ pcrPlateInput <- function(inputId,
   # print(values)
   tagList(
     tags$head(
-      singleton(
+      # singleton(
         includeScript(system.file("/js/pcrPlate-input-bindings.js", package = "pcrPlate"))
-      ),
-      singleton(
+      # ),
+      ,
+      # singleton(
         tags$style(type = "text/css",
                    paste0(whisker.render(
                      suppressWarnings(readLines(cssFile, warn = FALSE, encoding = "UTF-8")) %>%
@@ -133,7 +134,8 @@ pcrPlateInput <- function(inputId,
                    whisker.render(cssText, list(id = inputId))
                    )
         ))
-    ),
+    # ),
+    ,
     div(id = inputId, class = "pcr-plate",
         tags$label(label, `for` = inputId),
         htmlPlate,
