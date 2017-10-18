@@ -52,7 +52,7 @@ pcrPlateInput <- function(inputId,
                           wellClassTemplate = NULL,
                           wellStyleTemplate = NULL,
                           wellGroupTemplate = "{{sample}}-{{target}}",
-                          cssFile = system.file("/css/styles.css", package = "pcrPlate"),
+                          cssFile = system.file("/css/styles.css", package = "shinyMolBio"),
                           cssText = NULL,
                           plateLegend = NULL) {
   ns <- NS(inputId)
@@ -117,14 +117,12 @@ pcrPlateInput <- function(inputId,
         }) %>%
       paste(collapse = "")) %>%
     HTML
-  # print(values)
   tagList(
     tags$head(
-      # singleton(
-        includeScript(system.file("/js/pcrPlate-input-bindings.js", package = "pcrPlate"))
-      # ),
-      ,
-      # singleton(
+      singleton(
+        includeScript(system.file("/js/pcrPlate-input-bindings.js", package = "shinyMolBio"))
+      ),
+      singleton(
         tags$style(type = "text/css",
                    paste0(whisker.render(
                      suppressWarnings(readLines(cssFile, warn = FALSE, encoding = "UTF-8")) %>%
@@ -134,8 +132,7 @@ pcrPlateInput <- function(inputId,
                    whisker.render(cssText, list(id = inputId))
                    )
         ))
-    # ),
-    ,
+    ),
     div(id = inputId, class = "pcr-plate",
         tags$label(label, `for` = inputId),
         htmlPlate,
