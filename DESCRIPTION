@@ -1,0 +1,22 @@
+Package: shinyMolBio
+Type: Package
+Title: Molecular biology visualization tools for Shiny apps
+Version: 0.1
+Authors@R: c(
+  person("Konstantin A.", "Blagodatskikh",
+  email = "k.blag@yandex.ru", role = c("cre", "aut")))
+Description: Molecular biology visualization tools for Shiny apps.
+License: MIT + file LICENSE
+URL: https://github.com/kablag/pcrPlate
+Encoding: UTF-8
+LazyData: true
+Depends:
+  R (>= 3.4.0)
+Imports:
+  RDML,
+  shiny,
+  stringr,
+  tidyverse,
+  whisker
+VignetteBuilder: knitr
+RoxygenNote: 6.0.1
