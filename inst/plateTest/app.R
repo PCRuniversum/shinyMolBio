@@ -1,6 +1,7 @@
 library(shiny)
 library(RDML)
-library(pcrPlate)
+library(shinyMolBio)
+library(tidyverse)
 
 ui <- fluidPage(
   sidebarLayout(

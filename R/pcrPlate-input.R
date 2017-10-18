@@ -69,62 +69,61 @@ pcrPlateInput <- function(inputId,
   htmlPlate <-
     sprintf(paste0('<table id="', ns("pcrPlateTbl"),
                    '" class="pcr-plate-tbl">',
-                   '<style>',
-                   '</style><thead><tr><th id="', ns("toggleall"),
+                   '<thead><tr><th id="', ns("toggleall"),
                    '" class="toggle-all"></th>%s</tr></thead>',
                    '<tbody>%s</tbody></table>'
                    # ,'<script>addOnClick("', ns("pcrPlateTbl"),'");</script>'
-                   ),
-            list.map(1:pcrFormat$columns, col ~ sprintf("<th id='%s'>%s</th>",
-                                                        ns(sprintf("col_%02i", col)),
-                                                        col)) %>%
-              paste(collapse = ""),
-            list.map(LETTERS[1:pcrFormat$rows],
-                     row ~ sprintf("<tr><th id='%s' class='%s'>%s</th>%s</tr>",
-                                   ns(sprintf("row_%s", row)),
-                                   {
-                                     if (as.integer(charToRaw(row)) %% 2 == 0) "even-row"
-                                     else "odd-row"
-                                   },
-                                   row,
-                                   list.map(1:pcrFormat$columns,
-                                            col ~ {
-                                              well <- sprintf("%s%02i", row, col)
+    ),
+    map(1:pcrFormat$columns,
+        function(col) {
+          sprintf("<th id='%s'>%s</th>",
+                  ns(sprintf("col_%02i", col)),
+                  col)}) %>%
+      paste(collapse = ""),
+    map(LETTERS[1:pcrFormat$rows],
+        function(row){
+          sprintf("<tr><th id='%s' class='%s'>%s</th>%s</tr>",
+                  ns(sprintf("row_%s", row)),
+                  {
+                    if (as.integer(charToRaw(row)) %% 2 == 0) "even-row"
+                    else "odd-row"
+                  },
+                  row,
+                  map(1:pcrFormat$columns,
+                      function(col) {
+                        well <- sprintf("%s%02i", row, col)
 
-                                              trow <- plateDescription %>%
-                                                filter(position == well)
-                                              if (!length(trow$fdata.name))
-                                                return("<td class='empty-well'></td>")
-                                              # paste0(
-                                              sprintf("<td id='%s' title='%s' group='%s' class='%s' style='%s'>%s</td>",
-                                                      trow$position,
-                                                      whisker.render(onHoverWellTextTemplate,
-                                                                     trow),
-                                                      whisker.render(wellGroupTemplate,
-                                                                     trow) %>%
-                                                        str_replace_all("[[:punct:]]", ""),
-                                                      whisker.render(wellClassTemplate,
-                                                                     trow),
-                                                      whisker.render(wellStyleTemplate,
-                                                                     trow),
-                                                      whisker.render(wellLabelTemplate,
-                                                                     trow)
-                                              )
-                                            }) %>%
-                                     paste(collapse = ""))
-            ) %>%
-              paste(collapse = "")) %>%
+                        trow <- plateDescription %>%
+                          filter(position == well)
+                        if (!length(trow$fdata.name))
+                          return("<td class='empty-well'></td>")
+                        # paste0(
+                        sprintf("<td id='%s' title='%s' group='%s' class='%s' style='%s'>%s</td>",
+                                trow$position,
+                                whisker.render(onHoverWellTextTemplate,
+                                               trow),
+                                whisker.render(wellGroupTemplate,
+                                               trow) %>%
+                                  str_replace_all("[[:punct:]]", ""),
+                                whisker.render(wellClassTemplate,
+                                               trow),
+                                whisker.render(wellStyleTemplate,
+                                               trow),
+                                whisker.render(wellLabelTemplate,
+                                               trow)
+                        )
+                      }) %>%
+                    paste(collapse = ""))
+        }) %>%
+      paste(collapse = "")) %>%
     HTML
   # print(values)
   tagList(
-    singleton(
-      tags$head(
-        includeScript(system.file("/js/pcrPlate-clicks.js", package = "pcrPlate")),
+    tags$head(
+      singleton(
         includeScript(system.file("/js/pcrPlate-input-bindings.js", package = "pcrPlate"))
-      )
-    ),
-    div(id = inputId, class = "pcr-plate",
-        tags$label(label, `for` = inputId),
+      ),
+      singleton(
         tags$style(type = "text/css",
                    paste0(whisker.render(
                      suppressWarnings(readLines(cssFile, warn = FALSE, encoding = "UTF-8")) %>%
@@ -133,7 +132,10 @@ pcrPlateInput <- function(inputId,
                    ),
                    whisker.render(cssText, list(id = inputId))
                    )
-        ),
+        ))
+    ),
+    div(id = inputId, class = "pcr-plate",
+        tags$label(label, `for` = inputId),
         htmlPlate,
         plateLegend
     )
@@ -180,7 +182,7 @@ pcrPlateInput <- function(inputId,
 #' }
 #' @export
 updatePcrPlateInput <- function(session, inputId,
-                           label = NULL, selection = NULL) {
+                                label = NULL, selection = NULL) {
   message <- .dropNulls(list(label = label, selection = selection))
   session$sendInputMessage(inputId, message)
 }
