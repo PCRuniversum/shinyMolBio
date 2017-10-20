@@ -1,5 +1,5 @@
 // select all click
-$(document).on("click", ".pcr-plate-tbl thead tr th.toggle-all", function() {
+$(document).on("click", ".pcr-plate-tbl.interactive thead tr th.toggle-all", function() {
   var notempty = $(this).parents(".pcr-plate").find('td:not(.empty-well)');
   if (notempty.length == 0)
     return;
@@ -11,7 +11,7 @@ $(document).on("click", ".pcr-plate-tbl thead tr th.toggle-all", function() {
 });
 
 // select column click
-$(document).on("click", ".pcr-plate-tbl thead tr th", function() {
+$(document).on("click", ".pcr-plate-tbl.interactive thead tr th", function() {
   var index = this.cellIndex + 1;
   var notempty = $(this).parents(".pcr-plate").find('td:nth-child(' + index + '):not(.empty-well)');
   if (notempty.length === 0)
@@ -24,7 +24,7 @@ $(document).on("click", ".pcr-plate-tbl thead tr th", function() {
 });
 
 // select column dblclick
-$(document).on("dblclick", ".pcr-plate-tbl thead tr th", function() {
+$(document).on("dblclick", ".pcr-plate-tbl.interactive thead tr th", function() {
   var index = this.cellIndex + 1;
   $(this).parents(".pcr-plate").find('td').removeClass('selected-well');
   $(this).parents(".pcr-plate").find('td:nth-child(' + index + '):not(.empty-well)').addClass('selected-well');
@@ -32,7 +32,7 @@ $(document).on("dblclick", ".pcr-plate-tbl thead tr th", function() {
 });
 
 // select row click
-$(document).on("click", ".pcr-plate-tbl tbody tr th", function() {
+$(document).on("click", ".pcr-plate-tbl.interactive tbody tr th", function() {
   var notempty = $(this).parent().find('td:not(.empty-well)');
   if (notempty.length == 0)
     return;
@@ -43,14 +43,14 @@ $(document).on("click", ".pcr-plate-tbl tbody tr th", function() {
   $(this).parents(".pcr-plate").trigger('change');
 });
 // select row dblclick
-$(document).on("dblclick", ".pcr-plate-tbl tbody tr th", function() {
+$(document).on("dblclick", ".pcr-plate-tbl.interactive tbody tr th", function() {
   $(this).parent().parent().find('td').removeClass('selected-well');
   $(this).parent().find('td:not(.empty-well)').addClass('selected-well');
   $(this).parents(".pcr-plate").trigger('change');
 });
 
 // select well click
-$(document).on("click", ".pcr-plate-tbl tbody td:not(.empty-well)", function(event) {
+$(document).on("click", ".pcr-plate-tbl.interactive tbody td:not(.empty-well)", function(event) {
     $(this).parents(".pcr-plate").trigger('change');
     if (event.ctrlKey === true){
       var group = this.getAttribute('group');
@@ -65,7 +65,7 @@ $(document).on("click", ".pcr-plate-tbl tbody td:not(.empty-well)", function(eve
     $(this).parents(".pcr-plate").trigger('change');
 });
 // select well dblclick
-$(document).on("dblclick", ".pcr-plate-tbl tbody td:not(.empty-well)", function() {
+$(document).on("dblclick", ".pcr-plate-tbl.interactive tbody td:not(.empty-well)", function() {
     $(this).parent().parent().find('td.selected-well').removeClass('selected-well');
     $(this).addClass('selected-well');
     $(this).parents(".pcr-plate").trigger('change');

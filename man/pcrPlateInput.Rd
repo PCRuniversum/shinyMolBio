@@ -4,13 +4,15 @@
 \alias{pcrPlateInput}
 \title{Create a PCR plate input control}
 \usage{
-pcrPlateInput(inputId, label = "lbl", plateDescription, pcrFormat,
+pcrPlateInput(inputId, label = NULL, plateDescription,
+  pcrFormat = pcrFormatType$new(8, 12, labelFormatType$new("ABC"),
+  labelFormatType$new("123")), selection = NULL,
   wellLabelTemplate = "{{sample}}",
   onHoverWellTextTemplate = "{{position}}\\n{{sample}}\\n{{target}}",
   wellClassTemplate = NULL, wellStyleTemplate = NULL,
   wellGroupTemplate = "{{sample}}-{{target}}",
-  cssFile = system.file("/css/styles.css", package = "pcrPlate"),
-  cssText = NULL, plateLegend = NULL)
+  cssFile = system.file("/css/styles.css", package = "shinyMolBio"),
+  cssText = NULL, plateLegend = NULL, interactive = base::interactive())
 }
 \arguments{
 \item{inputId}{The \code{input} slot that will be used to access the selected
@@ -22,6 +24,8 @@ wells positions.}
 AsTable()} function.}
 
 \item{pcrFormat}{PCR plate parametrs. Should be \code{pcrFormatType}.}
+
+\item{selection}{Set preselected wells (e.g. \code{c("A01", "A02")})}
 
 \item{wellLabelTemplate}{Template of the well label.}
 

@@ -1,0 +1,39 @@
+---
+title: "pcrPlateInput"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(shinyMolBio)
+library(tidyverse)
+```
+
+# Introduction
+
+Propose of **pcrPlateInput** shiny control is to view runs as a PCR plate like this:
+```{r}
+library(RDML)
+# load RDML file
+rdml <- RDML$new(system.file("/extdata/stepone_std.rdml", package = "RDML"))
+```
+```{r, results='asis'}
+# create Shiny control
+pcrPlateInput(inputId = "testPlate", # Shiny input ID
+              label = "Plate 1", # optional plate label 
+              plateDescription = rdml$AsTable(), # plate description (wells content)
+              selection = c("A01", "C08") # optional preselected wells
+              ) 
+```
+
+PCR plate is fully customizable and can be interactive - selectable wells.
+
+# PCR plate customization
+
+There are several parameters that can be changed:
+
+* CSS
+* wells labels
+* wells grouping options
+* wells selection
+

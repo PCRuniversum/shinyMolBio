@@ -9,6 +9,7 @@
 #' @param plateDescription Plate description - basicly output from \code{RDML
 #'   AsTable()} function.
 #' @param pcrFormat PCR plate parametrs. Should be \code{pcrFormatType}.
+#' @param selection Set preselected wells (e.g. \code{c("A01", "A02")})
 #' @param wellLabelTemplate Template of the well label.
 #' @param onHoverWellTextTemplate Template of the text on hover.
 #' @param wellClassTemplate Template of the well class (css class).
@@ -44,9 +45,10 @@
 #' }
 #' @export
 pcrPlateInput <- function(inputId,
-                          label = "lbl",
+                          label = NULL,
                           plateDescription,
-                          pcrFormat,
+                          pcrFormat = pcrFormatType$new(8, 12, labelFormatType$new("ABC"), labelFormatType$new("123")),
+                          selection = NULL,
                           wellLabelTemplate = "{{sample}}",
                           onHoverWellTextTemplate = "{{position}}\u000A{{sample}}\u000A{{target}}",
                           wellClassTemplate = NULL,
@@ -54,7 +56,8 @@ pcrPlateInput <- function(inputId,
                           wellGroupTemplate = "{{sample}}-{{target}}",
                           cssFile = system.file("/css/styles.css", package = "shinyMolBio"),
                           cssText = NULL,
-                          plateLegend = NULL) {
+                          plateLegend = NULL,
+                          interactive = base::interactive()) {
   ns <- NS(inputId)
   plateDescription <- plateDescription %>%
     ungroup() %>%
@@ -64,12 +67,21 @@ pcrPlateInput <- function(inputId,
     group_by(position) %>%
     summarise_all(funs(first)) %>%
     group_by(fdata.name) %>%
-    mutate(wellID = ns(sprintf("well_%s", position)))
+    mutate(selection = {
+      if (position %in% selection)
+        " selected-well"
+      else
+        ""
+    })
 
   htmlPlate <-
     sprintf(paste0('<table id="', ns("pcrPlateTbl"),
-                   '" class="pcr-plate-tbl">',
-                   '<thead><tr><th id="', ns("toggleall"),
+                   '" class="pcr-plate-tbl',
+                   {
+                     if (interactive)
+                       ' interactive'
+                   },
+                   '"><thead><tr><th id="', ns("toggleall"),
                    '" class="toggle-all"></th>%s</tr></thead>',
                    '<tbody>%s</tbody></table>'
                    # ,'<script>addOnClick("', ns("pcrPlateTbl"),'");</script>'
@@ -98,7 +110,7 @@ pcrPlateInput <- function(inputId,
                         if (!length(trow$fdata.name))
                           return("<td class='empty-well'></td>")
                         # paste0(
-                        sprintf("<td id='%s' title='%s' group='%s' class='%s' style='%s'>%s</td>",
+                        sprintf("<td id='%s' title='%s' group='%s' class='%s%s' style='%s'>%s</td>",
                                 trow$position,
                                 whisker.render(onHoverWellTextTemplate,
                                                trow),
@@ -107,6 +119,7 @@ pcrPlateInput <- function(inputId,
                                   str_replace_all("[[:punct:]]", ""),
                                 whisker.render(wellClassTemplate,
                                                trow),
+                                trow$selection,
                                 whisker.render(wellStyleTemplate,
                                                trow),
                                 whisker.render(wellLabelTemplate,
@@ -117,22 +130,26 @@ pcrPlateInput <- function(inputId,
         }) %>%
       paste(collapse = "")) %>%
     HTML
+  css <- tags$style(type = "text/css",
+                    paste0(whisker.render(
+                      suppressWarnings(readLines(cssFile, warn = FALSE, encoding = "UTF-8")) %>%
+                        paste0( collapse = ""),
+                      list(id = inputId)
+                    ),
+                    whisker.render(cssText, list(id = inputId))
+                    )
+  )
   tagList(
-    tags$head(
-      singleton(
-        includeScript(system.file("/js/pcrPlate-input-bindings.js", package = "shinyMolBio"))
-      ),
-      singleton(
-        tags$style(type = "text/css",
-                   paste0(whisker.render(
-                     suppressWarnings(readLines(cssFile, warn = FALSE, encoding = "UTF-8")) %>%
-                       paste0( collapse = ""),
-                     list(id = inputId)
-                   ),
-                   whisker.render(cssText, list(id = inputId))
-                   )
-        ))
-    ),
+    if (interactive) {
+      tags$head(
+        singleton(
+          includeScript(system.file("/js/pcrPlate-input-bindings.js", package = "shinyMolBio"))
+        ),
+        singleton(css)
+      )
+    } else {
+      css
+    },
     div(id = inputId, class = "pcr-plate",
         tags$label(label, `for` = inputId),
         htmlPlate,

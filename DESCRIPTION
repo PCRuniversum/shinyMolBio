@@ -7,7 +7,7 @@ Authors@R: c(
   email = "k.blag@yandex.ru", role = c("cre", "aut")))
 Description: Molecular biology visualization tools for Shiny apps.
 License: MIT + file LICENSE
-URL: https://github.com/kablag/pcrPlate
+URL: https://github.com/kablag/shinyMolBio
 Encoding: UTF-8
 LazyData: true
 Depends:
