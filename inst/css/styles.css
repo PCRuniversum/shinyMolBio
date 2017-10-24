@@ -14,7 +14,6 @@ table.pcr-plate-tbl td{
   word-wrap: break-word;
 }
 table.pcr-plate-tbl th{
-  /*background: #FFA500;*/
   border-color: white;
   color: white;
 }
@@ -24,21 +23,15 @@ table.pcr-plate-tbl thead th:nth-child(even){
 table.pcr-plate-tbl thead th:nth-child(odd){
   background-color: #178ACC;
 }
-
 th.odd-row{
   background-color: #3CA9E8;
 }
 th.even-row{
   background-color: #178ACC;
 }
-
-table.pcr-plate body{
-  padding: 1rem;
-}
 td.selected-well{
   border: 2px solid black !important;
 }
-
 th.toggle-all {
   background: transparent !important;
   position: relative;
