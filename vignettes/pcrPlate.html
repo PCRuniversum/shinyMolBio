@@ -171,7 +171,7 @@ RNase P' group='STDRNase P6250RNase P' class=' selected-well' style=''>STD_RNase
 </ul>
 <div id="wells-selection" class="section level2">
 <h2>Wells Selection</h2>
-<p>Some PCR plate wells can be marked as selected by <strong>selection = c(TO_SELECT)</strong> (<strong>TO_SELECT</strong> can be <em>position</em> or <em>react.id</em>)</p>
+<p>Some PCR plate wells can be marked as selected by <code>selection = c(TO_SELECT)</code> (<code>TO_SELECT</code> can be <em>position</em> or <em>react.id</em>)</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pcrPlateInput</span>(<span class="dt">inputId =</span> <span class="st">&quot;testPlateSel&quot;</span>, 
               <span class="dt">label =</span> <span class="st">&quot;Selection&quot;</span>,
               <span class="dt">plateDescription =</span> rdml<span class="op">$</span><span class="kw">AsTable</span>(),
@@ -298,12 +298,12 @@ RNase P' group='STDRNase P6250RNase P' class='' style=''>STD_RNase P_625.0</td><
   }</code></pre></div>
 <p>So if you want to set your own style of plate you can do it by:</p>
 <ul>
-<li>providing your CSS file <strong>cssFile = YOUR_FILE</strong></li>
-<li>setting CSS file to NULL and providing CSS as text <strong>cssFile = “”, cssText = YOUR_TEXT</strong></li>
-<li>extend default file with your text <strong>cssText = YOUR_TEXT</strong></li>
+<li>providing your CSS file <code>cssFile = YOUR_FILE</code></li>
+<li>setting CSS file to NULL and providing CSS as text <code>cssFile = &quot;&quot;, cssText = YOUR_TEXT</code></li>
+<li>extend default file with your text <code>cssText = YOUR_TEXT</code></li>
 </ul>
-<p>Note that inside Shiny app CSS loads as singleton (once for all plates) but in <strong>Rmd</strong> file it loads for every plate but works globally too - you can prevent such loading by setting <strong>cssFile = “”</strong></p>
-<p>To make CSS rule only for current plate add <strong>#{{id}}</strong> befor CSS rule. For example if you want set selection border to red and well color to light yellow.</p>
+<p>Note that inside Shiny app CSS loads as singleton (once for all plates) but in <strong>Rmd</strong> file it loads for every plate but works globally too - you can prevent such loading by setting <code>cssFile = &quot;&quot;</code></p>
+<p>To make CSS rule only for current plate add <code>#{{id}}</code> befor CSS rule. For example if you want set selection border to red and well color to light yellow.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pcrPlateInput</span>(<span class="dt">inputId =</span> <span class="st">&quot;customCSS&quot;</span>, <span class="co"># Shiny input ID</span>
               <span class="dt">label =</span> <span class="st">&quot;Custom CSS: red selection, yellow background&quot;</span>,
               <span class="dt">plateDescription =</span> rdml<span class="op">$</span><span class="kw">AsTable</span>(),
@@ -371,14 +371,15 @@ RNase P' group='STDRNase P6250RNase P' class=' selected-well' style=''>STD_RNase
 </div>
 <div id="wells-labels-and-marks" class="section level2">
 <h2>Wells Labels and Marks</h2>
-<p>Well label, on hover text and other marks can be setted by templates. To do this <strong>pcrPlateInput</strong> use <strong>whisker</strong> package - so you can provide column names of plate description as shortcuts inside templates <strong>{{COLUMN}}</strong> (or <strong>{{{COLUMN}}}</strong> - without escaping basic HTML characters).</p>
+<p>Well label, on hover text and other marks can be setted by templates. To do this <strong>pcrPlateInput</strong> use <strong>whisker</strong> package - so you can provide column names of plate description as shortcuts inside templates <code>{{COLUMN}}</code> (or <code>{{{COLUMN}}}</code> - without escaping basic HTML characters).</p>
 <ul>
-<li><strong>wellLabelTemplate = {{sample}}</strong> - text inside well (label)</li>
-<li><strong>onHoverWellTextTemplate = “{{position}}00A{{sample}}00A{{target}}”</strong> - on hover text</li>
-<li><strong>wellClassTemplate = NULL</strong> - specific class for current well</li>
-<li><strong>wellStyleTemplate = NULL</strong> - specific CSS style for current well</li>
+<li><code>wellLabelTemplate = &quot;{{sample}}&quot;</code> - text inside well (label)</li>
+<li><code>onHoverWellTextTemplate = &quot;{{position}}\u000A{{sample}}\u000A{{target}}&quot;</code> - on hover text</li>
+<li><code>wellClassTemplate = NULL</code> - specific class for current well</li>
+<li><code>wellStyleTemplate = NULL</code> - specific CSS style for current well</li>
 </ul>
-<p>For example we want to show <em>sample name</em>, <em>Cq</em> and <em>Cq &lt; 30</em> or <em>Cq &gt; 35</em> with colored circle as label; <em>target name</em> and <em>dye</em> as on hover text; mark <em>sample type</em> with border color by class; set different background color for each <em>sample name</em>. Also legend will be added by <strong>plateLegend = YOUR_HTML_LEGEND</strong>.</p>
+<p>For example we want to show <em>sample name</em>, <em>Cq</em> and <em>Cq &lt; 30</em> or <em>Cq &gt; 35</em> with colored circle as label; <em>target name</em> and <em>dye</em> as on hover text; mark <em>sample type</em> with border color by class; set different background color for each <em>sample name</em>. Also legend will be added by <code>plateLegend = YOUR_HTML_LEGEND</code>.</p>
+<p>Note: if your plate description contains several rows with the same position - only the first will be used! So for example to print all targets for one well combine them to the new column like this <code>tbl %&gt;% group_by(position) %&gt;% mutate(targets = paste(target, collapse = &quot;, &quot;))</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(shiny) <span class="co"># to use tags</span></code></pre></div>
 <pre><code>## 
 ## Attaching package: 'shiny'</code></pre>
@@ -468,18 +469,18 @@ Cq &gt; 35
 </div>
 <div id="interactive-pcr-plate" class="section level1">
 <h1>Interactive PCR Plate</h1>
-<p>Run <strong>shinyMolBio::runExample(“pcrPlateInput”)</strong> to see interactive PCR plate in action. This demo <strong>Shiny App</strong> allows you to open PCR plate via <strong>RDML</strong> package and view in two independent plates: one with default style and second with custom. You can click on wells and see which of them are selected after that. Available click targets are:</p>
+<p>Run <code>shinyMolBio::runExample(&quot;pcrPlateInput&quot;)</code> to see interactive PCR plate in action. This demo <strong>Shiny App</strong> allows you to open PCR plate via <strong>RDML</strong> package and view in two independent plates: one with default style and second with custom. You can click on wells and see which of them are selected after that. Available click targets are:</p>
 <ul>
 <li>Click-Well - toggle selection of the well</li>
 <li>Dbl-Click-Well - select only this well (deselect other)</li>
-<li>Ctrl-Click-Well - select group of wells defined by <strong>wellGroupTemplate</strong></li>
+<li>Ctrl-Click-Well - select group of wells defined by <code>wellGroupTemplate</code></li>
 <li>Click-TopLeftCorner - toggle selection of the total plate</li>
 <li>Click-ColumnHeader - toggle selection of the column</li>
 <li>Dbl-Click-ColumnHeader - select only this column (deselect other)</li>
 <li>Click-RowHeader - toggle selection of the row</li>
 <li>Dbl-Click-RowHeader - select only this row (deselect other)</li>
 </ul>
-<p>Also this app shows action of <strong>updatePcrPlateInput</strong> function. Clicking on <em>Select Random Well</em> button selects well on the second plate.</p>
+<p>Also this app shows action of <code>updatePcrPlateInput</code> function. Clicking on <em>Select Random Well</em> button selects well on the second plate.</p>
 </div>
 
 

@@ -46,7 +46,7 @@ There are several parameters that can be changed:
 
 ## Wells Selection
 
-Some PCR plate wells can be marked as selected by **selection = c(TO_SELECT)** (**TO_SELECT** can be *position* or *react.id*)
+Some PCR plate wells can be marked as selected by `selection = c(TO_SELECT)` (`TO_SELECT` can be *position* or *react.id*)
 ```{r, results='asis'}
 pcrPlateInput(inputId = "testPlateSel", 
               label = "Selection",
@@ -126,13 +126,13 @@ Description of the default CSS file:
 
 So if you want to set your own style of plate you can do it by:
 
-* providing your CSS file **cssFile = YOUR_FILE**
-* setting CSS file to NULL and providing CSS as text **cssFile = "", cssText = YOUR_TEXT**
-* extend default file with your text **cssText = YOUR_TEXT**
+* providing your CSS file `cssFile = YOUR_FILE`
+* setting CSS file to NULL and providing CSS as text `cssFile = "", cssText = YOUR_TEXT`
+* extend default file with your text `cssText = YOUR_TEXT`
 
-Note that inside Shiny app CSS loads as singleton (once for all plates) but in **Rmd** file it loads for every plate but works globally too - you can prevent such loading by setting **cssFile = ""**
+Note that inside Shiny app CSS loads as singleton (once for all plates) but in **Rmd** file it loads for every plate but works globally too - you can prevent such loading by setting `cssFile = ""`
 
-To make CSS rule only for current plate add **#{{id}}** befor CSS rule. For example if you want set selection border to red and well color to light yellow.
+To make CSS rule only for current plate add `#{{id}}` befor CSS rule. For example if you want set selection border to red and well color to light yellow.
 ```{r, results='asis'}
 pcrPlateInput(inputId = "customCSS", # Shiny input ID
               label = "Custom CSS: red selection, yellow background",
@@ -147,14 +147,17 @@ pcrPlateInput(inputId = "customCSS", # Shiny input ID
 
 ## Wells Labels and Marks
 
-Well label, on hover text and other marks can be setted by templates. To do this **pcrPlateInput** use **whisker** package - so you can provide column names of plate description as shortcuts inside templates **{{COLUMN}}** (or **{{{COLUMN}}}** - without escaping  basic HTML characters).
+Well label, on hover text and other marks can be setted by templates. To do this **pcrPlateInput** use **whisker** package - so you can provide column names of plate description as shortcuts inside templates `{{COLUMN}}` (or `{{{COLUMN}}}` - without escaping  basic HTML characters).
 
-* **wellLabelTemplate = {{sample}}** - text inside well (label)
-* **onHoverWellTextTemplate = "{{position}}\u000A{{sample}}\u000A{{target}}"** - on hover text
-* **wellClassTemplate = NULL** - specific class for current well
-* **wellStyleTemplate = NULL** - specific CSS style for current well
+* `wellLabelTemplate = "{{sample}}"` - text inside well (label)
+* `onHoverWellTextTemplate = "{{position}}\u000A{{sample}}\u000A{{target}}"` - on hover text
+* `wellClassTemplate = NULL` - specific class for current well
+* `wellStyleTemplate = NULL` - specific CSS style for current well
 
-For example we want to show *sample name*, *Cq* and *Cq < 30* or *Cq > 35* with colored circle as label; *target name* and *dye* as on hover text; mark *sample type* with border color by class; set different background color for each *sample name*. Also legend will be added by **plateLegend = YOUR_HTML_LEGEND**.
+For example we want to show *sample name*, *Cq* and *Cq < 30* or *Cq > 35* with colored circle as label; *target name* and *dye* as on hover text; mark *sample type* with border color by class; set different background color for each *sample name*. Also legend will be added by `plateLegend = YOUR_HTML_LEGEND`.
+
+Note: if your plate description contains several rows with the same position - only the first will be used! So for example to print all targets for one well combine them to the new column like this `tbl %>% group_by(position) %>% mutate(targets = paste(target, collapse = ", "))`.
+
 ```{r, results='asis'}
 library(shiny) # to use tags
 
@@ -212,15 +215,15 @@ pcrPlateInput("customLabel", "Custom labels and marks",
 
 # Interactive PCR Plate
 
-Run **shinyMolBio::runExample("pcrPlateInput")** to see interactive PCR plate in action. This demo **Shiny App** allows you to open PCR plate via **RDML** package and view in two independent plates: one with default style and second with custom. You can click on wells and see which of them are selected after that. Available click targets are:
+Run `shinyMolBio::runExample("pcrPlateInput")` to see interactive PCR plate in action. This demo **Shiny App** allows you to open PCR plate via **RDML** package and view in two independent plates: one with default style and second with custom. You can click on wells and see which of them are selected after that. Available click targets are:
 
 * Click-Well - toggle selection of the well
 * Dbl-Click-Well - select only this well (deselect other)
-* Ctrl-Click-Well - select group of wells defined by **wellGroupTemplate**
+* Ctrl-Click-Well - select group of wells defined by `wellGroupTemplate`
 * Click-TopLeftCorner - toggle selection of the total plate
 * Click-ColumnHeader - toggle selection of the column
 * Dbl-Click-ColumnHeader - select only this column (deselect other)
 * Click-RowHeader - toggle selection of the row
 * Dbl-Click-RowHeader - select only this row (deselect other)
 
-Also this app shows action of **updatePcrPlateInput** function. Clicking on *Select Random Well* button selects well on the second plate.
+Also this app shows action of `updatePcrPlateInput` function. Clicking on *Select Random Well* button selects well on the second plate.
