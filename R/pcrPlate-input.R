@@ -165,10 +165,9 @@ pcrPlateInput <- function(inputId,
   )
 }
 
-#' Create a PCR plate input control
+#' Change the value of a PCR plate input control on the client
 #'
-#' Create an input control for representing PCR plate and dynamically selecting
-#' wells inside it.
+#' Change the value of a PCR plate input control on the client
 #'
 #' @param session The \code{session} object passed to function given to \code{shinyServer}.
 #' @param inputId The id of the \code{input} object.

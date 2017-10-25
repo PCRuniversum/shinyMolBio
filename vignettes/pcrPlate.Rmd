@@ -1,5 +1,6 @@
 ---
 title: "pcrPlateInput"
+author: "Konstantin A. Blagodatskikh"
 output: 
   rmarkdown::html_vignette:
     toc: true
@@ -17,7 +18,7 @@ options(knitr.table.format = "html")
 # Introduction
 
 Propose of **pcrPlateInput** shiny control is to view runs as a PCR plate like this:
-```{r}
+```{r, results='hide'}
 library(shinyMolBio)
 library(tidyverse)
 library(RDML)
@@ -208,3 +209,18 @@ pcrPlateInput("customLabel", "Custom labels and marks",
                 )
 )
 ```
+
+# Interactive PCR Plate
+
+Run **shinyMolBio::runExample("pcrPlateInput")** to see interactive PCR plate in action. This demo **Shiny App** allows you to open PCR plate via **RDML** package and view in two independent plates: one with default style and second with custom. You can click on wells and see which of them are selected after that. Available click targets are:
+
+* Click-Well - toggle selection of the well
+* Dbl-Click-Well - select only this well (deselect other)
+* Ctrl-Click-Well - select group of wells defined by **wellGroupTemplate**
+* Click-TopLeftCorner - toggle selection of the total plate
+* Click-ColumnHeader - toggle selection of the column
+* Dbl-Click-ColumnHeader - select only this column (deselect other)
+* Click-RowHeader - toggle selection of the row
+* Dbl-Click-RowHeader - select only this row (deselect other)
+
+Also this app shows action of **updatePcrPlateInput** function. Clicking on *Select Random Well* button selects well on the second plate.

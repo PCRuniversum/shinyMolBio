@@ -2,7 +2,7 @@
 % Please edit documentation in R/pcrPlate-input.R
 \name{updatePcrPlateInput}
 \alias{updatePcrPlateInput}
-\title{Create a PCR plate input control}
+\title{Change the value of a PCR plate input control on the client}
 \usage{
 updatePcrPlateInput(session, inputId, label = NULL, selection = NULL)
 }
@@ -16,8 +16,7 @@ updatePcrPlateInput(session, inputId, label = NULL, selection = NULL)
 \item{selection}{The positions of the wells to be selected.}
 }
 \description{
-Create an input control for representing PCR plate and dynamically selecting
-wells inside it.
+Change the value of a PCR plate input control on the client
 }
 \examples{
 ## Only run examples in interactive R sessions
