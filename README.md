@@ -1,6 +1,7 @@
 # shinyMolBio
 Molecular biology visualization tools for Shiny apps
 
+<div>
 <style type="text/css">table.pcr-plate-tbl{  width: 100%;  border-collapse: separate;  border-spacing: 1px;}table.pcr-plate-tbl td, table.pcr-plate-tbl th{  width: 4rem;  height: 2rem;  border: 2px solid #ccc;  text-align: center;}table.pcr-plate-tbl td{  max-width: 4rem;  word-wrap: break-word;}table.pcr-plate-tbl th{  border-color: white;  color: white;}table.pcr-plate-tbl thead th:nth-child(even){  background-color: #3CA9E8;}table.pcr-plate-tbl thead th:nth-child(odd){  background-color: #178ACC;}th.odd-row{  background-color: #3CA9E8;}th.even-row{  background-color: #178ACC;}td.selected-well{  border: 2px solid black !important;}th.toggle-all {  background: transparent !important;  position: relative;}th.toggle-all:after {    content: "";    position: absolute;    bottom: 0;    right: 0;	width: 0;	height: 0;    display: block;	border-left: 1em solid transparent;	border-bottom: 1em solid transparent;	border-bottom: 1em solid grey;}#customLabel td.selected-well{border: 2px solid red !important;}
                #customLabel .ntc{border: 3px solid Plum;}
                #customLabel .unkn{border: 3px solid Salmon;}
@@ -30,4 +31,4 @@ Molecular biology visualization tools for Shiny apps
     </span>
   </div>
 </div>
-
+</div>
