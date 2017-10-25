@@ -25,7 +25,7 @@ AsTable()} function.}
 
 \item{pcrFormat}{PCR plate parametrs. Should be \code{pcrFormatType}.}
 
-\item{selection}{Set preselected wells (e.g. \code{c("A01", "A02")})}
+\item{selection}{Set preselected wells (e.g. \code{c("A01", "A02") or \code{c(1, 2)}})}
 
 \item{wellLabelTemplate}{Template of the well label.}
 

@@ -1,19 +1,25 @@
 ---
 title: "pcrPlateInput"
-output:
-  html_document: default
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{pcrPlateInput overview}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-library(shinyMolBio)
-library(tidyverse)
+options(knitr.table.format = "html") 
 ```
 
 # Introduction
 
 Propose of **pcrPlateInput** shiny control is to view runs as a PCR plate like this:
 ```{r}
+library(shinyMolBio)
+library(tidyverse)
 library(RDML)
 # load RDML file
 rdml <- RDML$new(system.file("/extdata/stepone_std.rdml", package = "RDML"))

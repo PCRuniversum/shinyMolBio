@@ -74,12 +74,12 @@ pcrPlateInput <- function(inputId,
     group_by(position) %>%
     summarise_all(funs(first)) %>%
     group_by(fdata.name) %>%
-    mutate(selection = {
-      if (get(selectionColumn) %in% selection)
+    mutate_(selection = lazyeval::interp( ~ {
+      if (x %in% selection)
         " selected-well"
       else
         ""
-    })
+    }, x = as.name(selectionColumn)))
 
   htmlPlate <-
     sprintf(paste0('<table id="', ns("pcrPlateTbl"),
