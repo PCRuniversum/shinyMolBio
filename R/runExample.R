@@ -1,3 +1,23 @@
+#' Run shinyMolBio Example Applications
+#'
+#' Launch shinyMolBio example applications
+#'
+#' @param example The name of the example to run, or NA (the default) to list the available examples.
+#'
+#' @author Konstantin A. Blagodatskikh <k.blag@@yandex.ru>
+#'
+#' @examples
+#' ## Only run this example in interactive R sessions
+#' if (interactive()) {
+#'  # List all available examples
+#'  runExample()
+#'
+#'  # Run one of the examples
+#'  runExample("pcrPlateInput")
+#'
+#'  # Print the directory containing the code for all examples
+#'  system.file("shiny-examples", package="shinyMolBio")
+#' }
 #' @export
 runExample <- function(example) {
   # locate all the shiny app examples that exist

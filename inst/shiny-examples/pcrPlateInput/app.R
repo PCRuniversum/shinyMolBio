@@ -6,7 +6,8 @@ library(tidyverse)
 ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
-      fileInput("rdmlFile", "RDML")
+      fileInput("rdmlFile", "RDML"),
+      actionButton("exmplFile", "Example File")
     ),
     mainPanel(
       uiOutput("plate1"),
@@ -20,9 +21,19 @@ ui <- fluidPage(
 )
 
 server <- function(input, output, session) {
+  values <- reactiveValues()
+
+  observeEvent(input$exmplFile, {
+    values$path <- system.file("/extdata/stepone_std.rdml", package = "RDML")
+  })
+
+  observeEvent(input$rdmlFile$datapath, {
+    values$path <- input$rdmlFile$datapath
+  })
+
   rdmlFile <- reactive({
-    req(input$rdmlFile)
-    rdml <- RDML$new(input$rdmlFile$datapath)
+    req(values$path)
+    rdml <- RDML$new(values$path)
     expId <- as.character(rdml$experiment[[1]]$id)
     runId <- as.character(rdml$experiment[[expId]]$run[[1]]$id)
     list(table =  rdml$AsTable(cq = data$cq) %>%

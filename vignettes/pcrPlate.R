@@ -2,7 +2,7 @@
 knitr::opts_chunk$set(echo = TRUE)
 options(knitr.table.format = "html") 
 
-## ------------------------------------------------------------------------
+## ---- results='hide'-----------------------------------------------------
 library(shinyMolBio)
 library(tidyverse)
 library(RDML)

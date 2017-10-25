@@ -10,6 +10,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
+<meta name="author" content="Konstantin A. Blagodatskikh" />
 
 
 <title>pcrPlateInput</title>
@@ -67,6 +68,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 <h1 class="title toc-ignore">pcrPlateInput</h1>
+<h4 class="author"><em>Konstantin A. Blagodatskikh</em></h4>
 
 
 <div id="TOC">
@@ -77,6 +79,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="#css">CSS</a></li>
 <li><a href="#wells-labels-and-marks">Wells Labels and Marks</a></li>
 </ul></li>
+<li><a href="#interactive-pcr-plate">Interactive PCR Plate</a></li>
 </ul>
 </div>
 
@@ -91,18 +94,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ## Loading tidyverse: readr
 ## Loading tidyverse: purrr
 ## Loading tidyverse: dplyr</code></pre>
-<pre><code>## Warning: package 'ggplot2' was built under R version 3.4.2</code></pre>
-<pre><code>## Warning: package 'dplyr' was built under R version 3.4.2</code></pre>
 <pre><code>## Conflicts with tidy packages ----------------------------------------------</code></pre>
 <pre><code>## filter(): dplyr, stats
 ## lag():    dplyr, stats</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(RDML)</code></pre></div>
-<pre><code>## Warning: package 'RDML' was built under R version 3.4.2</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># load RDML file</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(RDML)
+<span class="co"># load RDML file</span>
 rdml &lt;-<span class="st"> </span>RDML<span class="op">$</span><span class="kw">new</span>(<span class="kw">system.file</span>(<span class="st">&quot;/extdata/stepone_std.rdml&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;RDML&quot;</span>))</code></pre></div>
-<pre><code>## 
-## Loading experiment: Standard Curve Example
-##  run: Run001</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># create Shiny control</span>
 <span class="kw">pcrPlateInput</span>(<span class="dt">inputId =</span> <span class="st">&quot;firstLook&quot;</span>, <span class="co"># Shiny input ID</span>
               <span class="dt">label =</span> <span class="st">&quot;Example&quot;</span>, <span class="co"># optional plate label </span>
@@ -382,20 +379,36 @@ RNase P' group='STDRNase P6250RNase P' class=' selected-well' style=''>STD_RNase
 <li><strong>wellStyleTemplate = NULL</strong> - specific CSS style for current well</li>
 </ul>
 <p>For example we want to show <em>sample name</em>, <em>Cq</em> and <em>Cq &lt; 30</em> or <em>Cq &gt; 35</em> with colored circle as label; <em>target name</em> and <em>dye</em> as on hover text; mark <em>sample type</em> with border color by class; set different background color for each <em>sample name</em>. Also legend will be added by <strong>plateLegend = YOUR_HTML_LEGEND</strong>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(shiny) <span class="co"># to use tags</span>
-
-plateDescription &lt;-<span class="st"> </span>rdml<span class="op">$</span><span class="kw">AsTable</span>(<span class="dt">cq =</span> <span class="kw">round</span>(data<span class="op">$</span>cq)) <span class="op">%&gt;%</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(shiny) <span class="co"># to use tags</span></code></pre></div>
+<pre><code>## 
+## Attaching package: 'shiny'</code></pre>
+<pre><code>## The following object is masked from 'package:shinyMolBio':
+## 
+##     runExample</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">plateDescription &lt;-<span class="st"> </span>rdml<span class="op">$</span><span class="kw">AsTable</span>(<span class="dt">cq =</span> <span class="kw">round</span>(data<span class="op">$</span>cq)) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">group_by</span>(fdata.name) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sampleType =</span> sample.type,  <span class="co"># whisker does not support dots!</span>
          <span class="dt">dyeId =</span> target.dyeId,   <span class="co"># whisker does not support dots!</span>
          <span class="dt">mark =</span> {<span class="cf">if</span> (cq <span class="op">&lt;</span><span class="st"> </span><span class="dv">30</span>) <span class="kw">return</span>(<span class="st">&quot;&lt;span class='filled-circle1'&gt;&lt;/span&gt;&quot;</span>)
            <span class="cf">if</span> (cq <span class="op">&gt;</span><span class="st"> </span><span class="dv">35</span>) <span class="kw">return</span>(<span class="st">&quot;&lt;span class='filled-circle2'&gt;&lt;/span&gt;&quot;</span>)
            <span class="cf">else</span> <span class="st">&quot;&quot;</span>})
+
+uniqSamples &lt;-<span class="st"> </span><span class="kw">unique</span>(plateDescription<span class="op">$</span>sample)
+sampleColors &lt;-<span class="st"> </span><span class="kw">topo.colors</span>(<span class="kw">length</span>(uniqSamples), <span class="dt">alpha =</span> <span class="fl">0.3</span>)
+<span class="kw">names</span>(sampleColors) &lt;-<span class="st"> </span>uniqSamples
+plateDescription &lt;-<span class="st"> </span>plateDescription <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(sample) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">color =</span> sampleColors[sample] <span class="op">%&gt;%</span>
+<span class="st">           </span><span class="kw">col2rgb</span>() <span class="op">%&gt;%</span>
+<span class="st">           </span>.[,<span class="dv">1</span>] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">c</span>(<span class="fl">0.2</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">           </span><span class="kw">paste</span>(<span class="dt">collapse =</span> <span class="st">&quot;,&quot;</span>))
+
 <span class="kw">pcrPlateInput</span>(<span class="st">&quot;customLabel&quot;</span>, <span class="st">&quot;Custom labels and marks&quot;</span>,
               plateDescription,
               <span class="dt">wellLabelTemplate =</span> <span class="st">&quot;{{{mark}}}{{sample}} Cq={{cq}}&quot;</span>,
               <span class="dt">onHoverWellTextTemplate =</span> <span class="st">&quot;{{target}}: {{dyeId}}&quot;</span>,
               <span class="dt">wellClassTemplate =</span> <span class="st">&quot;{{sampleType}}&quot;</span>,
+              <span class="dt">wellStyleTemplate =</span> <span class="st">&quot;background-color:rgba({{color}});&quot;</span>,
               <span class="dt">cssFile =</span> <span class="st">&quot;&quot;</span>,
               <span class="dt">cssText =</span> <span class="st">&quot;#{{id}} td.selected-well{border: 2px solid red !important;}</span>
 <span class="st">               #{{id}} .ntc{border: 3px solid Plum;}</span>
@@ -434,7 +447,7 @@ plateDescription &lt;-<span class="st"> </span>rdml<span class="op">$</span><spa
                   border-radius: 100%; background-color: Orange;}</style>
 <div id="customLabel" class="pcr-plate">
 <label for="customLabel">Custom labels and marks</label>
-<table id="customLabel-pcrPlateTbl" class="pcr-plate-tbl"><thead><tr><th id="customLabel-toggleall" class="toggle-all"></th><th id='customLabel-col_01'>1</th><th id='customLabel-col_02'>2</th><th id='customLabel-col_03'>3</th><th id='customLabel-col_04'>4</th><th id='customLabel-col_05'>5</th><th id='customLabel-col_06'>6</th><th id='customLabel-col_07'>7</th><th id='customLabel-col_08'>8</th><th id='customLabel-col_09'>9</th><th id='customLabel-col_10'>10</th><th id='customLabel-col_11'>11</th><th id='customLabel-col_12'>12</th></tr></thead><tbody><tr><th id='customLabel-row_A' class='odd-row'>A</th><td id='A01' title='RNase P: FAM' group='NTCRNase PRNase P' class='ntc' style=''><span class='filled-circle2'></span>NTC_RNase P Cq=40</td><td id='A02' title='RNase P: FAM' group='NTCRNase PRNase P' class='ntc' style=''><span class='filled-circle2'></span>NTC_RNase P Cq=40</td><td id='A03' title='RNase P: FAM' group='NTCRNase PRNase P' class='ntc' style=''><span class='filled-circle2'></span>NTC_RNase P Cq=40</td><td id='A04' title='RNase P: FAM' group='pop1RNase PRNase P' class='unkn' style=''><span class='filled-circle1'></span>pop1_RNase P Cq=29</td><td id='A05' title='RNase P: FAM' group='pop1RNase PRNase P' class='unkn' style=''><span class='filled-circle1'></span>pop1_RNase P Cq=29</td><td id='A06' title='RNase P: FAM' group='pop1RNase PRNase P' class='unkn' style=''><span class='filled-circle1'></span>pop1_RNase P Cq=29</td><td id='A07' title='RNase P: FAM' group='pop2RNase PRNase P' class='unkn' style=''><span class='filled-circle1'></span>pop2_RNase P Cq=28</td><td id='A08' title='RNase P: FAM' group='pop2RNase PRNase P' class='unkn' style=''><span class='filled-circle1'></span>pop2_RNase P Cq=28</td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='customLabel-row_B' class='even-row'>B</th><td id='B01' title='RNase P: FAM' group='pop2RNase PRNase P' class='unkn' style=''><span class='filled-circle1'></span>pop2_RNase P Cq=28</td><td id='B02' title='RNase P: FAM' group='STDRNase P100000RNase P' class='std' style=''><span class='filled-circle1'></span>STD_RNase P_10000.0 Cq=27</td><td id='B03' title='RNase P: FAM' group='STDRNase P100000RNase P' class='std' style=''><span class='filled-circle1'></span>STD_RNase P_10000.0 Cq=27</td><td id='B04' title='RNase P: FAM' group='STDRNase P100000RNase P' class='std' style=''><span class='filled-circle1'></span>STD_RNase P_10000.0 Cq=27</td><td id='B05' title='RNase P: FAM' group='STDRNase P50000RNase P' class='std' style=''><span class='filled-circle1'></span>STD_RNase P_5000.0 Cq=28</td><td id='B06' title='RNase P: FAM' group='STDRNase P50000RNase P' class='std' style=''><span class='filled-circle1'></span>STD_RNase P_5000.0 Cq=28</td><td id='B07' title='RNase P: FAM' group='STDRNase P50000RNase P' class='std' style=''><span class='filled-circle1'></span>STD_RNase P_5000.0 Cq=28</td><td id='B08' title='RNase P: FAM' group='STDRNase P25000RNase P' class='std' style=''><span class='filled-circle1'></span>STD_RNase P_2500.0 Cq=29</td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='customLabel-row_C' class='odd-row'>C</th><td id='C01' title='RNase P: FAM' group='STDRNase P25000RNase P' class='std' style=''><span class='filled-circle1'></span>STD_RNase P_2500.0 Cq=29</td><td id='C02' title='RNase P: FAM' group='STDRNase P25000RNase P' class='std' style=''><span class='filled-circle1'></span>STD_RNase P_2500.0 Cq=29</td><td id='C03' title='RNase P: FAM' group='STDRNase P12500RNase P' class='std' style=''>STD_RNase P_1250.0 Cq=30</td><td id='C04' title='RNase P: FAM' group='STDRNase P12500RNase P' class='std' style=''>STD_RNase P_1250.0 Cq=30</td><td id='C05' title='RNase P: FAM' group='STDRNase P12500RNase P' class='std' style=''>STD_RNase P_1250.0 Cq=30</td><td id='C06' title='RNase P: FAM' group='STDRNase P6250RNase P' class='std' style=''>STD_RNase P_625.0 Cq=31</td><td id='C07' title='RNase P: FAM' group='STDRNase P6250RNase P' class='std' style=''>STD_RNase P_625.0 Cq=31</td><td id='C08' title='RNase P: FAM' group='STDRNase P6250RNase P' class='std' style=''>STD_RNase P_625.0 Cq=31</td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='customLabel-row_D' class='even-row'>D</th><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='customLabel-row_E' class='odd-row'>E</th><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='customLabel-row_F' class='even-row'>F</th><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='customLabel-row_G' class='odd-row'>G</th><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='customLabel-row_H' class='even-row'>H</th><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr></tbody></table>
+<table id="customLabel-pcrPlateTbl" class="pcr-plate-tbl"><thead><tr><th id="customLabel-toggleall" class="toggle-all"></th><th id='customLabel-col_01'>1</th><th id='customLabel-col_02'>2</th><th id='customLabel-col_03'>3</th><th id='customLabel-col_04'>4</th><th id='customLabel-col_05'>5</th><th id='customLabel-col_06'>6</th><th id='customLabel-col_07'>7</th><th id='customLabel-col_08'>8</th><th id='customLabel-col_09'>9</th><th id='customLabel-col_10'>10</th><th id='customLabel-col_11'>11</th><th id='customLabel-col_12'>12</th></tr></thead><tbody><tr><th id='customLabel-row_A' class='odd-row'>A</th><td id='A01' title='RNase P: FAM' group='NTCRNase PRNase P' class='ntc' style='background-color:rgba(76,0,255,0.2);'><span class='filled-circle2'></span>NTC_RNase P Cq=40</td><td id='A02' title='RNase P: FAM' group='NTCRNase PRNase P' class='ntc' style='background-color:rgba(76,0,255,0.2);'><span class='filled-circle2'></span>NTC_RNase P Cq=40</td><td id='A03' title='RNase P: FAM' group='NTCRNase PRNase P' class='ntc' style='background-color:rgba(76,0,255,0.2);'><span class='filled-circle2'></span>NTC_RNase P Cq=40</td><td id='A04' title='RNase P: FAM' group='pop1RNase PRNase P' class='unkn' style='background-color:rgba(0,25,255,0.2);'><span class='filled-circle1'></span>pop1_RNase P Cq=29</td><td id='A05' title='RNase P: FAM' group='pop1RNase PRNase P' class='unkn' style='background-color:rgba(0,25,255,0.2);'><span class='filled-circle1'></span>pop1_RNase P Cq=29</td><td id='A06' title='RNase P: FAM' group='pop1RNase PRNase P' class='unkn' style='background-color:rgba(0,25,255,0.2);'><span class='filled-circle1'></span>pop1_RNase P Cq=29</td><td id='A07' title='RNase P: FAM' group='pop2RNase PRNase P' class='unkn' style='background-color:rgba(0,128,255,0.2);'><span class='filled-circle1'></span>pop2_RNase P Cq=28</td><td id='A08' title='RNase P: FAM' group='pop2RNase PRNase P' class='unkn' style='background-color:rgba(0,128,255,0.2);'><span class='filled-circle1'></span>pop2_RNase P Cq=28</td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='customLabel-row_B' class='even-row'>B</th><td id='B01' title='RNase P: FAM' group='pop2RNase PRNase P' class='unkn' style='background-color:rgba(0,128,255,0.2);'><span class='filled-circle1'></span>pop2_RNase P Cq=28</td><td id='B02' title='RNase P: FAM' group='STDRNase P100000RNase P' class='std' style='background-color:rgba(0,229,255,0.2);'><span class='filled-circle1'></span>STD_RNase P_10000.0 Cq=27</td><td id='B03' title='RNase P: FAM' group='STDRNase P100000RNase P' class='std' style='background-color:rgba(0,229,255,0.2);'><span class='filled-circle1'></span>STD_RNase P_10000.0 Cq=27</td><td id='B04' title='RNase P: FAM' group='STDRNase P100000RNase P' class='std' style='background-color:rgba(0,229,255,0.2);'><span class='filled-circle1'></span>STD_RNase P_10000.0 Cq=27</td><td id='B05' title='RNase P: FAM' group='STDRNase P50000RNase P' class='std' style='background-color:rgba(0,255,77,0.2);'><span class='filled-circle1'></span>STD_RNase P_5000.0 Cq=28</td><td id='B06' title='RNase P: FAM' group='STDRNase P50000RNase P' class='std' style='background-color:rgba(0,255,77,0.2);'><span class='filled-circle1'></span>STD_RNase P_5000.0 Cq=28</td><td id='B07' title='RNase P: FAM' group='STDRNase P50000RNase P' class='std' style='background-color:rgba(0,255,77,0.2);'><span class='filled-circle1'></span>STD_RNase P_5000.0 Cq=28</td><td id='B08' title='RNase P: FAM' group='STDRNase P25000RNase P' class='std' style='background-color:rgba(230,255,0,0.2);'><span class='filled-circle1'></span>STD_RNase P_2500.0 Cq=29</td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='customLabel-row_C' class='odd-row'>C</th><td id='C01' title='RNase P: FAM' group='STDRNase P25000RNase P' class='std' style='background-color:rgba(230,255,0,0.2);'><span class='filled-circle1'></span>STD_RNase P_2500.0 Cq=29</td><td id='C02' title='RNase P: FAM' group='STDRNase P25000RNase P' class='std' style='background-color:rgba(230,255,0,0.2);'><span class='filled-circle1'></span>STD_RNase P_2500.0 Cq=29</td><td id='C03' title='RNase P: FAM' group='STDRNase P12500RNase P' class='std' style='background-color:rgba(255,255,0,0.2);'>STD_RNase P_1250.0 Cq=30</td><td id='C04' title='RNase P: FAM' group='STDRNase P12500RNase P' class='std' style='background-color:rgba(255,255,0,0.2);'>STD_RNase P_1250.0 Cq=30</td><td id='C05' title='RNase P: FAM' group='STDRNase P12500RNase P' class='std' style='background-color:rgba(255,255,0,0.2);'>STD_RNase P_1250.0 Cq=30</td><td id='C06' title='RNase P: FAM' group='STDRNase P6250RNase P' class='std' style='background-color:rgba(255,224,179,0.2);'>STD_RNase P_625.0 Cq=31</td><td id='C07' title='RNase P: FAM' group='STDRNase P6250RNase P' class='std' style='background-color:rgba(255,224,179,0.2);'>STD_RNase P_625.0 Cq=31</td><td id='C08' title='RNase P: FAM' group='STDRNase P6250RNase P' class='std' style='background-color:rgba(255,224,179,0.2);'>STD_RNase P_625.0 Cq=31</td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='customLabel-row_D' class='even-row'>D</th><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='customLabel-row_E' class='odd-row'>E</th><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='customLabel-row_F' class='even-row'>F</th><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='customLabel-row_G' class='odd-row'>G</th><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='customLabel-row_H' class='even-row'>H</th><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr></tbody></table>
 <div>
 <span class="filled-circle1"></span>
 Cq &lt; 30
@@ -452,6 +465,21 @@ Cq &gt; 35
 </div>
 </div>
 </div>
+</div>
+<div id="interactive-pcr-plate" class="section level1">
+<h1>Interactive PCR Plate</h1>
+<p>Run <strong>shinyMolBio::runExample(“pcrPlateInput”)</strong> to see interactive PCR plate in action. This demo <strong>Shiny App</strong> allows you to open PCR plate via <strong>RDML</strong> package and view in two independent plates: one with default style and second with custom. You can click on wells and see which of them are selected after that. Available click targets are:</p>
+<ul>
+<li>Click-Well - toggle selection of the well</li>
+<li>Dbl-Click-Well - select only this well (deselect other)</li>
+<li>Ctrl-Click-Well - select group of wells defined by <strong>wellGroupTemplate</strong></li>
+<li>Click-TopLeftCorner - toggle selection of the total plate</li>
+<li>Click-ColumnHeader - toggle selection of the column</li>
+<li>Dbl-Click-ColumnHeader - select only this column (deselect other)</li>
+<li>Click-RowHeader - toggle selection of the row</li>
+<li>Dbl-Click-RowHeader - select only this row (deselect other)</li>
+</ul>
+<p>Also this app shows action of <strong>updatePcrPlateInput</strong> function. Clicking on <em>Select Random Well</em> button selects well on the second plate.</p>
 </div>
 
 
