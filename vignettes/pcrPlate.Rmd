@@ -164,11 +164,23 @@ plateDescription <- rdml$AsTable(cq = round(data$cq)) %>%
          mark = {if (cq < 30) return("<span class='filled-circle1'></span>")
            if (cq > 35) return("<span class='filled-circle2'></span>")
            else ""})
+
+uniqSamples <- unique(plateDescription$sample)
+sampleColors <- topo.colors(length(uniqSamples), alpha = 0.3)
+names(sampleColors) <- uniqSamples
+plateDescription <- plateDescription %>% 
+  group_by(sample) %>% 
+  mutate(color = sampleColors[sample] %>%
+           col2rgb() %>%
+           .[,1] %>% c(0.2) %>% 
+           paste(collapse = ","))
+
 pcrPlateInput("customLabel", "Custom labels and marks",
               plateDescription,
               wellLabelTemplate = "{{{mark}}}{{sample}} Cq={{cq}}",
               onHoverWellTextTemplate = "{{target}}: {{dyeId}}",
               wellClassTemplate = "{{sampleType}}",
+              wellStyleTemplate = "background-color:rgba({{color}});",
               cssFile = "",
               cssText = "#{{id}} td.selected-well{border: 2px solid red !important;}
                #{{id}} .ntc{border: 3px solid Plum;}
