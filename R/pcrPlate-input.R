@@ -22,7 +22,7 @@
 #'
 #' @author Konstantin A. Blagodatskikh <k.blag@@yandex.ru>
 #' @keywords PCR RDML Shiny Input
-#' @import RDML shiny tidyverse whisker stringr
+#' @import RDML shiny tidyverse whisker stringr checkmate
 #'
 #' @family input elements
 #' @seealso \code{\link{updatePcrPlateInput}}
@@ -58,6 +58,23 @@ pcrPlateInput <- function(inputId,
                           cssText = NULL,
                           plateLegend = NULL,
                           interactive = base::interactive()) {
+  assertString(inputId)
+  assertString(label, null.ok = TRUE)
+  assertDataFrame(plateDescription)
+  assertClass(pcrFormat, "pcrFormatType")
+  assert(checkNull(selection),
+         checkNumeric(selection),
+         checkCharacter(selection))
+  assertString(wellLabelTemplate, null.ok = TRUE)
+  assertString(onHoverWellTextTemplate, null.ok = TRUE)
+  assertString(wellClassTemplate, null.ok = TRUE)
+  assertString(wellStyleTemplate, null.ok = TRUE)
+  assertString(wellGroupTemplate, null.ok = TRUE)
+  assertString(cssFile)
+  assertString(cssText, null.ok = TRUE)
+  assertString(plateLegend, null.ok = TRUE)
+  assertFlag(interactive)
+
   ns <- NS(inputId)
   plateDescription <- plateDescription %>%
     ungroup() %>%
@@ -204,7 +221,14 @@ pcrPlateInput <- function(inputId,
 #' }
 #' @export
 updatePcrPlateInput <- function(session, inputId,
-                                label = NULL, selection = NULL) {
+                                label = NULL,
+                                selection = NULL) {
+  assertClass(session, "ShinySession")
+  assertString(inputId)
+  assertString(label, null.ok = TRUE)
+  assert(checkNull(selection),
+         checkNumeric(selection),
+         checkCharacter(selection))
   message <- .dropNulls(list(label = label, selection = selection))
   session$sendInputMessage(inputId, message)
 }
