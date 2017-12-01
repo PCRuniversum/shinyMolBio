@@ -18,5 +18,10 @@ Imports:
   stringr,
   tidyverse,
   whisker
+Collate:
+  'global.R'
+  'pcrPlate-input.R'
+  'pcrCurves-input.R'
+  'runExample.R'
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1

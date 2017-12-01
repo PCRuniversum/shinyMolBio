@@ -15,7 +15,8 @@ ui <- fluidPage(
       uiOutput("plate2"),
       textOutput("plate2Selected"),
       actionButton("selectRandomWellBtn",
-                   "Select Random Well")
+                   "Select Random Well"),
+      uiOutput("curves1")
     )
   )
 )
@@ -39,7 +40,8 @@ server <- function(input, output, session) {
     list(table =  rdml$AsTable(cq = data$cq) %>%
            filter(exp.id == expId &
                     run.id == runId),
-         format = rdml$experiment[[expId]]$run[[runId]]$pcrFormat)
+         format = rdml$experiment[[expId]]$run[[runId]]$pcrFormat,
+         rdml = rdml)
   })
 
   output$plate1 <- renderUI({
@@ -113,6 +115,13 @@ server <- function(input, output, session) {
     req(input$pcrPlate2)
     paste("Selected wells:",
           paste(input$pcrPlate2, collapse = ", "))
+  })
+
+  output$curves1 <- renderUI({
+    req(rdmlFile(), input$pcrPlate2)
+    pcrCurvesInput("pcrCurves1", "curves1",
+                   rdmlFile()$rdml$GetFData(long.table = TRUE),
+                   input$pcrPlate2)
   })
 
 }

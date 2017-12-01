@@ -54,7 +54,8 @@ pcrPlateInput <- function(inputId,
                           wellClassTemplate = NULL,
                           wellStyleTemplate = NULL,
                           wellGroupTemplate = "{{sample}}-{{target}}",
-                          cssFile = system.file("/css/styles.css", package = "shinyMolBio"),
+                          cssFile = system.file("/css/pcrPlateInputStyle.css",
+                                                package = "shinyMolBio"),
                           cssText = NULL,
                           plateLegend = NULL,
                           interactive = base::interactive()) {
@@ -72,7 +73,9 @@ pcrPlateInput <- function(inputId,
   assertString(wellGroupTemplate, null.ok = TRUE)
   assertString(cssFile)
   assertString(cssText, null.ok = TRUE)
-  assertString(plateLegend, null.ok = TRUE)
+  # assertString(plateLegend, null.ok = TRUE)
+  assert(checkNull(plateLegend),
+         checkClass(plateLegend, "shiny.tag"))
   assertFlag(interactive)
 
   ns <- NS(inputId)
@@ -231,9 +234,4 @@ updatePcrPlateInput <- function(session, inputId,
          checkCharacter(selection))
   message <- .dropNulls(list(label = label, selection = selection))
   session$sendInputMessage(inputId, message)
-}
-
-# Given a vector or list, drop all the NULL items in it
-.dropNulls <- function(x) {
-  x[!vapply(x, is.null, FUN.VALUE = logical(1))]
 }
