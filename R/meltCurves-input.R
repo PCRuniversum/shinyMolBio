@@ -28,27 +28,26 @@
 #'  shinyApp(ui, server)
 #' }
 #' @export
-pcrCurvesInput <- function(inputId,
+meltCurvesInput <- function(inputId,
                           label = NULL,
-                          pcrCurves,
+                          meltCurves,
                           selected = NULL,
                           colorBy = "none", shapeBy = "none",
-                          logScale = FALSE,
-                          showCq = FALSE,
-                          showBaseline = FALSE,
-                          cssFile = system.file("/css/pcrCurvesInputStyle.css",
+                          diffCurves = TRUE,
+                          inverted = FALSE,
+                          cssFile = system.file("/css/meltCurvesInputStyle.css",
                                                 package = "shinyMolBio"),
                           cssText = NULL,
                           interactive = base::interactive()) {
   ns <- NS(inputId)
 
   if (!is.null(selected)){
-    pcrCurves <- pcrCurves %>%
+    meltCurves <- meltCurves %>%
       filter(position %in% selected)
   }
 
   p <-
-    ggplot(pcrCurves) +
+    ggplot(meltCurves) +
     geom_line(aes_string(x = "cyc", y = "fluor",
                          group = "fdata.name",
                          color = {
@@ -83,7 +82,7 @@ pcrCurvesInput <- function(inputId,
     } else {
       css
     },
-    div(id = inputId, class = "pcr-curves",
+    div(id = inputId, class = "melt-curves",
         tags$label(label, `for` = inputId),
         ggplotly(p)
     )

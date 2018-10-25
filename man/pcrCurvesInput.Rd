@@ -4,44 +4,11 @@
 \alias{pcrCurvesInput}
 \title{Create a PCR curves viewer input control}
 \usage{
-pcrCurvesInput(inputId, label = NULL, pcrCurves, colorBy = "none",
-  shapeBy = "none", logScale = FALSE, showCq = FALSE,
+pcrCurvesInput(inputId, label = NULL, pcrCurves, selected = NULL,
+  colorBy = "none", shapeBy = "none", logScale = FALSE, showCq = FALSE,
   showBaseline = FALSE,
   cssFile = system.file("/css/pcrCurvesInputStyle.css", package =
-  "shinyMolBio"), cssText = NULL, plateLegend = NULL,
-  interactive = base::interactive())
-}
-\arguments{
-\item{inputId}{The \code{input} slot that will be used to access the selected
-wells positions.}
-
-\item{label}{Display label for the control, or \code{NULL} for no label.}
-
-\item{cssFile}{path to the css styles file.}
-
-\item{cssText}{css styles as text.}
-
-\item{plateLegend}{plate legend (any HTML content).}
-
-\item{plateDescription}{Plate description - basicly output from \code{RDML
-AsTable()} function.}
-
-\item{pcrFormat}{PCR plate parametrs. Should be \code{pcrFormatType}.}
-
-\item{selection}{Set preselected wells (e.g. \code{c("A01", "A02") or \code{c(1, 2)}})}
-
-\item{wellLabelTemplate}{Template of the well label.}
-
-\item{onHoverWellTextTemplate}{Template of the text on hover.}
-
-\item{wellClassTemplate}{Template of the well class (css class).}
-
-\item{wellStyleTemplate}{Template of the well style (css).}
-
-\item{wellGroupTemplate}{Template of the well group for selecting.}
-}
-\value{
-A PCR plate control that can be added to a UI definition.
+  "shinyMolBio"), cssText = NULL, interactive = base::interactive())
 }
 \description{
 Create an input control for representing PCR plate and dynamically selecting
