@@ -17,11 +17,13 @@ Imports:
   shiny,
   stringr,
   tidyverse,
-  whisker
+  whisker,
+  plotly
 Collate:
   'global.R'
   'pcrPlate-input.R'
   'pcrCurves-input.R'
+  'meltCurves-input.R'
   'runExample.R'
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1

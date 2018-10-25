@@ -48,7 +48,7 @@ meltCurvesInput <- function(inputId,
 
   p <-
     ggplot(meltCurves) +
-    geom_line(aes_string(x = "cyc", y = "fluor",
+    geom_line(aes_string(x = "tmp", y = "fluor",
                          group = "fdata.name",
                          color = {
                            if (colorBy == "none")

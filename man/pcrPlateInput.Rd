@@ -71,7 +71,8 @@ ui <- fluidPage(
 \seealso{
 \code{\link{updatePcrPlateInput}}
 
-Other input elements: \code{\link{pcrCurvesInput}}
+Other input elements: \code{\link{meltCurvesInput}},
+  \code{\link{pcrCurvesInput}}
 }
 \author{
 Konstantin A. Blagodatskikh <k.blag@yandex.ru>
