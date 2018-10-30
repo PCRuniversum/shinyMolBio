@@ -32,14 +32,16 @@ pcrCurvesInput <- function(inputId,
                           label = NULL,
                           pcrCurves,
                           selected = NULL,
+                          ggplotCode = NULL,
                           colorBy = "none", shapeBy = "none",
                           logScale = FALSE,
-                          showCq = FALSE,
+                          showCq = TRUE,
                           showBaseline = FALSE,
                           cssFile = system.file("/css/pcrCurvesInputStyle.css",
                                                 package = "shinyMolBio"),
                           cssText = NULL,
-                          interactive = base::interactive()) {
+                          interactive = base::interactive()
+                          ) {
   ns <- NS(inputId)
 
   if (!is.null(selected)){
@@ -63,12 +65,37 @@ pcrCurvesInput <- function(inputId,
                            else
                              shapeBy
                          }),
-              size = 0.5)
+              size = 0.5) +
+              {
+                if (!showCq)
+                  NULL
+                else
+                  geom_point(aes_string(x = "cyc", y = "fluor",
+                                        group = "fdata.name",
+                                        color = {
+                                          if (colorBy == "none")
+                                            NULL
+                                          else
+                                            colorBy
+                                        },
+                                        shape = {
+                                          NULL
+                                          # if (input$shapeqPCRby == "none")
+                                          #   NULL
+                                          # else
+                                          #   input$shapeqPCRby
+                                        }
+                                        # , size = "Tm"
+                  ), data = pcrCurves %>%
+                    filter(Cq == TRUE),
+                  size = 1)
+              } +
+    ggplotCode
 
   css <- tags$style(type = "text/css",
                     paste0(whisker.render(
                       suppressWarnings(readLines(cssFile, warn = FALSE, encoding = "UTF-8")) %>%
-                        paste0( collapse = ""),
+                        paste0(collapse = ""),
                       list(id = inputId)
                     ),
                     whisker.render(cssText, list(id = inputId))

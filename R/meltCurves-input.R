@@ -29,16 +29,18 @@
 #' }
 #' @export
 meltCurvesInput <- function(inputId,
-                          label = NULL,
-                          meltCurves,
-                          selected = NULL,
-                          colorBy = "none", shapeBy = "none",
-                          diffCurves = TRUE,
-                          inverted = FALSE,
-                          cssFile = system.file("/css/meltCurvesInputStyle.css",
-                                                package = "shinyMolBio"),
-                          cssText = NULL,
-                          interactive = base::interactive()) {
+                            label = NULL,
+                            meltCurves,
+                            ggplotCode = NULL,
+                            selected = NULL,
+                            colorBy = "none", shapeBy = "none",
+                            diffCurves = TRUE,
+                            inverted = FALSE,
+                            showTm = TRUE,
+                            cssFile = system.file("/css/meltCurvesInputStyle.css",
+                                                  package = "shinyMolBio"),
+                            cssText = NULL,
+                            interactive = base::interactive()) {
   ns <- NS(inputId)
 
   if (!is.null(selected)){
@@ -62,7 +64,32 @@ meltCurvesInput <- function(inputId,
                            else
                              shapeBy
                          }),
-              size = 0.5)
+              size = 0.5) +
+              {
+                if (!showTm)
+                  NULL
+                else
+                  geom_point(aes_string(x = "tmp", y = "fluor",
+                                        group = "fdata.name",
+                                        color = {
+                                          if (colorBy == "none")
+                                            NULL
+                                          else
+                                            colorBy
+                                        },
+                                        shape = {
+                                          NULL
+                                          # if (input$shapeqPCRby == "none")
+                                          #   NULL
+                                          # else
+                                          #   input$shapeqPCRby
+                                        }
+                                        # , size = "Tm"
+                  ), data = meltCurves %>%
+                    filter(Tm == TRUE),
+                  size = 1)
+              } +
+    ggplotCode
 
   css <- tags$style(type = "text/css",
                     paste0(whisker.render(

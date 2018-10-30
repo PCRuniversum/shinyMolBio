@@ -121,7 +121,8 @@ server <- function(input, output, session) {
     req(rdmlFile(), input$pcrPlate2)
     pcrCurvesInput("pcrCurves1", "curves1",
                    rdmlFile()$rdml$GetFData(long.table = TRUE),
-                   input$pcrPlate2)
+                   selected = input$pcrPlate2,
+                   showCq = TRUE)
   })
 
 }
