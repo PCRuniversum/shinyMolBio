@@ -35,7 +35,7 @@ pcrCurvesInput <- function(inputId,
                           ggplotCode = NULL,
                           colorBy = "none", shapeBy = "none",
                           logScale = FALSE,
-                          showCq = TRUE,
+                          showCq = FALSE,
                           showBaseline = FALSE,
                           cssFile = system.file("/css/pcrCurvesInputStyle.css",
                                                 package = "shinyMolBio"),
@@ -67,9 +67,10 @@ pcrCurvesInput <- function(inputId,
                          }),
               size = 0.5) +
               {
-                if (!showCq)
+                if (!showCq) {
                   NULL
-                else
+                } else {
+                  if ("Cq" %in% colnames(pcrCurves)) {
                   geom_point(aes_string(x = "cyc", y = "fluor",
                                         group = "fdata.name",
                                         color = {
@@ -89,6 +90,11 @@ pcrCurvesInput <- function(inputId,
                   ), data = pcrCurves %>%
                     filter(Cq == TRUE),
                   size = 1)
+                  } else {
+                    warning(paste0(inputId, " (pcrCurvesInput): 'showCq' option is selected but no Cq column is provided!"))
+                    NULL
+                  }
+                }
               } +
     ggplotCode
 
