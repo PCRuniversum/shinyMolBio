@@ -4,11 +4,11 @@
 \alias{meltCurvesInput}
 \title{Create a PCR curves viewer input control}
 \usage{
-meltCurvesInput(inputId, label = NULL, meltCurves, selected = NULL,
-  colorBy = "none", shapeBy = "none", diffCurves = TRUE,
-  inverted = FALSE, cssFile = system.file("/css/meltCurvesInputStyle.css",
-  package = "shinyMolBio"), cssText = NULL,
-  interactive = base::interactive())
+meltCurvesInput(inputId, label = NULL, meltCurves, ggplotCode = NULL,
+  selected = NULL, colorBy = "none", shapeBy = "none",
+  diffCurves = TRUE, inverted = FALSE, showTm = TRUE,
+  cssFile = system.file("/css/meltCurvesInputStyle.css", package =
+  "shinyMolBio"), cssText = NULL, interactive = base::interactive())
 }
 \description{
 Create an input control for representing PCR plate and dynamically selecting

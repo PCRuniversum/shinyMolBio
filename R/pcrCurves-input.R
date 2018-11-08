@@ -1,7 +1,6 @@
 #' Create a PCR curves viewer input control
 #'
-#' Create an input control for representing PCR plate and dynamically selecting
-#' wells inside it.
+#' Create an input control for viewing PCR curves as plot.
 #'
 #'
 #' @author Konstantin A. Blagodatskikh <k.blag@@yandex.ru>
@@ -9,31 +8,16 @@
 #' @import plotly
 #'
 #' @family input elements
-#' @seealso \code{\link{updatePcrPlateInput}}
+#' @seealso \code{\link{updatePcrCurvesInput}}
 #'
 #' @examples
-#' ## Only run examples in interactive R sessions
-#' if (interactive()) {
-#' ui <- fluidPage(
-#'     pcrPlateInput("plate1",
-#'                    "Plate 1",
-#'                    RDML$new(system.file("/extdata/stepone_std.rdml", package = "RDML"))$AsTable(),
-#'                   pcrFormatType$new(8,12,labelFormatType$new("ABC"),
-#'                                          labelFormatType$new("123"))),
-#'    verbatimTextOutput("selected")
-#'  )
-#'  server <- function(input, output) {
-#'    output$selected <- renderText({ input$plate1 })
-#'  }
-#'  shinyApp(ui, server)
-#' }
 #' @export
 pcrCurvesInput <- function(inputId,
                           label = NULL,
                           pcrCurves,
                           selected = NULL,
                           ggplotCode = NULL,
-                          colorBy = "none", shapeBy = "none",
+                          colorBy = NULL, shapeBy = NULL,
                           logScale = FALSE,
                           showCq = FALSE,
                           showBaseline = FALSE,
@@ -44,59 +28,12 @@ pcrCurvesInput <- function(inputId,
                           ) {
   ns <- NS(inputId)
 
-  if (!is.null(selected)){
-    pcrCurves <- pcrCurves %>%
-      filter(position %in% selected)
-  }
-
-  p <-
-    ggplot(pcrCurves) +
-    geom_line(aes_string(x = "cyc", y = "fluor",
-                         group = "fdata.name",
-                         color = {
-                           if (colorBy == "none")
-                             NULL
-                           else
-                             colorBy
-                         },
-                         linetype = {
-                           if (shapeBy == "none")
-                             NULL
-                           else
-                             shapeBy
-                         }),
-              size = 0.5) +
-              {
-                if (!showCq) {
-                  NULL
-                } else {
-                  if ("Cq" %in% colnames(pcrCurves)) {
-                  geom_point(aes_string(x = "cyc", y = "fluor",
-                                        group = "fdata.name",
-                                        color = {
-                                          if (colorBy == "none")
-                                            NULL
-                                          else
-                                            colorBy
-                                        },
-                                        shape = {
-                                          NULL
-                                          # if (input$shapeqPCRby == "none")
-                                          #   NULL
-                                          # else
-                                          #   input$shapeqPCRby
-                                        }
-                                        # , size = "Tm"
-                  ), data = pcrCurves %>%
-                    filter(Cq == TRUE),
-                  size = 1)
-                  } else {
-                    warning(paste0(inputId, " (pcrCurvesInput): 'showCq' option is selected but no Cq column is provided!"))
-                    NULL
-                  }
-                }
-              } +
-    ggplotCode
+  p <- plot_ly(pcrCurves,
+               x = ~cyc, y = ~fluor,
+               color = {if (!is.null(colorBy)) { ~get(colorBy) } else { NULL }},
+               split = ~fdata.name,
+               type = "scatter", mode = "lines") %>%
+    layout(showlegend = FALSE)
 
   css <- tags$style(type = "text/css",
                     paste0(whisker.render(
@@ -111,6 +48,9 @@ pcrCurvesInput <- function(inputId,
   tagList(
     if (interactive) {
       tags$head(
+        singleton(
+          includeScript(system.file("/js/pcrCurves-input-bindings.js", package = "shinyMolBio"))
+        ),
         singleton(css)
       )
     } else {
@@ -118,7 +58,33 @@ pcrCurvesInput <- function(inputId,
     },
     div(id = inputId, class = "pcr-curves",
         tags$label(label, `for` = inputId),
-        ggplotly(p)
+        p #ggplotly(p)
     )
   )
+}
+
+#' Change the value of a PCR curve input control on the client
+#'
+#' Change the value of a PCR plate input control on the client
+#'
+#' @param session The \code{session} object passed to function given to \code{shinyServer}.
+#' @param inputId The id of the \code{input} object.
+#' @param label The label to set for the input object.
+#' @param selection The positions of the wells to be selected.
+#'
+#' @author Konstantin A. Blagodatskikh <k.blag@@yandex.ru>
+#' @keywords PCR RDML Shiny Input
+#' @examples
+#' @export
+updatePcrCurvesInput <- function(session, inputId,
+                                 label = NULL,
+                                 selection = NULL) {
+  assertClass(session, "ShinySession")
+  assertString(inputId)
+  assertString(label, null.ok = TRUE)
+  assert(checkNull(selection),
+         checkNumeric(selection),
+         checkCharacter(selection))
+  message <- .dropNulls(list(label = label, selection = selection))
+  session$sendInputMessage(inputId, message)
 }

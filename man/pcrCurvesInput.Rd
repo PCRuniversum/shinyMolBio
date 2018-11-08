@@ -5,34 +5,16 @@
 \title{Create a PCR curves viewer input control}
 \usage{
 pcrCurvesInput(inputId, label = NULL, pcrCurves, selected = NULL,
-  colorBy = "none", shapeBy = "none", logScale = FALSE, showCq = FALSE,
-  showBaseline = FALSE,
+  ggplotCode = NULL, colorBy = NULL, shapeBy = NULL, logScale = FALSE,
+  showCq = FALSE, showBaseline = FALSE,
   cssFile = system.file("/css/pcrCurvesInputStyle.css", package =
   "shinyMolBio"), cssText = NULL, interactive = base::interactive())
 }
 \description{
-Create an input control for representing PCR plate and dynamically selecting
-wells inside it.
-}
-\examples{
-## Only run examples in interactive R sessions
-if (interactive()) {
-ui <- fluidPage(
-    pcrPlateInput("plate1",
-                   "Plate 1",
-                   RDML$new(system.file("/extdata/stepone_std.rdml", package = "RDML"))$AsTable(),
-                  pcrFormatType$new(8,12,labelFormatType$new("ABC"),
-                                         labelFormatType$new("123"))),
-   verbatimTextOutput("selected")
- )
- server <- function(input, output) {
-   output$selected <- renderText({ input$plate1 })
- }
- shinyApp(ui, server)
-}
+Create an input control for viewing PCR curves as plot.
 }
 \seealso{
-\code{\link{updatePcrPlateInput}}
+\code{\link{updatePcrCurvesInput}}
 
 Other input elements: \code{\link{meltCurvesInput}},
   \code{\link{pcrPlateInput}}

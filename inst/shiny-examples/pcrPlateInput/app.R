@@ -113,17 +113,25 @@ server <- function(input, output, session) {
 
   output$plate2Selected <- renderText({
     req(input$pcrPlate2)
-    paste("Selected wells:",
-          paste(input$pcrPlate2, collapse = ", "))
+    isolate({
+      updatePcrCurvesInput(session,
+                           "pcrCurves1",
+                           selection = input$pcrPlate2)
+      paste("Selected wells:",
+            paste(input$pcrPlate2, collapse = ", "))
+    })
   })
 
   output$curves1 <- renderUI({
-    req(rdmlFile(), input$pcrPlate2)
+    req(rdmlFile())#, input$pcrPlate2)
     pcrCurvesInput("pcrCurves1", "curves1",
                    rdmlFile()$rdml$GetFData(long.table = TRUE),
-                   selected = input$pcrPlate2,
+                   # selected = input$pcrPlate2,
+                   colorBy = "sample",
                    showCq = FALSE)
   })
+
+
 
 }
 
