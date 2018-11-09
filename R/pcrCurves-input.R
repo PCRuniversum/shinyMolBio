@@ -27,13 +27,18 @@ pcrCurvesInput <- function(inputId,
                           interactive = base::interactive()
                           ) {
   ns <- NS(inputId)
-
   p <- plot_ly(pcrCurves,
                x = ~cyc, y = ~fluor,
-               color = {if (!is.null(colorBy)) { ~get(colorBy) } else { NULL }},
+               color = {
+                 if (!is.null(colorBy)) {
+                   ~get(colorBy)
+                 } else {
+                   NULL
+                 }
+               },
                split = ~fdata.name,
                type = "scatter", mode = "lines") %>%
-    layout(showlegend = FALSE)
+    plotly::layout(showlegend = FALSE)
 
   css <- tags$style(type = "text/css",
                     paste0(whisker.render(
@@ -78,13 +83,12 @@ pcrCurvesInput <- function(inputId,
 #' @export
 updatePcrCurvesInput <- function(session, inputId,
                                  label = NULL,
-                                 selection = NULL) {
+                                 hideCurves = NULL) {
   assertClass(session, "ShinySession")
   assertString(inputId)
   assertString(label, null.ok = TRUE)
-  assert(checkNull(selection),
-         checkNumeric(selection),
-         checkCharacter(selection))
-  message <- .dropNulls(list(label = label, selection = selection))
+  assertInteger(hideCurves,
+                any.missing = FALSE, null.ok = TRUE)
+  message <- .dropNulls(list(label = label, hideCurves = hideCurves - 1L))
   session$sendInputMessage(inputId, message)
 }

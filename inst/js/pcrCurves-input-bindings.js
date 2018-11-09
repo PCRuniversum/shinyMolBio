@@ -25,14 +25,19 @@ $.extend(pcrCurvesInputBinding, {
   },
 
   // Given the DOM element for the input, set the value
-  setValue: function(el, selection) {
-    if (Array.isArray(selection) === false)
-      selection = [selection]
+  setValue: function(el, hideCurves) {
+    if (Array.isArray(hideCurves) === false)
+      hideCurves = [hideCurves]
     var graphDiv = document.getElementsByClassName('plotly')[0];
     var visF = {
       visible: false
     };
-    Plotly.restyle(graphDiv, visF);
+    var visT = {
+      visible: true
+    };
+    Plotly.restyle(graphDiv, visT);
+    if (hideCurves.length)
+      Plotly.restyle(graphDiv, visF, hideCurves);
   },
 
   // Set up the event listeners so that interactions with the
@@ -53,8 +58,8 @@ $.extend(pcrCurvesInputBinding, {
   // Receive messages from the server.
   // Messages sent by updatePcrPlateInput() are received by this function.
   receiveMessage: function(el, data) {
-    if (data.hasOwnProperty('selection')){
-      this.setValue(el, data.selection)
+    if (data.hasOwnProperty('hideCurves')){
+      this.setValue(el, data.hideCurves)
     };
 
     if (data.hasOwnProperty('label'))

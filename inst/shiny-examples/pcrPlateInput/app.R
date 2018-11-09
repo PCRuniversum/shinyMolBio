@@ -114,9 +114,10 @@ server <- function(input, output, session) {
   output$plate2Selected <- renderText({
     req(input$pcrPlate2)
     isolate({
+      toHideCurves <- which(!(rdmlFile()$table$position %in% input$pcrPlate2))
       updatePcrCurvesInput(session,
                            "pcrCurves1",
-                           selection = input$pcrPlate2)
+                           hideCurves = toHideCurves)
       paste("Selected wells:",
             paste(input$pcrPlate2, collapse = ", "))
     })
