@@ -59,22 +59,23 @@ server <- function(input, output, session) {
 
   output$plate2 <- renderUI({
     req(rdmlFile())
-    pcrPlateInput("pcrPlate2", "Plate 2",
-                  rdmlFile()$table %>%
-                    filter(target.dyeId == "FAM") %>%
-                    group_by(fdata.name) %>%
-                    mutate(sampleType = sample.type,  #whisker does not support dots!
-                           cq = {
-                             if(is.na(cq)) 100
-                             else cq },
-                           mark = {if (cq < 30) return("<span class='filled-circle1'></span>")
-                             if (cq > 35) return("<span class='filled-circle2'></span>")
-                             else ""}),
-                  pcrFormat = rdmlFile()$format,
-                  wellLabelTemplate = "{{{mark}}}{{sample}}",
-                  wellClassTemplate = "{{sampleType}}",
-                  cssFile = "",
-                  cssText = "#{{id}} td.selected-well{border: 2px solid red !important;}
+    isolate({
+      pcrPlateInput("pcrPlate2", "Plate 2",
+                    rdmlFile()$table %>%
+                      filter(target.dyeId == rdmlFile()$table$target.dyeId[1]) %>%
+                      group_by(fdata.name) %>%
+                      mutate(sampleType = sample.type,  #whisker does not support dots!
+                             cq = {
+                               if(is.na(cq)) 100
+                               else cq },
+                             mark = {if (cq < 30) return("<span class='filled-circle1'></span>")
+                               if (cq > 35) return("<span class='filled-circle2'></span>")
+                               else ""}),
+                    pcrFormat = rdmlFile()$format,
+                    wellLabelTemplate = "{{{mark}}}{{sample}}",
+                    wellClassTemplate = "{{sampleType}}",
+                    cssFile = "",
+                    cssText = "#{{id}} td.selected-well{border: 2px solid red !important;}
                #{{id}} .ntc{background-color: Plum ;}
                #{{id}} .unkn{background-color: LightGrey ;}
                #{{id}} .pos{background-color: PaleGreen ;}
@@ -84,22 +85,23 @@ server <- function(input, output, session) {
                   border-radius: 100%; background-color: Maroon;}
                #{{id}} .filled-circle2 {padding: 2px 11px;
                   border-radius: 100%; background-color: Orange;}",
-                  # tags$div(tags$span(class = ".filled-circle1"), "Sdsf")
-                  plateLegend =
-                    tags$div(
-                      tags$span(class = "filled-circle1"), "Cq < 30",
-                      tags$br(),
-                      tags$span(class = "filled-circle2"), "Cq > 35",
-                      tags$br(),
-                      tags$span(
-                        tags$span(class = "ntc", "NTC"),
-                        tags$span(class = "unkn", "Unknown"),
-                        tags$span(class = "pos", "Positive"),
-                        tags$span(class = "neg", "Negative"),
-                        tags$span(class = "std", "Standard")
+                    # tags$div(tags$span(class = ".filled-circle1"), "Sdsf")
+                    plateLegend =
+                      tags$div(
+                        tags$span(class = "filled-circle1"), "Cq < 30",
+                        tags$br(),
+                        tags$span(class = "filled-circle2"), "Cq > 35",
+                        tags$br(),
+                        tags$span(
+                          tags$span(class = "ntc", "NTC"),
+                          tags$span(class = "unkn", "Unknown"),
+                          tags$span(class = "pos", "Positive"),
+                          tags$span(class = "neg", "Negative"),
+                          tags$span(class = "std", "Standard")
+                        )
                       )
-                    )
-    )
+      )
+    })
   })
 
   observeEvent(
@@ -126,10 +128,12 @@ server <- function(input, output, session) {
   output$curves1 <- renderUI({
     req(rdmlFile())#, input$pcrPlate2)
     pcrCurvesInput("pcrCurves1", "curves1",
-                   rdmlFile()$rdml$GetFData(long.table = TRUE),
-                   # selected = input$pcrPlate2,
+                   rdmlFile()$rdml$GetFData(rdmlFile()$table,
+                                            long.table = TRUE) %>%
+                     group_by(fdata.name) %>%
+                     mutate(Cq = cyc == round(cq[1])),
                    colorBy = "sample",
-                   showCq = FALSE)
+                   showCq = TRUE)
   })
 
 

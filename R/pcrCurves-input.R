@@ -13,32 +13,57 @@
 #' @examples
 #' @export
 pcrCurvesInput <- function(inputId,
-                          label = NULL,
-                          pcrCurves,
-                          selected = NULL,
-                          ggplotCode = NULL,
-                          colorBy = NULL, shapeBy = NULL,
-                          logScale = FALSE,
-                          showCq = FALSE,
-                          showBaseline = FALSE,
-                          cssFile = system.file("/css/pcrCurvesInputStyle.css",
-                                                package = "shinyMolBio"),
-                          cssText = NULL,
-                          interactive = base::interactive()
-                          ) {
+                           label = NULL,
+                           pcrCurves,
+                           plotlyCode = NULL,
+                           colorBy = NULL, shapeBy = NULL,
+                           logScale = FALSE,
+                           showCq = FALSE,
+                           showBaseline = FALSE,
+                           cssFile = system.file("/css/pcrCurvesInputStyle.css",
+                                                 package = "shinyMolBio"),
+                           cssText = NULL,
+                           interactive = base::interactive()) {
   ns <- NS(inputId)
-  p <- plot_ly(pcrCurves,
-               x = ~cyc, y = ~fluor,
-               color = {
-                 if (!is.null(colorBy)) {
-                   ~get(colorBy)
-                 } else {
-                   NULL
-                 }
-               },
-               split = ~fdata.name,
-               type = "scatter", mode = "lines") %>%
+  if (is.null(pcrCurves$curveColor)) {
+    if (!is.null(colorBy)) {
+      colorNames <- unique(pcrCurves[[colorBy]])
+      needNColors <- length(colorNames)
+      curvesColors <- tryCatch(
+        RColorBrewer::brewer.pal(needNColors, "Set2"),
+        warning = function(w)
+          colorRampPalette(RColorBrewer::brewer.pal(8,"Set2"))(needNColors)
+      )
+      names(curvesColors) <- colorNames
+      pcrCurves$curveColor <- curvesColors[pcrCurves[[colorBy]]]
+    } else {
+      pcrCurves$curveColor <- "black"
+    }
+  }
+  pcu <<- pcrCurves
+  p <- plot_ly() %>%
+    add_trace(data = pcrCurves,
+              x = ~cyc, y = ~fluor,
+              color = ~curveColor,
+              split = ~fdata.name,
+              type = "scatter", mode = "lines"
+    ) %>%
     plotly::layout(showlegend = FALSE)
+
+  if (showCq) {
+    cqs <- pcrCurves %>%
+      filter(Cq == TRUE)
+    p <- add_trace(p,
+                   data = cqs,
+                   x = ~cyc, y = ~fluor,
+                   color = ~curveColor,
+                   split = ~fdata.name,
+                   type = "scatter", mode = "markers"
+    )
+  }
+
+  if (!is.null(plotlyCode))
+    p <- plotlyCode(p)
 
   css <- tags$style(type = "text/css",
                     paste0(whisker.render(
@@ -49,7 +74,6 @@ pcrCurvesInput <- function(inputId,
                     whisker.render(cssText, list(id = inputId))
                     )
   )
-
   tagList(
     if (interactive) {
       tags$head(
@@ -89,6 +113,6 @@ updatePcrCurvesInput <- function(session, inputId,
   assertString(label, null.ok = TRUE)
   assertInteger(hideCurves,
                 any.missing = FALSE, null.ok = TRUE)
-  message <- .dropNulls(list(label = label, hideCurves = hideCurves - 1L))
+  message <- list(label = label, hideCurves = hideCurves - 1L)
   session$sendInputMessage(inputId, message)
 }
