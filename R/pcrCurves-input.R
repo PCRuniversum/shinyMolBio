@@ -25,7 +25,18 @@ pcrCurvesInput <- function(inputId,
                            cssText = NULL,
                            interactive = base::interactive()) {
   ns <- NS(inputId)
-  if (is.null(pcrCurves$curveColor)) {
+
+
+  # prepare Cq
+  maxCyc <- max(pcrCurves$cyc, na.rm = TRUE)
+  # replace all NA cq with max cycle
+  pcrCurves[is.na(pcrCurves$cq), "cq"] <- maxCyc
+  pcrCurves <- pcrCurves %>%
+    group_by(fdata.name) %>%
+    mutate(Cq = cyc == round(cq[1]))
+
+  # assign colors to curves
+  if (suppressWarnings(is.null(pcrCurves$curveColor))) {
     if (!is.null(colorBy)) {
       colorNames <- unique(pcrCurves[[colorBy]])
       needNColors <- length(colorNames)
@@ -40,7 +51,6 @@ pcrCurvesInput <- function(inputId,
       pcrCurves$curveColor <- "black"
     }
   }
-  pcu <<- pcrCurves
   p <- plot_ly() %>%
     add_trace(data = pcrCurves,
               x = ~cyc, y = ~fluor,
@@ -86,6 +96,9 @@ pcrCurvesInput <- function(inputId,
       css
     },
     div(id = inputId, class = "pcr-curves",
+        "data-ncurves" = pcrCurves$fdata.name %>% unique() %>% length(),
+        "data-showcq" = if (showCq) "true" else "false",
+        "data-showbaseline" = if (showBaseline) "true" else "false",
         tags$label(label, `for` = inputId),
         p #ggplotly(p)
     )
@@ -113,6 +126,6 @@ updatePcrCurvesInput <- function(session, inputId,
   assertString(label, null.ok = TRUE)
   assertInteger(hideCurves,
                 any.missing = FALSE, null.ok = TRUE)
-  message <- list(label = label, hideCurves = hideCurves - 1L)
+  message <- .dropNulls(list(label = label, hideCurves = hideCurves))# - 1L)
   session$sendInputMessage(inputId, message)
 }

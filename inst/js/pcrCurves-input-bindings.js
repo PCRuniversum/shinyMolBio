@@ -18,17 +18,30 @@ $.extend(pcrCurvesInputBinding, {
 
   // Given the DOM element for the input, return the value
   getValue: function(el) {
-    var selected = $(el).find('td.selected-well').map(function() { return this.id; }).get();
-    if (selected.length == 0)
-      return $(el).find('td:not(.empty-well)').map(function() { return this.id; }).get();
-    return selected;
+    return true;
   },
 
   // Given the DOM element for the input, set the value
   setValue: function(el, hideCurves) {
     if (Array.isArray(hideCurves) === false)
-      hideCurves = [hideCurves]
+      hideCurves = [hideCurves];
+    hideCurves = hideCurves.map(function (curveId) { return curveId - 1; });
+
     var graphDiv = document.getElementsByClassName('plotly')[0];
+
+    var ncurves = parseInt(el.dataset.ncurves);
+    var showCq = (el.dataset.showcq === 'true');
+    var showBaseline = (el.dataset.showbaseline === 'true');
+
+    var hideCqs = [];
+    if (showCq)
+      hideCqs = hideCurves.map(function (curveId) { return curveId + ncurves; });
+
+    var hideBaselines = [];
+    if (showBaseline)
+      hideBaselines = hideCurves.map(function (curveId) { return curveId + ncurves * 2; });
+
+    hideTracks = hideCurves.concat(hideCqs).concat(hideBaselines);
     var visF = {
       visible: false
     };
@@ -36,8 +49,8 @@ $.extend(pcrCurvesInputBinding, {
       visible: true
     };
     Plotly.restyle(graphDiv, visT);
-    if (hideCurves.length)
-      Plotly.restyle(graphDiv, visF, hideCurves);
+    if (hideTracks.length)
+      Plotly.restyle(graphDiv, visF, hideTracks);
   },
 
   // Set up the event listeners so that interactions with the

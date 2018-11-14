@@ -129,9 +129,7 @@ server <- function(input, output, session) {
     req(rdmlFile())#, input$pcrPlate2)
     pcrCurvesInput("pcrCurves1", "curves1",
                    rdmlFile()$rdml$GetFData(rdmlFile()$table,
-                                            long.table = TRUE) %>%
-                     group_by(fdata.name) %>%
-                     mutate(Cq = cyc == round(cq[1])),
+                                            long.table = TRUE),
                    colorBy = "sample",
                    showCq = TRUE)
   })
