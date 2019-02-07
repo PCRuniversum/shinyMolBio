@@ -34,12 +34,12 @@ ui <- fluidPage(
 \seealso{
 \code{\link{updatePcrPlateInput}}
 
-Other input elements: \code{\link{pcrCurvesInput}},
-  \code{\link{pcrPlateInput}}
+Other input elements: \code{\link{pcrPlateInput}}
 }
 \author{
 Konstantin A. Blagodatskikh <k.blag@yandex.ru>
 }
+\concept{input elements}
 \keyword{Input}
 \keyword{PCR}
 \keyword{RDML}

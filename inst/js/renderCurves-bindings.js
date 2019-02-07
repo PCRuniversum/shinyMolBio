@@ -1,10 +1,10 @@
 // URL input binding
 // This input binding is very similar to textInputBinding from
 // shiny.js.
-var pcrCurvesInputBinding = new Shiny.InputBinding();
+var renderAmpCurvesBinding = new Shiny.InputBinding();
 
 // An input binding must implement these methods
-$.extend(pcrCurvesInputBinding, {
+$.extend(renderAmpCurvesBinding, {
 
   // This returns a jQuery object with the DOM element
   find: function(scope) {
@@ -30,18 +30,19 @@ $.extend(pcrCurvesInputBinding, {
     var graphDiv = document.getElementsByClassName('plotly')[0];
 
     var ncurves = parseInt(el.dataset.ncurves);
-    var showCq = (el.dataset.showcq === 'true');
-    var showBaseline = (el.dataset.showbaseline === 'true');
+    var showMarkers = (el.dataset.showmarkers === 'true');
+    //var showBaseline = (el.dataset.showbaseline === 'true');
 
-    var hideCqs = [];
-    if (showCq)
-      hideCqs = hideCurves.map(function (curveId) { return curveId + ncurves; });
+    var hideMarkers = [];
+    if (showMarkers)
+      hideMarkers = hideCurves.map(function (curveId) { return curveId + ncurves; });
 
     var hideBaselines = [];
-    if (showBaseline)
-      hideBaselines = hideCurves.map(function (curveId) { return curveId + ncurves * 2; });
+    //if (showBaseline)
+    //  hideBaselines = hideCurves.map(function (curveId) { return curveId + ncurves * 2; });
 
-    hideTracks = hideCurves.concat(hideCqs).concat(hideBaselines);
+    hideTracks = hideCurves.concat(hideMarkers);
+    //.concat(hideBaselines);
     var visF = {
       visible: false
     };
@@ -58,14 +59,14 @@ $.extend(pcrCurvesInputBinding, {
   // callback is a function that queues data to be sent to
   // the server.
   subscribe: function(el, callback) {
-    $(el).on('change.pcrCurvesInputBinding', function(event) {
+    $(el).on('change.renderAmpCurvesBinding', function(event) {
       callback(true);
     });
   },
 
   // Remove the event listeners
   unsubscribe: function(el) {
-    $(el).off('.pcrCurvesInputBinding');
+    $(el).off('.renderAmpCurvesBinding');
   },
 
   // Receive messages from the server.
@@ -103,4 +104,4 @@ $.extend(pcrCurvesInputBinding, {
 
 });
 
-Shiny.inputBindings.register(pcrCurvesInputBinding, 'Kablag.pcrCurvesInput');
+Shiny.inputBindings.register(renderAmpCurvesBinding, 'Kablag.renderAmpCurvesBinding');

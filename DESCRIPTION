@@ -13,17 +13,18 @@ LazyData: true
 Depends:
   R (>= 3.4.0)
 Imports:
+  tidyverse,
+  checkmate,
   RDML,
   shiny,
   stringr,
-  tidyverse,
   whisker,
   plotly
 Collate:
   'global.R'
   'pcrPlate-input.R'
-  'pcrCurves-input.R'
+  'renderCurves.R'
   'meltCurves-input.R'
   'runExample.R'
 VignetteBuilder: knitr
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1

@@ -196,6 +196,7 @@ pcrPlateInput <- function(inputId,
 #'
 #' @author Konstantin A. Blagodatskikh <k.blag@@yandex.ru>
 #' @keywords PCR RDML Shiny Input
+#' @export
 #' @examples
 #' ## Only run examples in interactive R sessions
 #' if (interactive()) {
@@ -222,7 +223,6 @@ pcrPlateInput <- function(inputId,
 #'  }
 #'  shinyApp(ui, server)
 #' }
-#' @export
 updatePcrPlateInput <- function(session, inputId,
                                 label = NULL,
                                 selection = NULL) {

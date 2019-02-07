@@ -16,6 +16,7 @@ ui <- fluidPage(
       textOutput("plate2Selected"),
       actionButton("selectRandomWellBtn",
                    "Select Random Well"),
+      checkboxInput("logScale", "Log Scale"),
       uiOutput("curves1")
     )
   )
@@ -113,25 +114,30 @@ server <- function(input, output, session) {
         selection = sample(unique(rdmlFile()$table$position), 1))
     })
 
+
+
+  output$curves1 <- renderUI({
+    req(rdmlFile())#, input$pcrPlate2)
+    renderAmpCurves("pcrCurves1", "curves1",
+                    rdmlFile()$rdml$GetFData(rdmlFile()$table,
+                                             long.table = TRUE),
+                    # plotlyCode = plotly::layout(yaxis = list(title = "Fluorescence")),
+                    colorBy = "sample",
+                    showCq = TRUE,
+                    logScale = input$logScale)
+  })
+
   output$plate2Selected <- renderText({
     req(input$pcrPlate2)
     isolate({
       toHideCurves <- which(!(rdmlFile()$table$position %in% input$pcrPlate2))
-      updatePcrCurvesInput(session,
-                           "pcrCurves1",
-                           hideCurves = toHideCurves)
+      cat(toHideCurves, "\n")
+      updateCurves(session,
+                   "pcrCurves1",
+                   hideCurves = toHideCurves)
       paste("Selected wells:",
             paste(input$pcrPlate2, collapse = ", "))
     })
-  })
-
-  output$curves1 <- renderUI({
-    req(rdmlFile())#, input$pcrPlate2)
-    pcrCurvesInput("pcrCurves1", "curves1",
-                   rdmlFile()$rdml$GetFData(rdmlFile()$table,
-                                            long.table = TRUE),
-                   colorBy = "sample",
-                   showCq = TRUE)
   })
 
 
