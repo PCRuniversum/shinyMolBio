@@ -1,8 +1,6 @@
-
-
-#' Renders a PCR curves viewer input control
+#' Renders a amplification curves viewer
 #'
-#' Create an input control for viewing PCR curves as plot.
+#' Create amplification curves plot.
 #'
 #' @author Konstantin A. Blagodatskikh <k.blag@@yandex.ru>
 #' @keywords PCR RDML Shiny Input
@@ -56,6 +54,59 @@ renderAmpCurves <- function(inputId,
                interactive = interactive)
 }
 
+#' Renders a melting curves viewer
+#'
+#' Create melting curves plot.
+#'
+#' @author Konstantin A. Blagodatskikh <k.blag@@yandex.ru>
+#' @keywords PCR RDML Shiny Input
+#' @import plotly
+#'
+#' @family render elements
+#' @seealso \code{\link{updateCurvesInput}}
+#'
+#' @examples
+#' # TODO
+#' @export
+renderMeltCurves <- function(inputId,
+                            label = NULL,
+                            meltCurves,
+                            # plotlyCode = NULL,
+                            colorBy = NULL,
+                            shapeBy = NULL,
+                            showTm = FALSE,
+                            cssFile = system.file("/css/curvesInputStyle.css",
+                                                  package = "shinyMolBio"),
+                            cssText = NULL,
+                            interactive = base::interactive()) {
+  assertNames(colnames(meltCurves),
+              must.include = c("fdata.name", "tmp", "fluor"))
+  meltCurves <- meltCurves %>%
+    rename(x = tmp,
+           y = fluor)
+  if (showTm) {
+    assertNames(colnames(meltCurves),
+                must.include = c("tm"))
+    meltCurves <- meltCurves %>%
+      rename(markers = tm)
+  }
+
+  renderCurves(inputId,
+               label = label,
+               curves = meltCurves,
+               xAxisTitle = "Temperature",
+               yAxisTitle = "-∆(RFU)/∆T",
+               # plotlyCode = NULL,
+               colorBy = colorBy,
+               shapeBy = shapeBy,
+               logScale = FALSE,
+               showMarkers = showTm,
+               # showBaseline = showBaseline,
+               cssFile = cssFile,
+               cssText = cssText,
+               interactive = interactive)
+}
+
 
 renderCurves <- function(inputId,
                          label = NULL,
@@ -75,13 +126,13 @@ renderCurves <- function(inputId,
   assertString(inputId)
   assertString(label, null.ok = TRUE)
   assertDataFrame(curves)
-  assertNames(colnames(curves),
-              must.include = c("fdata.name", "x", "y"))
   assertString(xAxisTitle)
   assertString(yAxisTitle)
   # assertString(plotlyCode, null.ok = TRUE)
   assertString(colorBy, null.ok = TRUE)
   assertString(shapeBy, null.ok = TRUE)
+  assertNames(colnames(curves),
+              must.include = c("fdata.name", "x", "y", colorBy, shapeBy))
   assertLogical(logScale)
   assertLogical(showMarkers)
 
@@ -126,9 +177,10 @@ renderCurves <- function(inputId,
   }
   p <- plot_ly() %>%
     add_trace(data = curves,
+              split = ~fdata.name,
               x = ~x, y = ~y,
               color = ~curveColor,
-              split = ~fdata.name,
+              linetype = ~get(shapeBy),
               type = "scatter", mode = "lines"
     ) %>%
     plotly::layout(showlegend = FALSE,

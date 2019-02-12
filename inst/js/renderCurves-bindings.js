@@ -25,9 +25,10 @@ $.extend(renderAmpCurvesBinding, {
   setValue: function(el, hideCurves) {
     if (Array.isArray(hideCurves) === false)
       hideCurves = [hideCurves];
+
     hideCurves = hideCurves.map(function (curveId) { return curveId - 1; });
 
-    var graphDiv = document.getElementsByClassName('plotly')[0];
+    var graphDiv = el.getElementsByClassName('plotly')[0];
 
     var ncurves = parseInt(el.dataset.ncurves);
     var showMarkers = (el.dataset.showmarkers === 'true');
@@ -70,7 +71,7 @@ $.extend(renderAmpCurvesBinding, {
   },
 
   // Receive messages from the server.
-  // Messages sent by updatePcrPlateInput() are received by this function.
+  // Messages sent by updateCurves() are received by this function.
   receiveMessage: function(el, data) {
     if (data.hasOwnProperty('hideCurves')){
       this.setValue(el, data.hideCurves)

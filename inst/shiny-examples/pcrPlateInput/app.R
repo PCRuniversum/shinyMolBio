@@ -16,8 +16,10 @@ ui <- fluidPage(
       textOutput("plate2Selected"),
       actionButton("selectRandomWellBtn",
                    "Select Random Well"),
+      uiOutput("showDyesUI"),
       checkboxInput("logScale", "Log Scale"),
-      uiOutput("curves1")
+      uiOutput("curves1"),
+      uiOutput("mcurves1")
     )
   )
 )
@@ -37,11 +39,13 @@ server <- function(input, output, session) {
     req(values$path)
     rdml <- RDML$new(values$path)
     expId <- as.character(rdml$experiment[[1]]$id)
-    runId <- as.character(rdml$experiment[[expId]]$run[[1]]$id)
+    # runId <- as.character(rdml$experiment[[expId]]$run[[1]]$id)
     list(table =  rdml$AsTable(cq = data$cq) %>%
-           filter(exp.id == expId &
-                    run.id == runId),
-         format = rdml$experiment[[expId]]$run[[runId]]$pcrFormat,
+           filter(exp.id == expId
+                  # &
+                    # run.id == runId
+                  ),
+         format = rdml$experiment[[expId]]$run[[1]]$pcrFormat,
          rdml = rdml)
   })
 
@@ -114,34 +118,59 @@ server <- function(input, output, session) {
         selection = sample(unique(rdmlFile()$table$position), 1))
     })
 
-
-
   output$curves1 <- renderUI({
     req(rdmlFile())#, input$pcrPlate2)
+    cat("redraw\n")
     renderAmpCurves("pcrCurves1", "curves1",
                     rdmlFile()$rdml$GetFData(rdmlFile()$table,
                                              long.table = TRUE),
                     # plotlyCode = plotly::layout(yaxis = list(title = "Fluorescence")),
                     colorBy = "sample",
+                    shapeBy = "target.dyeId",
                     showCq = TRUE,
                     logScale = input$logScale)
   })
 
+  output$mcurves1 <- renderUI({
+    req(rdmlFile())#, input$pcrPlate2)
+    cat("redraw\n")
+    renderMeltCurves("meltCurves1", "curves1",
+                    rdmlFile()$rdml$GetFData(rdmlFile()$table,
+                                             dp.type = "mdp",
+                                             long.table = TRUE) %>%
+                      group_by(fdata.name) %>%
+                      mutate(fluor = c(NA, diff(fluor))),
+                    # plotlyCode = plotly::layout(yaxis = list(title = "Fluorescence")),
+                    colorBy = "sample",
+                    shapeBy = "target.dyeId")
+  })
+
+  output$showDyesUI <- renderUI({
+    req(rdmlFile())
+    selectInput("showDyes", "Dyes",
+                choices = rdmlFile()$table$target.dyeId %>% unique(),
+                selected = rdmlFile()$table$target.dyeId %>% unique(),
+                multiple = TRUE)
+  })
+
   output$plate2Selected <- renderText({
     req(input$pcrPlate2)
+    input$showDyes
     isolate({
-      toHideCurves <- which(!(rdmlFile()$table$position %in% input$pcrPlate2))
-      cat(toHideCurves, "\n")
+      cat("upd curves\n")
+      toHideCurves <-
+        which(!(rdmlFile()$table$position %in% input$pcrPlate2) |
+                  !(rdmlFile()$table$target.dyeId %in% input$showDyes))
       updateCurves(session,
                    "pcrCurves1",
+                   hideCurves = toHideCurves)
+      updateCurves(session,
+                   "meltCurves1",
                    hideCurves = toHideCurves)
       paste("Selected wells:",
             paste(input$pcrPlate2, collapse = ", "))
     })
   })
-
-
-
 }
 
 shinyApp(ui, server)

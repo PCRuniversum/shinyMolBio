@@ -24,7 +24,6 @@ Collate:
   'global.R'
   'pcrPlate-input.R'
   'renderCurves.R'
-  'meltCurves-input.R'
   'runExample.R'
 VignetteBuilder: knitr
 RoxygenNote: 6.1.1

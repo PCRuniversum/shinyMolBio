@@ -70,8 +70,6 @@ ui <- fluidPage(
 }
 \seealso{
 \code{\link{updatePcrPlateInput}}
-
-Other input elements: \code{\link{meltCurvesInput}}
 }
 \author{
 Konstantin A. Blagodatskikh <k.blag@yandex.ru>
