@@ -180,7 +180,10 @@ renderCurves <- function(inputId,
               split = ~fdata.name,
               x = ~x, y = ~y,
               color = ~curveColor,
-              linetype = ~get(shapeBy),
+              linetype = {
+                if (is.null(shapeBy)) NULL
+                else ~get(shapeBy)
+              },
               type = "scatter", mode = "lines"
     ) %>%
     plotly::layout(showlegend = FALSE,

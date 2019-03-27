@@ -65,7 +65,6 @@ server <- function(input, output, session) {
 
   output$plate2 <- renderUI({
     req(rdmlFile())
-    rdmlf <<- rdmlFile()
     isolate({
       pcrPlateInput("pcrPlate2", "Plate 2",
                     rdmlFile()$table %>%
