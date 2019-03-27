@@ -18,8 +18,9 @@ ui <- fluidPage(
                    "Select Random Well"),
       uiOutput("showDyesUI"),
       checkboxInput("logScale", "Log Scale"),
-      uiOutput("curves1"),
-      uiOutput("mcurves1")
+      uiOutput("curves1")
+      # ,
+      # uiOutput("mcurves1")
     )
   )
 )
@@ -64,6 +65,7 @@ server <- function(input, output, session) {
 
   output$plate2 <- renderUI({
     req(rdmlFile())
+    rdmlf <<- rdmlFile()
     isolate({
       pcrPlateInput("pcrPlate2", "Plate 2",
                     rdmlFile()$table %>%
@@ -73,9 +75,11 @@ server <- function(input, output, session) {
                              cq = {
                                if(is.na(cq)) 100
                                else cq },
-                             mark = {if (cq < 30) return("<span class='filled-circle1'></span>")
-                               if (cq > 35) return("<span class='filled-circle2'></span>")
-                               else ""}),
+                             mark = {
+                               if (cq < 30) "<span class='filled-circle1'></span>"
+                               else if (cq > 35) "<span class='filled-circle2'></span>"
+                               else ""
+                             }),
                     pcrFormat = rdmlFile()$format,
                     wellLabelTemplate = "{{{mark}}}{{sample}}",
                     wellClassTemplate = "{{sampleType}}",
@@ -120,7 +124,7 @@ server <- function(input, output, session) {
 
   output$curves1 <- renderUI({
     req(rdmlFile())#, input$pcrPlate2)
-    cat("redraw\n")
+    # cat("redraw\n")
     renderAmpCurves("pcrCurves1", "curves1",
                     rdmlFile()$rdml$GetFData(rdmlFile()$table,
                                              long.table = TRUE),
