@@ -58,7 +58,7 @@ pcrPlateInput <- function(inputId,
                                                 package = "shinyMolBio"),
                           cssText = NULL,
                           plateLegend = NULL,
-                          interactive = base::interactive()) {
+                          interactive = TRUE) {
   assertString(inputId)
   assertString(label, null.ok = TRUE)
   assertDataFrame(plateDescription)

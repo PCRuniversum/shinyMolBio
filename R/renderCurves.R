@@ -24,7 +24,7 @@ renderAmpCurves <- function(inputId,
                             cssFile = system.file("/css/curvesInputStyle.css",
                                                   package = "shinyMolBio"),
                             cssText = NULL,
-                            interactive = base::interactive()) {
+                            interactive = TRUE) {
   assertNames(colnames(ampCurves),
               must.include = c("fdata.name", "cyc", "fluor"))
   assertLogical(logScale)
@@ -78,7 +78,7 @@ renderMeltCurves <- function(inputId,
                             cssFile = system.file("/css/curvesInputStyle.css",
                                                   package = "shinyMolBio"),
                             cssText = NULL,
-                            interactive = base::interactive()) {
+                            interactive = TRUE) {
   assertNames(colnames(meltCurves),
               must.include = c("fdata.name", "tmp", "fluor"))
   meltCurves <- meltCurves %>%
@@ -122,7 +122,7 @@ renderCurves <- function(inputId,
                          cssFile = system.file("/css/curvesInputStyle.css",
                                                package = "shinyMolBio"),
                          cssText = NULL,
-                         interactive = base::interactive()) {
+                         interactive = TRUE) {
   assertString(inputId)
   assertString(label, null.ok = TRUE)
   assertDataFrame(curves)
@@ -156,8 +156,6 @@ renderCurves <- function(inputId,
   assertLogical(interactive)
 
   ns <- NS(inputId)
-
-
 
   # assign colors to curves
   if (suppressWarnings(is.null(curves$curveColor))) {
@@ -227,8 +225,6 @@ renderCurves <- function(inputId,
       css
     },
     div(id = inputId, class = "pcr-curves",
-        "data-ncurves" = curves$fdata.name %>% unique() %>% length(),
-        "data-showmarkers" = if (showMarkers) "true" else "false",
         # "data-showbaseline" = if (showBaseline) "true" else "false",
         tags$label(label, `for` = inputId),
         p #ggplotly(p)
@@ -256,8 +252,9 @@ updateCurves <- function(session, inputId,
   assertClass(session, "ShinySession")
   assertString(inputId)
   assertString(label, null.ok = TRUE)
-  assertInteger(hideCurves,
-                any.missing = FALSE, null.ok = TRUE)
+  # assertInteger(hideCurves,
+  #               any.missing = FALSE, null.ok = TRUE)
+  assertCharacter(hideCurves, any.missing = FALSE, null.ok = TRUE)
   message <- .dropNulls(list(label = label, hideCurves = hideCurves))# - 1L)
   session$sendInputMessage(inputId, message)
 }

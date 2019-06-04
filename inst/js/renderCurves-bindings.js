@@ -26,33 +26,17 @@ $.extend(renderAmpCurvesBinding, {
     if (Array.isArray(hideCurves) === false)
       hideCurves = [hideCurves];
 
-    hideCurves = hideCurves.map(function (curveId) { return curveId - 1; });
-
     var graphDiv = el.getElementsByClassName('plotly')[0];
-
-    var ncurves = parseInt(el.dataset.ncurves);
-    var showMarkers = (el.dataset.showmarkers === 'true');
-    //var showBaseline = (el.dataset.showbaseline === 'true');
-
-    var hideMarkers = [];
-    if (showMarkers)
-      hideMarkers = hideCurves.map(function (curveId) { return curveId + ncurves; });
-
-    var hideBaselines = [];
-    //if (showBaseline)
-    //  hideBaselines = hideCurves.map(function (curveId) { return curveId + ncurves * 2; });
-
-    hideTracks = hideCurves.concat(hideMarkers);
-    //.concat(hideBaselines);
-    var visF = {
-      visible: false
-    };
-    var visT = {
-      visible: true
-    };
-    Plotly.restyle(graphDiv, visT);
-    if (hideTracks.length)
-      Plotly.restyle(graphDiv, visF, hideTracks);
+    graphDiv.data.forEach(function(curve) {
+      if (hideCurves.some(function(hideCurve) {
+        return curve.name.includes(hideCurve);
+              }))
+              {
+          curve.visible = false;
+        } else {
+          curve.visible = true;}
+    });
+    Plotly.redraw(graphDiv);
   },
 
   // Set up the event listeners so that interactions with the
