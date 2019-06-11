@@ -2,19 +2,42 @@
 % Please edit documentation in R/renderCurves.R
 \name{renderAmpCurves}
 \alias{renderAmpCurves}
-\title{Renders a amplification curves viewer}
+\title{Renders an amplification curves viewer}
 \usage{
 renderAmpCurves(inputId, label = NULL, ampCurves, colorBy = NULL,
-  shapeBy = NULL, logScale = FALSE, showCq = FALSE,
-  showBaseline = FALSE,
-  cssFile = system.file("/css/curvesInputStyle.css", package =
-  "shinyMolBio"), cssText = NULL, interactive = base::interactive())
+  linetypeBy = NULL, logScale = FALSE, showCq = FALSE, cssFile =
+  system.file("/css/curvesInputStyle.css", package = "shinyMolBio"), cssText
+  = NULL, interactive = TRUE)
+}
+\arguments{
+\item{inputId}{The \code{input} slot that will be used to modify plot.}
+
+\item{label}{Display label for the control, or \code{NULL} for no label.}
+
+\item{ampCurves}{Amplification curves data with
+\code{RDML$GetFData(long.table = TRUE)} format.}
+
+\item{colorBy}{Column name that contains color levels data.}
+
+\item{linetypeBy}{Column name that contains linetype levels data.}
+
+\item{logScale}{Converts plot to \code{log(RFU)}.}
+
+\item{showCq}{Shows Cq with dots (\code{cq} column have to be provided!)}
+
+\item{cssFile}{Path to the css styles file.}
+
+\item{cssText}{CSS styles as text.}
+
+\item{interactive}{Should be this \code{pcrPlate} interactive or not.}
 }
 \description{
-Create amplification curves plot.
+Renders a reactive PCR amplification plot that is suitable for assigning to
+an \code{UI output} slot.
 }
 \examples{
-# TODO
+rdml <- RDML$new(system.file("/extdata/test.rdml", package = "shinyMolBio"))
+renderAmpCurves("curves1", ampCurves = rdml$GetFData(long.table = TRUE))
 }
 \seealso{
 \code{\link{updateCurvesInput}}

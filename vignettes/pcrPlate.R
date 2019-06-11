@@ -2,7 +2,7 @@
 knitr::opts_chunk$set(echo = TRUE)
 options(knitr.table.format = "html") 
 
-## ---- results='hide'-----------------------------------------------------
+## ---- results='hide', message=FALSE, warning=FALSE-----------------------
 library(shinyMolBio)
 library(tidyverse)
 library(RDML)
@@ -105,9 +105,11 @@ plateDescription <- rdml$AsTable(cq = round(data$cq)) %>%
   group_by(fdata.name) %>%
   mutate(sampleType = sample.type,  # whisker does not support dots!
          dyeId = target.dyeId,   # whisker does not support dots!
-         mark = {if (cq < 30) return("<span class='filled-circle1'></span>")
-           if (cq > 35) return("<span class='filled-circle2'></span>")
-           else ""})
+         mark = {
+           if (cq < 30) "<span class='filled-circle1'></span>"
+           else if (cq > 35) "<span class='filled-circle2'></span>"
+           else ""
+           })
 
 uniqSamples <- unique(plateDescription$sample)
 sampleColors <- topo.colors(length(uniqSamples), alpha = 0.3)
@@ -136,7 +138,7 @@ pcrPlateInput("customLabel", "Custom labels and marks",
                   border-radius: 100%; background-color: Maroon;}
                #{{id}} .filled-circle2 {padding: 2px 11px;
                   border-radius: 100%; background-color: Orange;}",
-              plateLegend =
+              legend =
                 tags$div(
                   tags$span(class = "filled-circle1"), "Cq < 30",
                   tags$br(),

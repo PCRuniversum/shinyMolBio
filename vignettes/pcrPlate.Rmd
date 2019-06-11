@@ -17,8 +17,8 @@ options(knitr.table.format = "html")
 
 # Introduction
 
-Propose of **pcrPlateInput** shiny control is to view runs as a PCR plate like this:
-```{r, results='hide'}
+Propose of **pcrPlateInput** shiny control is to view runs as a PCR plate like any conventional real-time PCR software:
+```{r, results='hide', message=FALSE, warning=FALSE}
 library(shinyMolBio)
 library(tidyverse)
 library(RDML)
@@ -30,7 +30,7 @@ rdml <- RDML$new(system.file("/extdata/stepone_std.rdml", package = "RDML"))
 pcrPlateInput(inputId = "firstLook", # Shiny input ID
               label = "Example", # optional plate label 
               plateDescription = rdml$AsTable(), # plate description (wells content)
-              selection = c("A01", "C08") # optional preselected wells
+              interactive = FALSE
 ) 
 ```
 
@@ -51,7 +51,8 @@ Some PCR plate wells can be marked as selected by `selection = c(TO_SELECT)` (`T
 pcrPlateInput(inputId = "testPlateSel", 
               label = "Selection",
               plateDescription = rdml$AsTable(),
-              selection = 1:12 # optional preselected wells
+              selection = 1:12, # optional preselected wells
+              interactive = FALSE
 ) 
 ```
 
@@ -154,7 +155,7 @@ Well label, on hover text and other marks can be setted by templates. To do this
 * `wellClassTemplate = NULL` - specific class for current well
 * `wellStyleTemplate = NULL` - specific CSS style for current well
 
-For example we want to show *sample name*, *Cq* and *Cq < 30* or *Cq > 35* with colored circle as label; *target name* and *dye* as on hover text; mark *sample type* with border color by class; set different background color for each *sample name*. Also legend will be added by `plateLegend = YOUR_HTML_LEGEND`.
+For example we want to show *sample name*, *Cq* and *Cq < 30* or *Cq > 35* with colored circle as label; *target name* and *dye* as on hover text; mark *sample type* with border color by class; set different background color for each *sample name*. Also legend will be added by `legend = YOUR_HTML_LEGEND`.
 
 Note: if your plate description contains several rows with the same position - only the first will be used! So for example to print all targets for one well combine them to the new column like this `tbl %>% group_by(position) %>% mutate(targets = paste(target, collapse = ", "))`.
 
@@ -165,9 +166,11 @@ plateDescription <- rdml$AsTable(cq = round(data$cq)) %>%
   group_by(fdata.name) %>%
   mutate(sampleType = sample.type,  # whisker does not support dots!
          dyeId = target.dyeId,   # whisker does not support dots!
-         mark = {if (cq < 30) return("<span class='filled-circle1'></span>")
-           if (cq > 35) return("<span class='filled-circle2'></span>")
-           else ""})
+         mark = {
+           if (cq < 30) "<span class='filled-circle1'></span>"
+           else if (cq > 35) "<span class='filled-circle2'></span>"
+           else ""
+           })
 
 uniqSamples <- unique(plateDescription$sample)
 sampleColors <- topo.colors(length(uniqSamples), alpha = 0.3)
@@ -196,7 +199,7 @@ pcrPlateInput("customLabel", "Custom labels and marks",
                   border-radius: 100%; background-color: Maroon;}
                #{{id}} .filled-circle2 {padding: 2px 11px;
                   border-radius: 100%; background-color: Orange;}",
-              plateLegend =
+              legend =
                 tags$div(
                   tags$span(class = "filled-circle1"), "Cq < 30",
                   tags$br(),
@@ -209,7 +212,8 @@ pcrPlateInput("customLabel", "Custom labels and marks",
                     tags$span(class = "neg", "Negative"),
                     tags$span(class = "std", "Standard")
                   )
-                )
+                ),
+              interactive = FALSE
 )
 ```
 

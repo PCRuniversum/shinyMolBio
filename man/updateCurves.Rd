@@ -13,7 +13,7 @@ updateCurves(session, inputId, label = NULL, hideCurves = NULL)
 
 \item{label}{The label to set for the input object.}
 
-\item{selection}{The positions of the wells to be selected.}
+\item{selection}{The \code{fdata.names} of the curves to be hided.}
 }
 \description{
 Change the value of a render PCR curves control on the client

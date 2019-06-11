@@ -1,6 +1,24 @@
-#' Renders a amplification curves viewer
+#' Renders an amplification curves viewer
 #'
-#' Create amplification curves plot.
+#' Renders a reactive PCR amplification plot that is suitable for assigning to
+#' an \code{UI output} slot.
+#'
+#' @usage renderAmpCurves(inputId, label = NULL, ampCurves, colorBy = NULL,
+#'   linetypeBy = NULL, logScale = FALSE, showCq = FALSE, showLegend = FALSE, cssFile =
+#'   NULL, cssText = NULL, interactive = TRUE)
+#'
+#' @param inputId The \code{input} slot that will be used to modify plot.
+#' @param label Display label for the control, or \code{NULL} for no label.
+#' @param ampCurves Amplification curves data with
+#'   \code{RDML$GetFData(long.table = TRUE)} format.
+#' @param colorBy Column name that contains color levels data.
+#' @param linetypeBy Column name that contains linetype levels data.
+#' @param logScale Converts plot to \code{log(RFU)}.
+#' @param showCq Shows Cq with dots (\code{cq} column have to be provided!)
+#' @param showLegend Show plot legend.
+#' @param cssFile Path to the css styles file.
+#' @param cssText CSS styles as text.
+#' @param interactive Should be this \code{pcrPlate} interactive or not.
 #'
 #' @author Konstantin A. Blagodatskikh <k.blag@@yandex.ru>
 #' @keywords PCR RDML Shiny Input
@@ -9,20 +27,19 @@
 #' @family render elements
 #' @seealso \code{\link{updateCurvesInput}}
 #'
-#' @examples
-#' # TODO
 #' @export
+#' @examples
+#' rdml <- RDML$new(system.file("/extdata/test.rdml", package = "shinyMolBio"))
+#' renderAmpCurves("curves1", ampCurves = rdml$GetFData(long.table = TRUE))
 renderAmpCurves <- function(inputId,
                             label = NULL,
                             ampCurves,
-                            # plotlyCode = NULL,
                             colorBy = NULL,
-                            shapeBy = NULL,
+                            linetypeBy = NULL,
                             logScale = FALSE,
                             showCq = FALSE,
-                            showBaseline = FALSE,
-                            cssFile = system.file("/css/curvesInputStyle.css",
-                                                  package = "shinyMolBio"),
+                            showLegend = FALSE,
+                            cssFile = NULL,
                             cssText = NULL,
                             interactive = TRUE) {
   assertNames(colnames(ampCurves),
@@ -45,10 +62,10 @@ renderAmpCurves <- function(inputId,
                yAxisTitle = if (logScale) "log(RFU)" else "RFU",
                # plotlyCode = NULL,
                colorBy = colorBy,
-               shapeBy = shapeBy,
+               linetypeBy = linetypeBy,
                logScale = logScale,
                showMarkers = showCq,
-               # showBaseline = showBaseline,
+               showLegend = showLegend,
                cssFile = cssFile,
                cssText = cssText,
                interactive = interactive)
@@ -56,7 +73,25 @@ renderAmpCurves <- function(inputId,
 
 #' Renders a melting curves viewer
 #'
-#' Create melting curves plot.
+#' Renders a reactive melting plot that is suitable for assigning to an \code{UI
+#' output} slot.
+#'
+#' @usage renderMeltCurves(inputId, label = NULL, meltCurves, colorBy = NULL,
+#'   linetypeBy = NULL, logScale = FALSE, showTm = FALSE, showLegend = FALSE, cssFile =
+#'   NULL, cssText
+#'   = NULL, interactive = TRUE)
+#'
+#' @param inputId The \code{input} slot that will be used to modify plot.
+#' @param label Display label for the control, or \code{NULL} for no label.
+#' @param meltCurves Melting curves data with \code{RDML$GetFData(dp.type =
+#'   "mdp", long.table = TRUE)} format.
+#' @param colorBy Column name that contains color levels data.
+#' @param linetypeBy Column name that contains linetype levels data.
+#' @param logScale Converts plot to \code{log(RFU)}.
+#' @param showTm Shows Tm with dots (\code{tm} column have to be provided!)
+#' @param cssFile Path to the css styles file.
+#' @param cssText CSS styles as text.
+#' @param interactive Should be this \code{pcrPlate} interactive or not.
 #'
 #' @author Konstantin A. Blagodatskikh <k.blag@@yandex.ru>
 #' @keywords PCR RDML Shiny Input
@@ -65,18 +100,19 @@ renderAmpCurves <- function(inputId,
 #' @family render elements
 #' @seealso \code{\link{updateCurvesInput}}
 #'
-#' @examples
-#' # TODO
 #' @export
+#' @examples
+#' rdml <- RDML$new(system.file("/extdata/test.rdml", package = "shinyMolBio"))
+#' renderAmpCurves("curves1", meltCurves = rdml$GetFData(dp.type = "mdp", long.table = TRUE))
 renderMeltCurves <- function(inputId,
                             label = NULL,
                             meltCurves,
                             # plotlyCode = NULL,
                             colorBy = NULL,
-                            shapeBy = NULL,
+                            linetypeBy = NULL,
                             showTm = FALSE,
-                            cssFile = system.file("/css/curvesInputStyle.css",
-                                                  package = "shinyMolBio"),
+                            showLegend = FALSE,
+                            cssFile = NULL,
                             cssText = NULL,
                             interactive = TRUE) {
   assertNames(colnames(meltCurves),
@@ -98,10 +134,10 @@ renderMeltCurves <- function(inputId,
                yAxisTitle = "-∆(RFU)/∆T",
                # plotlyCode = NULL,
                colorBy = colorBy,
-               shapeBy = shapeBy,
+               linetypeBy = linetypeBy,
                logScale = FALSE,
                showMarkers = showTm,
-               # showBaseline = showBaseline,
+               showLegend = showLegend,
                cssFile = cssFile,
                cssText = cssText,
                interactive = interactive)
@@ -115,12 +151,11 @@ renderCurves <- function(inputId,
                          yAxisTitle,
                          # plotlyCode = NULL,
                          colorBy = NULL,
-                         shapeBy = NULL,
+                         linetypeBy = NULL,
                          logScale = FALSE,
                          showMarkers = FALSE,
-                         # showBaseline = FALSE,
-                         cssFile = system.file("/css/curvesInputStyle.css",
-                                               package = "shinyMolBio"),
+                         showLegend = FALSE,
+                         cssFile = NULL,
                          cssText = NULL,
                          interactive = TRUE) {
   assertString(inputId)
@@ -130,11 +165,57 @@ renderCurves <- function(inputId,
   assertString(yAxisTitle)
   # assertString(plotlyCode, null.ok = TRUE)
   assertString(colorBy, null.ok = TRUE)
-  assertString(shapeBy, null.ok = TRUE)
+  assertString(linetypeBy, null.ok = TRUE)
   assertNames(colnames(curves),
-              must.include = c("fdata.name", "x", "y", colorBy, shapeBy))
+              must.include = c("fdata.name", "x", "y", colorBy, linetypeBy))
   assertLogical(logScale)
   assertLogical(showMarkers)
+  assertLogical(showLegend)
+
+  # curves <- curves %>%
+    # mutate(curveName = sprintf("%s %s\n%s\n%s", position, target.dyeId, sample, fdata.name))
+
+
+  # assertLogical(showBaseline)
+  assertString(cssFile, null.ok = TRUE)
+  assertString(cssText, null.ok = TRUE)
+  assertLogical(interactive)
+
+  ns <- NS(inputId)
+
+  # assign colors to curves
+  if (!("color" %in% colnames(curves))) {
+    if (!is.null(colorBy)) {
+      colorNames <- unique(curves[[colorBy]])
+      needNColors <- length(colorNames)
+      curvesColors <- tryCatch(
+        RColorBrewer::brewer.pal(needNColors, "Set2"),
+        warning = function(w)
+          colorRampPalette(RColorBrewer::brewer.pal(8, "Set2"))(needNColors)
+      )
+      names(curvesColors) <- colorNames
+      curves$color <- curvesColors[curves[[colorBy]]]
+    } else {
+      curves$color <- "black"
+    }
+  }
+
+  p <- plot_ly() %>%
+    add_trace(data = curves,
+              # split = ~fdata.name,
+              name = ~fdata.name,
+              x = ~x, y = ~y,
+              line = list(color = curves$color),
+              linetype = {
+                if (is.null(linetypeBy)) NULL
+                else ~get(linetypeBy)
+              },
+              type = "scatter", mode = "lines"
+    ) %>%
+    plotly::layout(showlegend = showLegend,
+                   xaxis = list(title = xAxisTitle),
+                   yaxis = list(title = yAxisTitle,
+                                type = if (logScale) "log" else "linear"))
 
   if (showMarkers) {
     assertNames(colnames(curves),
@@ -148,68 +229,31 @@ renderCurves <- function(inputId,
       mutate(isMarker = replace(rep(FALSE, length(x)),
                                 sapply(unique(markers), # set TRUE to closest cyc
                                        function(marker) which.min(abs(x - marker))), TRUE))
-  }
-
-  # assertLogical(showBaseline)
-  assertString(cssFile)
-  assertString(cssText, null.ok = TRUE)
-  assertLogical(interactive)
-
-  ns <- NS(inputId)
-
-  # assign colors to curves
-  if (suppressWarnings(is.null(curves$curveColor))) {
-    if (!is.null(colorBy)) {
-      colorNames <- unique(curves[[colorBy]])
-      needNColors <- length(colorNames)
-      curvesColors <- tryCatch(
-        RColorBrewer::brewer.pal(needNColors, "Set2"),
-        warning = function(w)
-          colorRampPalette(RColorBrewer::brewer.pal(8, "Set2"))(needNColors)
-      )
-      names(curvesColors) <- colorNames
-      curves$curveColor <- curvesColors[curves[[colorBy]]]
-    } else {
-      curves$curveColor <- "black"
-    }
-  }
-  p <- plot_ly() %>%
-    add_trace(data = curves,
-              split = ~fdata.name,
-              x = ~x, y = ~y,
-              color = ~curveColor,
-              linetype = {
-                if (is.null(shapeBy)) NULL
-                else ~get(shapeBy)
-              },
-              type = "scatter", mode = "lines"
-    ) %>%
-    plotly::layout(showlegend = FALSE,
-                   xaxis = list(title = xAxisTitle),
-                   yaxis = list(title = yAxisTitle,
-                                type = if (logScale) "log" else "linear"))
-
-  if (showMarkers) {
     cqs <- curves %>%
       filter(isMarker == TRUE)
     p <- add_trace(p,
                    data = cqs,
+                   # split = ~fdata.name,
+                   name = ~fdata.name,
                    x = ~x, y = ~y,
-                   color = ~curveColor,
-                   split = ~fdata.name,
-                   type = "scatter", mode = "markers"
+                   marker = list(color = cqs$color),
+                   type = "scatter", mode = "markers",
+                   showlegend = FALSE
     )
   }
 
   # if (!is.null(plotlyCode))
   # p <- p %>% eval(parse(plotlyCode))
 
-  css <- tags$style(type = "text/css",
-                    paste0(whisker.render(
-                      suppressWarnings(readLines(cssFile, warn = FALSE, encoding = "UTF-8")) %>%
-                        paste0(collapse = ""),
-                      list(id = inputId)
-                    ),
+  css <-
+    tags$style(type = "text/css",
+                    paste0(
+                      if (!is.null(cssFile)) {
+                        whisker.render(
+                          suppressWarnings(readLines(cssFile, warn = FALSE, encoding = "UTF-8")) %>%
+                            paste0(collapse = ""),
+                          list(id = inputId)
+                        )} else { "" },
                     whisker.render(cssText, list(id = inputId))
                     )
   )
@@ -225,9 +269,8 @@ renderCurves <- function(inputId,
       css
     },
     div(id = inputId, class = "pcr-curves",
-        # "data-showbaseline" = if (showBaseline) "true" else "false",
         tags$label(label, `for` = inputId),
-        p #ggplotly(p)
+        p
     )
   )
 }
@@ -239,12 +282,10 @@ renderCurves <- function(inputId,
 #' @param session The \code{session} object passed to function given to \code{shinyServer}.
 #' @param inputId The id of the \code{input} object.
 #' @param label The label to set for the input object.
-#' @param selection The positions of the wells to be selected.
+#' @param selection The \code{fdata.names} of the curves to be hiden.
 #'
 #' @author Konstantin A. Blagodatskikh <k.blag@@yandex.ru>
 #' @keywords PCR RDML Shiny Input
-#' @examples
-#' # TODO
 #' @export
 updateCurves <- function(session, inputId,
                          label = NULL,

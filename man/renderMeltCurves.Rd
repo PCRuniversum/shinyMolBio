@@ -5,15 +5,39 @@
 \title{Renders a melting curves viewer}
 \usage{
 renderMeltCurves(inputId, label = NULL, meltCurves, colorBy = NULL,
-  shapeBy = NULL, showTm = FALSE,
-  cssFile = system.file("/css/curvesInputStyle.css", package =
-  "shinyMolBio"), cssText = NULL, interactive = base::interactive())
+  linetypeBy = NULL, logScale = FALSE, showTm = FALSE, cssFile =
+  system.file("/css/curvesInputStyle.css", package = "shinyMolBio"), cssText
+  = NULL, interactive = TRUE)
+}
+\arguments{
+\item{inputId}{The \code{input} slot that will be used to modify plot.}
+
+\item{label}{Display label for the control, or \code{NULL} for no label.}
+
+\item{meltCurves}{Melting curves data with \code{RDML$GetFData(dp.type =
+"mdp", long.table = TRUE)} format.}
+
+\item{colorBy}{Column name that contains color levels data.}
+
+\item{linetypeBy}{Column name that contains linetype levels data.}
+
+\item{showTm}{Shows Tm with dots (\code{tm} column have to be provided!)}
+
+\item{cssFile}{Path to the css styles file.}
+
+\item{cssText}{CSS styles as text.}
+
+\item{interactive}{Should be this \code{pcrPlate} interactive or not.}
+
+\item{logScale}{Converts plot to \code{log(RFU)}.}
 }
 \description{
-Create melting curves plot.
+Renders a reactive melting plot that is suitable for assigning to an \code{UI
+output} slot.
 }
 \examples{
-# TODO
+rdml <- RDML$new(system.file("/extdata/test.rdml", package = "shinyMolBio"))
+renderAmpCurves("curves1", meltCurves = rdml$GetFData(dp.type = "mdp", long.table = TRUE))
 }
 \seealso{
 \code{\link{updateCurvesInput}}

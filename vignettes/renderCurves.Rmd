@@ -1,0 +1,86 @@
+---
+title: "renderAmpCurves and renderMeltCurves"
+author: "Konstantin A. Blagodatskikh"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{pcrPlateInput overview}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+# Introduction
+
+**renderAmpCurves** and **renderMeltCurves** function represent amplification and melting data from real-time PCR experiments as curves based on **plotly** package.
+Main advantage of using this functions instead of regular plot renders is that it glued with **RDML** package. Minimal usage recures only `GetFData(long.table = TRUE)` function output. Also it have interactive feature - fast curves hiding without total plot redraw.
+
+```{r, results='hide', message=FALSE, warning=FALSE}
+library(shinyMolBio)
+library(tidyverse)
+library(RDML)
+# load RDML file
+rdml <- RDML$new(system.file("/extdata/stepone_std.rdml", package = "RDML"))
+```
+```{r, results='asis'}
+# create Shiny UI
+renderAmpCurves(inputId = "firstLook", # Shiny input ID
+              label = "Example", # optional plot label 
+              ampCurves = rdml$GetFData(long.table = TRUE), # Amplification curves
+              interactive = FALSE
+) 
+```
+
+# Curves customization
+
+## Color
+
+Curve color can be directly provided by adding column **color** to **ampCurves** table or by choosing column that defines color with **colorBy** param.
+
+```{r, results='asis'}
+# create Shiny UI
+renderAmpCurves(inputId = "color1",
+              ampCurves = rdml$GetFData(long.table = TRUE),
+              colorBy = "sample", # sample name will define color
+              interactive = FALSE
+) 
+
+renderAmpCurves(inputId = "color2",
+              ampCurves = rdml$GetFData(long.table = TRUE) %>% 
+                mutate(color = "red"), # All curves will be red
+              interactive = FALSE
+)
+```
+
+## Linetype
+
+Curve linetype can be setted by choosing column that defines linetype with **linetypeBy** param.
+
+```{r, results='asis'}
+# create Shiny UI
+renderAmpCurves(inputId = "linetype",
+              ampCurves = rdml$GetFData(long.table = TRUE),
+              linetypeBy = "sample.type", # sample.type will define color
+              interactive = FALSE
+) 
+```
+
+# Show Markers
+
+You can show *Cq* or *Tm* values on curves as markers setting `showCq = TRUE` or `showTm = TRUE`. Then input table have to contain *cq* or *tm* column.
+
+```{r, results='asis'}
+# create Shiny UI
+renderAmpCurves(inputId = "cq", 
+              ampCurves = rdml$GetFData(
+                rdml$AsTable(cq = data$cq), # Get Cq values from file
+                long.table = TRUE), 
+              showCq = TRUE, # Add Cq markers to curves
+              colorBy = "sample",
+              interactive = FALSE
+) 
+```
+
+# Hiding curves
+
+Individual curves can be hidden without plot redraw. Use *updateCurves* function with *fdata.name* as *hideCurves* param.
+Run `shinyMolBio::runExample("pcrPlateInput")` to see this in action.

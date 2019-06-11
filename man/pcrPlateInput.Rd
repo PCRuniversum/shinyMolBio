@@ -4,16 +4,21 @@
 \alias{pcrPlateInput}
 \title{Create a PCR plate input control}
 \usage{
-pcrPlateInput(inputId, label = NULL, plateDescription,
-  pcrFormat = pcrFormatType$new(8, 12, labelFormatType$new("ABC"),
-  labelFormatType$new("123")), selection = NULL,
-  wellLabelTemplate = "{{sample}}",
-  onHoverWellTextTemplate = "{{position}}\\n{{sample}}\\n{{target}}",
-  wellClassTemplate = NULL, wellStyleTemplate = NULL,
-  wellGroupTemplate = "{{sample}}-{{target}}",
-  cssFile = system.file("/css/pcrPlateInputStyle.css", package =
-  "shinyMolBio"), cssText = NULL, plateLegend = NULL,
-  interactive = base::interactive())
+pcrPlateInput(inputId,
+       label = NULL,
+       plateDescription,
+       pcrFormat = pcrFormatType$new(8, 12, labelFormatType$new("ABC"), labelFormatType$new("123")),
+       selection = NULL,
+       wellLabelTemplate = "{{sample}}",
+       onHoverWellTextTemplate = "{{position}}\u000A{{sample}}\u000A{{target}}",
+       wellClassTemplate = NULL,
+       wellStyleTemplate = NULL,
+       wellGroupTemplate = "{{sample}}-{{target}}",
+       cssFile = system.file("/css/pcrPlateInputStyle.css",
+                 package = "shinyMolBio"),
+       cssText = NULL,
+       legend = NULL,
+       interactive = TRUE)
 }
 \arguments{
 \item{inputId}{The \code{input} slot that will be used to access the selected
@@ -38,11 +43,13 @@ AsTable()} function.}
 
 \item{wellGroupTemplate}{Template of the well group for selecting.}
 
-\item{cssFile}{path to the css styles file.}
+\item{cssFile}{Path to the css styles file.}
 
-\item{cssText}{css styles as text.}
+\item{cssText}{CSS styles as text.}
 
-\item{plateLegend}{plate legend (any HTML content).}
+\item{legend}{Plate legend (any HTML content).}
+
+\item{interactive}{Should be this \code{pcrPlate} interactive or not.}
 }
 \value{
 A PCR plate control that can be added to a UI definition.

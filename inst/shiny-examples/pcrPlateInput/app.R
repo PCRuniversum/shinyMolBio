@@ -19,8 +19,8 @@ ui <- fluidPage(
       uiOutput("showDyesUI"),
       checkboxInput("logScale", "Log Scale"),
       uiOutput("curves1")
-      # ,
-      # uiOutput("mcurves1")
+      ,
+      uiOutput("mcurves1")
     )
   )
 )
@@ -29,7 +29,7 @@ server <- function(input, output, session) {
   values <- reactiveValues()
 
   observeEvent(input$exmplFile, {
-    values$path <- system.file("/extdata/stepone_std.rdml", package = "RDML")
+    values$path <- system.file("/extdata/test.rdml", package = "shinyMolBio")
   })
 
   observeEvent(input$rdmlFile$datapath, {
@@ -72,7 +72,7 @@ server <- function(input, output, session) {
                       group_by(fdata.name) %>%
                       mutate(sampleType = sample.type,  #whisker does not support dots!
                              cq = {
-                               if(is.na(cq)) 100
+                               if (is.na(cq)) 100
                                else cq },
                              mark = {
                                if (cq < 30) "<span class='filled-circle1'></span>"
@@ -94,7 +94,7 @@ server <- function(input, output, session) {
                #{{id}} .filled-circle2 {padding: 2px 11px;
                   border-radius: 100%; background-color: Orange;}",
                     # tags$div(tags$span(class = ".filled-circle1"), "Sdsf")
-                    plateLegend =
+                    legend =
                       tags$div(
                         tags$span(class = "filled-circle1"), "Cq < 30",
                         tags$br(),
@@ -123,20 +123,19 @@ server <- function(input, output, session) {
 
   output$curves1 <- renderUI({
     req(rdmlFile())#, input$pcrPlate2)
-    # cat("redraw\n")
     renderAmpCurves("pcrCurves1", "curves1",
                     rdmlFile()$rdml$GetFData(rdmlFile()$table,
                                              long.table = TRUE),
                     # plotlyCode = plotly::layout(yaxis = list(title = "Fluorescence")),
                     colorBy = "sample",
-                    shapeBy = "target.dyeId",
+                    linetypeBy = "target.dyeId",
                     showCq = TRUE,
+                    showLegend = TRUE,
                     logScale = input$logScale)
   })
 
   output$mcurves1 <- renderUI({
     req(rdmlFile())#, input$pcrPlate2)
-    cat("redraw\n")
     renderMeltCurves("meltCurves1", "curves1",
                     rdmlFile()$rdml$GetFData(rdmlFile()$table,
                                              dp.type = "mdp",
@@ -145,7 +144,7 @@ server <- function(input, output, session) {
                       mutate(fluor = c(NA, diff(fluor))),
                     # plotlyCode = plotly::layout(yaxis = list(title = "Fluorescence")),
                     colorBy = "sample",
-                    shapeBy = "target.dyeId")
+                    linetypeBy = "target.dyeId")
   })
 
   output$showDyesUI <- renderUI({
@@ -160,7 +159,7 @@ server <- function(input, output, session) {
     req(input$pcrPlate2)
     input$showDyes
     isolate({
-      cat("upd curves\n")
+      # cat("upd curves\n")
       toHideCurves <-
         rdmlFile()$table %>%
         filter(!(position %in% input$pcrPlate2) |

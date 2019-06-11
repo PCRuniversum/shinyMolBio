@@ -3,6 +3,22 @@
 #' Create an input control for representing PCR plate and dynamically selecting
 #' wells inside it.
 #'
+#' @usage pcrPlateInput(inputId,
+#'        label = NULL,
+#'        plateDescription,
+#'        pcrFormat = pcrFormatType$new(8, 12, labelFormatType$new("ABC"), labelFormatType$new("123")),
+#'        selection = NULL,
+#'        wellLabelTemplate = "{{sample}}",
+#'        onHoverWellTextTemplate = "{{position}}\u000A{{sample}}\u000A{{target}}",
+#'        wellClassTemplate = NULL,
+#'        wellStyleTemplate = NULL,
+#'        wellGroupTemplate = "{{sample}}-{{target}}",
+#'        cssFile = system.file("/css/pcrPlateInputStyle.css",
+#'                  package = "shinyMolBio"),
+#'        cssText = NULL,
+#'        legend = NULL,
+#'        interactive = TRUE)
+#'
 #' @param inputId The \code{input} slot that will be used to access the selected
 #'   wells positions.
 #' @param label Display label for the control, or \code{NULL} for no label.
@@ -15,9 +31,10 @@
 #' @param wellClassTemplate Template of the well class (css class).
 #' @param wellStyleTemplate Template of the well style (css).
 #' @param wellGroupTemplate Template of the well group for selecting.
-#' @param cssFile path to the css styles file.
-#' @param cssText css styles as text.
-#' @param plateLegend plate legend (any HTML content).
+#' @param cssFile Path to the css styles file.
+#' @param cssText CSS styles as text.
+#' @param legend Plate legend (any HTML content).
+#' @param interactive Should be this \code{pcrPlate} interactive or not.
 #' @return A PCR plate control that can be added to a UI definition.
 #'
 #' @author Konstantin A. Blagodatskikh <k.blag@@yandex.ru>
@@ -57,7 +74,7 @@ pcrPlateInput <- function(inputId,
                           cssFile = system.file("/css/pcrPlateInputStyle.css",
                                                 package = "shinyMolBio"),
                           cssText = NULL,
-                          plateLegend = NULL,
+                          legend = NULL,
                           interactive = TRUE) {
   assertString(inputId)
   assertString(label, null.ok = TRUE)
@@ -73,9 +90,9 @@ pcrPlateInput <- function(inputId,
   assertString(wellGroupTemplate, null.ok = TRUE)
   assertString(cssFile)
   assertString(cssText, null.ok = TRUE)
-  # assertString(plateLegend, null.ok = TRUE)
-  assert(checkNull(plateLegend),
-         checkClass(plateLegend, "shiny.tag"))
+  # assertString(legend, null.ok = TRUE)
+  assert(checkNull(legend),
+         checkClass(legend, "shiny.tag"))
   assertFlag(interactive)
 
   ns <- NS(inputId)
@@ -180,7 +197,7 @@ pcrPlateInput <- function(inputId,
     div(id = inputId, class = "pcr-plate",
         tags$label(label, `for` = inputId),
         htmlPlate,
-        plateLegend
+        legend
     )
   )
 }
