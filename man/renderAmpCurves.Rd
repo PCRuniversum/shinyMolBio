@@ -5,9 +5,8 @@
 \title{Renders an amplification curves viewer}
 \usage{
 renderAmpCurves(inputId, label = NULL, ampCurves, colorBy = NULL,
-  linetypeBy = NULL, logScale = FALSE, showCq = FALSE, cssFile =
-  system.file("/css/curvesInputStyle.css", package = "shinyMolBio"), cssText
-  = NULL, interactive = TRUE)
+  linetypeBy = NULL, logScale = FALSE, showCq = FALSE, showLegend = FALSE,
+   cssFile = NULL, cssText = NULL, interactive = TRUE)
 }
 \arguments{
 \item{inputId}{The \code{input} slot that will be used to modify plot.}
@@ -25,6 +24,8 @@ renderAmpCurves(inputId, label = NULL, ampCurves, colorBy = NULL,
 
 \item{showCq}{Shows Cq with dots (\code{cq} column have to be provided!)}
 
+\item{showLegend}{Show plot legend.}
+
 \item{cssFile}{Path to the css styles file.}
 
 \item{cssText}{CSS styles as text.}
@@ -36,11 +37,12 @@ Renders a reactive PCR amplification plot that is suitable for assigning to
 an \code{UI output} slot.
 }
 \examples{
+library(RDML)
 rdml <- RDML$new(system.file("/extdata/test.rdml", package = "shinyMolBio"))
 renderAmpCurves("curves1", ampCurves = rdml$GetFData(long.table = TRUE))
 }
 \seealso{
-\code{\link{updateCurvesInput}}
+\code{\link{updateCurves}}
 
 Other render elements: \code{\link{renderMeltCurves}}
 }

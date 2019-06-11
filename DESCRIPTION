@@ -19,11 +19,15 @@ Imports:
   shiny,
   stringr,
   whisker,
-  plotly
+  plotly,
+  lazyeval,
+  RColorBrewer
 Collate:
   'global.R'
   'pcrPlate-input.R'
   'renderCurves.R'
   'runExample.R'
+Suggests:
+  knitr
 VignetteBuilder: knitr
 RoxygenNote: 6.1.1

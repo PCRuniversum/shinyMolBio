@@ -4,8 +4,8 @@
 #' an \code{UI output} slot.
 #'
 #' @usage renderAmpCurves(inputId, label = NULL, ampCurves, colorBy = NULL,
-#'   linetypeBy = NULL, logScale = FALSE, showCq = FALSE, showLegend = FALSE, cssFile =
-#'   NULL, cssText = NULL, interactive = TRUE)
+#'   linetypeBy = NULL, logScale = FALSE, showCq = FALSE, showLegend = FALSE,
+#'    cssFile = NULL, cssText = NULL, interactive = TRUE)
 #'
 #' @param inputId The \code{input} slot that will be used to modify plot.
 #' @param label Display label for the control, or \code{NULL} for no label.
@@ -22,13 +22,15 @@
 #'
 #' @author Konstantin A. Blagodatskikh <k.blag@@yandex.ru>
 #' @keywords PCR RDML Shiny Input
-#' @import plotly
+#' @import plotly RColorBrewer
+#' @importFrom grDevices colorRampPalette
 #'
 #' @family render elements
-#' @seealso \code{\link{updateCurvesInput}}
+#' @seealso \code{\link{updateCurves}}
 #'
 #' @export
 #' @examples
+#' library(RDML)
 #' rdml <- RDML$new(system.file("/extdata/test.rdml", package = "shinyMolBio"))
 #' renderAmpCurves("curves1", ampCurves = rdml$GetFData(long.table = TRUE))
 renderAmpCurves <- function(inputId,
@@ -77,9 +79,8 @@ renderAmpCurves <- function(inputId,
 #' output} slot.
 #'
 #' @usage renderMeltCurves(inputId, label = NULL, meltCurves, colorBy = NULL,
-#'   linetypeBy = NULL, logScale = FALSE, showTm = FALSE, showLegend = FALSE, cssFile =
-#'   NULL, cssText
-#'   = NULL, interactive = TRUE)
+#'   linetypeBy = NULL, showTm = FALSE, showLegend = FALSE, cssFile =
+#'   NULL, cssText = NULL, interactive = TRUE)
 #'
 #' @param inputId The \code{input} slot that will be used to modify plot.
 #' @param label Display label for the control, or \code{NULL} for no label.
@@ -87,23 +88,24 @@ renderAmpCurves <- function(inputId,
 #'   "mdp", long.table = TRUE)} format.
 #' @param colorBy Column name that contains color levels data.
 #' @param linetypeBy Column name that contains linetype levels data.
-#' @param logScale Converts plot to \code{log(RFU)}.
 #' @param showTm Shows Tm with dots (\code{tm} column have to be provided!)
+#' @param showLegend Show plot legend.
 #' @param cssFile Path to the css styles file.
 #' @param cssText CSS styles as text.
 #' @param interactive Should be this \code{pcrPlate} interactive or not.
 #'
 #' @author Konstantin A. Blagodatskikh <k.blag@@yandex.ru>
 #' @keywords PCR RDML Shiny Input
-#' @import plotly
 #'
 #' @family render elements
-#' @seealso \code{\link{updateCurvesInput}}
+#' @seealso \code{\link{updateCurves}}
 #'
 #' @export
 #' @examples
+#' library(RDML)
 #' rdml <- RDML$new(system.file("/extdata/test.rdml", package = "shinyMolBio"))
-#' renderAmpCurves("curves1", meltCurves = rdml$GetFData(dp.type = "mdp", long.table = TRUE))
+#' renderMeltCurves("curves1", meltCurves = rdml$GetFData(dp.type = "mdp",
+#'  long.table = TRUE))
 renderMeltCurves <- function(inputId,
                             label = NULL,
                             meltCurves,
@@ -131,7 +133,7 @@ renderMeltCurves <- function(inputId,
                label = label,
                curves = meltCurves,
                xAxisTitle = "Temperature",
-               yAxisTitle = "-∆(RFU)/∆T",
+               yAxisTitle = "-d(RFU)/dT",
                # plotlyCode = NULL,
                colorBy = colorBy,
                linetypeBy = linetypeBy,
@@ -173,7 +175,8 @@ renderCurves <- function(inputId,
   assertLogical(showLegend)
 
   # curves <- curves %>%
-    # mutate(curveName = sprintf("%s %s\n%s\n%s", position, target.dyeId, sample, fdata.name))
+    # mutate(curveName = sprintf("%s %s\n%s\n%s", position, target.dyeId,
+  # sample, fdata.name))
 
 
   # assertLogical(showBaseline)
@@ -189,9 +192,9 @@ renderCurves <- function(inputId,
       colorNames <- unique(curves[[colorBy]])
       needNColors <- length(colorNames)
       curvesColors <- tryCatch(
-        RColorBrewer::brewer.pal(needNColors, "Set2"),
+        brewer.pal(needNColors, "Set2"),
         warning = function(w)
-          colorRampPalette(RColorBrewer::brewer.pal(8, "Set2"))(needNColors)
+          colorRampPalette(brewer.pal(8, "Set2"))(needNColors)
       )
       names(curvesColors) <- colorNames
       curves$color <- curvesColors[curves[[colorBy]]]
@@ -226,9 +229,11 @@ renderCurves <- function(inputId,
     curves[is.na(curves$markers), "markers"] <- maxX
     curves <- curves %>%
       group_by(fdata.name) %>%
-      mutate(isMarker = replace(rep(FALSE, length(x)),
-                                sapply(unique(markers), # set TRUE to closest cyc
-                                       function(marker) which.min(abs(x - marker))), TRUE))
+      mutate(isMarker =
+               replace(rep(FALSE, length(x)),
+                       sapply(unique(markers), # set TRUE to closest cyc
+                              function(marker)
+                                which.min(abs(x - marker))), TRUE))
     cqs <- curves %>%
       filter(isMarker == TRUE)
     p <- add_trace(p,
@@ -250,7 +255,9 @@ renderCurves <- function(inputId,
                     paste0(
                       if (!is.null(cssFile)) {
                         whisker.render(
-                          suppressWarnings(readLines(cssFile, warn = FALSE, encoding = "UTF-8")) %>%
+                          suppressWarnings(
+                            readLines(cssFile,
+                                      warn = FALSE, encoding = "UTF-8")) %>%
                             paste0(collapse = ""),
                           list(id = inputId)
                         )} else { "" },
@@ -261,7 +268,8 @@ renderCurves <- function(inputId,
     if (interactive) {
       tags$head(
         singleton(
-          includeScript(system.file("/js/renderCurves-bindings.js", package = "shinyMolBio"))
+          includeScript(system.file("/js/renderCurves-bindings.js",
+                                    package = "shinyMolBio"))
         ),
         singleton(css)
       )
@@ -279,10 +287,11 @@ renderCurves <- function(inputId,
 #'
 #' Change the value of a render PCR curves control on the client
 #'
-#' @param session The \code{session} object passed to function given to \code{shinyServer}.
+#' @param session The \code{session} object passed to function given to
+#'   \code{shinyServer}.
 #' @param inputId The id of the \code{input} object.
 #' @param label The label to set for the input object.
-#' @param selection The \code{fdata.names} of the curves to be hiden.
+#' @param hideCurves The \code{fdata.names} of the curves to be hiden.
 #'
 #' @author Konstantin A. Blagodatskikh <k.blag@@yandex.ru>
 #' @keywords PCR RDML Shiny Input

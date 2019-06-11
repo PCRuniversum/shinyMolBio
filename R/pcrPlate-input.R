@@ -6,7 +6,8 @@
 #' @usage pcrPlateInput(inputId,
 #'        label = NULL,
 #'        plateDescription,
-#'        pcrFormat = pcrFormatType$new(8, 12, labelFormatType$new("ABC"), labelFormatType$new("123")),
+#'        pcrFormat = pcrFormatType$new(8, 12, labelFormatType$new("ABC"),
+#'         labelFormatType$new("123")),
 #'        selection = NULL,
 #'        wellLabelTemplate = "{{sample}}",
 #'        onHoverWellTextTemplate = "{{position}}\u000A{{sample}}\u000A{{target}}",
@@ -25,7 +26,7 @@
 #' @param plateDescription Plate description - basicly output from \code{RDML
 #'   AsTable()} function.
 #' @param pcrFormat PCR plate parametrs. Should be \code{pcrFormatType}.
-#' @param selection Set preselected wells (e.g. \code{c("A01", "A02") or \code{c(1, 2)}})
+#' @param selection Set preselected wells (e.g. \code{c("A01", "A02")} or \code{c(1, 2)})
 #' @param wellLabelTemplate Template of the well label.
 #' @param onHoverWellTextTemplate Template of the text on hover.
 #' @param wellClassTemplate Template of the well class (css class).
@@ -39,7 +40,7 @@
 #'
 #' @author Konstantin A. Blagodatskikh <k.blag@@yandex.ru>
 #' @keywords PCR RDML Shiny Input
-#' @import RDML shiny tidyverse whisker stringr checkmate
+#' @import RDML shiny tidyverse whisker stringr checkmate lazyeval
 #'
 #' @family input elements
 #' @seealso \code{\link{updatePcrPlateInput}}
@@ -111,7 +112,7 @@ pcrPlateInput <- function(inputId,
     group_by(position) %>%
     summarise_all(funs(first)) %>%
     group_by(fdata.name) %>%
-    mutate_(selection = lazyeval::interp( ~ {
+    mutate_(selection = interp( ~ {
       if (x %in% selection)
         " selected-well"
       else

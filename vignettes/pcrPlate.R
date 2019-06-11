@@ -14,14 +14,15 @@ rdml <- RDML$new(system.file("/extdata/stepone_std.rdml", package = "RDML"))
 pcrPlateInput(inputId = "firstLook", # Shiny input ID
               label = "Example", # optional plate label 
               plateDescription = rdml$AsTable(), # plate description (wells content)
-              selection = c("A01", "C08") # optional preselected wells
+              interactive = FALSE
 ) 
 
 ## ---- results='asis'-----------------------------------------------------
 pcrPlateInput(inputId = "testPlateSel", 
               label = "Selection",
               plateDescription = rdml$AsTable(),
-              selection = 1:12 # optional preselected wells
+              selection = 1:12, # optional preselected wells
+              interactive = FALSE
 ) 
 
 ## ----eval=FALSE----------------------------------------------------------
@@ -151,6 +152,7 @@ pcrPlateInput("customLabel", "Custom labels and marks",
                     tags$span(class = "neg", "Negative"),
                     tags$span(class = "std", "Standard")
                   )
-                )
+                ),
+              interactive = FALSE
 )
 

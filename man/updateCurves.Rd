@@ -7,19 +7,17 @@
 updateCurves(session, inputId, label = NULL, hideCurves = NULL)
 }
 \arguments{
-\item{session}{The \code{session} object passed to function given to \code{shinyServer}.}
+\item{session}{The \code{session} object passed to function given to
+\code{shinyServer}.}
 
 \item{inputId}{The id of the \code{input} object.}
 
 \item{label}{The label to set for the input object.}
 
-\item{selection}{The \code{fdata.names} of the curves to be hided.}
+\item{hideCurves}{The \code{fdata.names} of the curves to be hiden.}
 }
 \description{
 Change the value of a render PCR curves control on the client
-}
-\examples{
-# TODO
 }
 \author{
 Konstantin A. Blagodatskikh <k.blag@yandex.ru>
