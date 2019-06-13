@@ -29,7 +29,7 @@ $.extend(renderAmpCurvesBinding, {
     var graphDiv = el.getElementsByClassName('plotly')[0];
     graphDiv.data.forEach(function(curve) {
       if (hideCurves.some(function(hideCurve) {
-        return curve.name.includes(hideCurve);
+        return curve.customdata.includes(hideCurve);
               }))
               {
           curve.visible = false;

@@ -125,7 +125,8 @@ server <- function(input, output, session) {
     req(rdmlFile())#, input$pcrPlate2)
     renderAmpCurves("pcrCurves1", "curves1",
                     rdmlFile()$rdml$GetFData(rdmlFile()$table,
-                                             long.table = TRUE),
+                                             long.table = TRUE) %>%
+                      mutate(quantFluor = 150),
                     # plotlyCode = plotly::layout(yaxis = list(title = "Fluorescence")),
                     colorBy = "sample",
                     linetypeBy = "target.dyeId",

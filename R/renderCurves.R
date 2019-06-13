@@ -5,7 +5,7 @@
 #'
 #' @usage renderAmpCurves(inputId, label = NULL, ampCurves, colorBy = NULL,
 #'   linetypeBy = NULL, logScale = FALSE, showCq = FALSE, showLegend = FALSE,
-#'    cssFile = NULL, cssText = NULL, interactive = TRUE)
+#'   cssFile = NULL, cssText = NULL, interactive = TRUE)
 #'
 #' @param inputId The \code{input} slot that will be used to modify plot.
 #' @param label Display label for the control, or \code{NULL} for no label.
@@ -14,8 +14,10 @@
 #' @param colorBy Column name that contains color levels data.
 #' @param linetypeBy Column name that contains linetype levels data.
 #' @param logScale Converts plot to \code{log(RFU)}.
-#' @param showCq Shows Cq with dots (\code{cq} column have to be provided!)
+#' @param showCq Shows Cq with dots (\code{cq} column have to be provided!).
 #' @param showLegend Show plot legend.
+#' @param thBy Column name that separates threshold values (\code{quantFluor}
+#'   column have to be provided!).
 #' @param cssFile Path to the css styles file.
 #' @param cssText CSS styles as text.
 #' @param interactive Should be this \code{pcrPlate} interactive or not.
@@ -32,7 +34,8 @@
 #' @examples
 #' library(RDML)
 #' rdml <- RDML$new(system.file("/extdata/test.rdml", package = "shinyMolBio"))
-#' renderAmpCurves("curves1", ampCurves = rdml$GetFData(long.table = TRUE))
+#' curves <- renderAmpCurves("curves1", ampCurves = rdml$GetFData(long.table = TRUE))
+#' curves[[2]][[3]][[2]]
 renderAmpCurves <- function(inputId,
                             label = NULL,
                             ampCurves,
@@ -41,6 +44,7 @@ renderAmpCurves <- function(inputId,
                             logScale = FALSE,
                             showCq = FALSE,
                             showLegend = FALSE,
+                            thBy = NULL,
                             cssFile = NULL,
                             cssText = NULL,
                             interactive = TRUE) {
@@ -68,6 +72,7 @@ renderAmpCurves <- function(inputId,
                logScale = logScale,
                showMarkers = showCq,
                showLegend = showLegend,
+               thBy = thBy,
                cssFile = cssFile,
                cssText = cssText,
                interactive = interactive)
@@ -104,8 +109,9 @@ renderAmpCurves <- function(inputId,
 #' @examples
 #' library(RDML)
 #' rdml <- RDML$new(system.file("/extdata/test.rdml", package = "shinyMolBio"))
-#' renderMeltCurves("curves1", meltCurves = rdml$GetFData(dp.type = "mdp",
+#' curves <- renderMeltCurves("curves1", meltCurves = rdml$GetFData(dp.type = "mdp",
 #'  long.table = TRUE))
+#' curves[[2]][[3]][[2]]
 renderMeltCurves <- function(inputId,
                             label = NULL,
                             meltCurves,
@@ -156,6 +162,7 @@ renderCurves <- function(inputId,
                          linetypeBy = NULL,
                          logScale = FALSE,
                          showMarkers = FALSE,
+                         thBy = NULL,
                          showLegend = FALSE,
                          cssFile = NULL,
                          cssText = NULL,
@@ -168,16 +175,22 @@ renderCurves <- function(inputId,
   # assertString(plotlyCode, null.ok = TRUE)
   assertString(colorBy, null.ok = TRUE)
   assertString(linetypeBy, null.ok = TRUE)
+  assertString(thBy, null.ok = TRUE)
   assertNames(colnames(curves),
-              must.include = c("fdata.name", "x", "y", colorBy, linetypeBy))
+              must.include = c("fdata.name", "x", "y",
+                               colorBy, linetypeBy, thBy))
   assertLogical(logScale)
   assertLogical(showMarkers)
   assertLogical(showLegend)
 
-  # curves <- curves %>%
-    # mutate(curveName = sprintf("%s %s\n%s\n%s", position, target.dyeId,
-  # sample, fdata.name))
-
+  curves <- curves %>%
+    mutate(curveName = sprintf("%s %s %s %s", position, target.dyeId,
+                               sample, sample.type)) %>%
+    group_by(fdata.name, x) %>%
+    mutate(legendGroup = paste(if (!is.null(colorBy)) get(colorBy),
+                               if (!is.null(linetypeBy)) get(linetypeBy),
+                               collapse = " ")) %>%
+    ungroup()
 
   # assertLogical(showBaseline)
   assertString(cssFile, null.ok = TRUE)
@@ -205,8 +218,11 @@ renderCurves <- function(inputId,
 
   p <- plot_ly() %>%
     add_trace(data = curves,
-              # split = ~fdata.name,
-              name = ~fdata.name,
+              split = ~fdata.name,
+              name = ~curveName,
+              customdata = ~fdata.name,
+              hoverinfo = "x+y+name",
+              legendgroup = ~legendGroup,
               x = ~x, y = ~y,
               line = list(color = curves$color),
               linetype = {
@@ -238,8 +254,11 @@ renderCurves <- function(inputId,
       filter(isMarker == TRUE)
     p <- add_trace(p,
                    data = cqs,
-                   # split = ~fdata.name,
-                   name = ~fdata.name,
+                   split = ~fdata.name,
+                   name = ~curveName,
+                   customdata = ~fdata.name,
+                   hoverinfo = "x+y+name",
+                   legendgroup = ~legendGroup,
                    x = ~x, y = ~y,
                    marker = list(color = cqs$color),
                    type = "scatter", mode = "markers",
@@ -247,9 +266,25 @@ renderCurves <- function(inputId,
     )
   }
 
+  if (!is.null(thBy)) {
+    assertNames(colnames(curves),
+                must.include = c("quantFluor"))
+    maxX <- max(curves$x)
+    minX <- min(curves$x)
+    ths <- curves %>%
+      select_("quantFluor", thBy) %>%
+      distinct()
+    p <- add_segments(p,
+                      x = minX, xend = maxX,
+                      y = ~quantFluor, yend = ~quantFluor,
+                      name = ~get(thBy),
+                      color = ~get(thBy),
+                      hoverinfo = "y+name")
+
+  }
+
   # if (!is.null(plotlyCode))
   # p <- p %>% eval(parse(plotlyCode))
-
   css <-
     tags$style(type = "text/css",
                     paste0(
