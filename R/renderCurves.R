@@ -5,7 +5,7 @@
 #'
 #' @usage renderAmpCurves(inputId, label = NULL, ampCurves, colorBy = NULL,
 #'   linetypeBy = NULL, logScale = FALSE, showCq = FALSE, showLegend = FALSE,
-#'   cssFile = NULL, cssText = NULL, interactive = TRUE)
+#'   thBy = NULL, cssFile = NULL, cssText = NULL, interactive = TRUE)
 #'
 #' @param inputId The \code{input} slot that will be used to modify plot.
 #' @param label Display label for the control, or \code{NULL} for no label.

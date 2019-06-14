@@ -37,8 +37,9 @@ output} slot.
 \examples{
 library(RDML)
 rdml <- RDML$new(system.file("/extdata/test.rdml", package = "shinyMolBio"))
-renderMeltCurves("curves1", meltCurves = rdml$GetFData(dp.type = "mdp",
+curves <- renderMeltCurves("curves1", meltCurves = rdml$GetFData(dp.type = "mdp",
  long.table = TRUE))
+curves[[2]][[3]][[2]]
 }
 \seealso{
 \code{\link{updateCurves}}

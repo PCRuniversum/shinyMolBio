@@ -6,7 +6,7 @@
 \usage{
 renderAmpCurves(inputId, label = NULL, ampCurves, colorBy = NULL,
   linetypeBy = NULL, logScale = FALSE, showCq = FALSE, showLegend = FALSE,
-   cssFile = NULL, cssText = NULL, interactive = TRUE)
+  thBy = NULL, cssFile = NULL, cssText = NULL, interactive = TRUE)
 }
 \arguments{
 \item{inputId}{The \code{input} slot that will be used to modify plot.}
@@ -22,9 +22,12 @@ renderAmpCurves(inputId, label = NULL, ampCurves, colorBy = NULL,
 
 \item{logScale}{Converts plot to \code{log(RFU)}.}
 
-\item{showCq}{Shows Cq with dots (\code{cq} column have to be provided!)}
+\item{showCq}{Shows Cq with dots (\code{cq} column have to be provided!).}
 
 \item{showLegend}{Show plot legend.}
+
+\item{thBy}{Column name that separates threshold values (\code{quantFluor}
+column have to be provided!).}
 
 \item{cssFile}{Path to the css styles file.}
 
@@ -39,7 +42,8 @@ an \code{UI output} slot.
 \examples{
 library(RDML)
 rdml <- RDML$new(system.file("/extdata/test.rdml", package = "shinyMolBio"))
-renderAmpCurves("curves1", ampCurves = rdml$GetFData(long.table = TRUE))
+curves <- renderAmpCurves("curves1", ampCurves = rdml$GetFData(long.table = TRUE))
+curves[[2]][[3]][[2]]
 }
 \seealso{
 \code{\link{updateCurves}}

@@ -28,6 +28,7 @@ Collate:
   'renderCurves.R'
   'runExample.R'
 Suggests:
-  knitr
+  knitr,
+  chipPCR
 VignetteBuilder: knitr
 RoxygenNote: 6.1.1
