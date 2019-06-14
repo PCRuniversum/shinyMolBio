@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Konstantin A. Blagodatskikh" />
+
+
+<title>pcrPlateInput</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">pcrPlateInput</h1>
+<h4 class="author">Konstantin A. Blagodatskikh</h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#pcr-plate-customization">PCR Plate Customization</a><ul>
+<li><a href="#wells-selection">Wells Selection</a></li>
+<li><a href="#css">CSS</a></li>
+<li><a href="#wells-labels-and-marks">Wells Labels and Marks</a></li>
+</ul></li>
+<li><a href="#interactive-pcr-plate">Interactive PCR Plate</a></li>
+</ul>
+</div>
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>Propose of <strong>pcrPlateInput</strong> shiny control is to view runs as a PCR plate like any conventional real-time PCR software:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(shinyMolBio)
+<span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(RDML)
+<span class="co"># load RDML file</span>
+rdml &lt;-<span class="st"> </span>RDML<span class="op">$</span><span class="kw">new</span>(<span class="kw">system.file</span>(<span class="st">&quot;/extdata/stepone_std.rdml&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;RDML&quot;</span>))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># create Shiny control</span>
+<span class="kw">pcrPlateInput</span>(<span class="dt">inputId =</span> <span class="st">&quot;firstLook&quot;</span>, <span class="co"># Shiny input ID</span>
+              <span class="dt">label =</span> <span class="st">&quot;Example&quot;</span>, <span class="co"># optional plate label </span>
+              <span class="dt">plateDescription =</span> rdml<span class="op">$</span><span class="kw">AsTable</span>(), <span class="co"># plate description (wells content)</span>
+              <span class="dt">interactive =</span> <span class="ot">FALSE</span>
+) </code></pre></div>
+<style type="text/css">table.pcr-plate-tbl{  width: 100%;  border-collapse: separate;  border-spacing: 1px;}table.pcr-plate-tbl td, table.pcr-plate-tbl th{  width: 4rem;  height: 2rem;  border: 2px solid #ccc;  text-align: center;}table.pcr-plate-tbl td{  max-width: 4rem;  word-wrap: break-word;}table.pcr-plate-tbl th{  border-color: white;  color: white;}table.pcr-plate-tbl thead th:nth-child(even){  background-color: #3CA9E8;}table.pcr-plate-tbl thead th:nth-child(odd){  background-color: #178ACC;}th.odd-row{  background-color: #3CA9E8;}th.even-row{  background-color: #178ACC;}td.selected-well{  border: 2px solid black !important;}th.toggle-all {  background: transparent !important;  position: relative;}th.toggle-all:after {    content: "";    position: absolute;    bottom: 0;    right: 0;	width: 0;	height: 0;    display: block;	border-left: 1em solid transparent;	border-bottom: 1em solid transparent;	border-bottom: 1em solid grey;}</style>
+<div id="firstLook" class="pcr-plate">
+<label for="firstLook">Example</label>
+<table id="firstLook-pcrPlateTbl" class="pcr-plate-tbl"><thead><tr><th id="firstLook-toggleall" class="toggle-all"></th><th id='firstLook-col_01'>1</th><th id='firstLook-col_02'>2</th><th id='firstLook-col_03'>3</th><th id='firstLook-col_04'>4</th><th id='firstLook-col_05'>5</th><th id='firstLook-col_06'>6</th><th id='firstLook-col_07'>7</th><th id='firstLook-col_08'>8</th><th id='firstLook-col_09'>9</th><th id='firstLook-col_10'>10</th><th id='firstLook-col_11'>11</th><th id='firstLook-col_12'>12</th></tr></thead><tbody><tr><th id='firstLook-row_A' class='odd-row'>A</th><td id='A01' title='A01
+NTC_RNase P
+RNase P' group='NTCRNase PRNase P' class='' style=''>NTC_RNase P</td><td id='A02' title='A02
+NTC_RNase P
+RNase P' group='NTCRNase PRNase P' class='' style=''>NTC_RNase P</td><td id='A03' title='A03
+NTC_RNase P
+RNase P' group='NTCRNase PRNase P' class='' style=''>NTC_RNase P</td><td id='A04' title='A04
+pop1_RNase P
+RNase P' group='pop1RNase PRNase P' class='' style=''>pop1_RNase P</td><td id='A05' title='A05
+pop1_RNase P
+RNase P' group='pop1RNase PRNase P' class='' style=''>pop1_RNase P</td><td id='A06' title='A06
+pop1_RNase P
+RNase P' group='pop1RNase PRNase P' class='' style=''>pop1_RNase P</td><td id='A07' title='A07
+pop2_RNase P
+RNase P' group='pop2RNase PRNase P' class='' style=''>pop2_RNase P</td><td id='A08' title='A08
+pop2_RNase P
+RNase P' group='pop2RNase PRNase P' class='' style=''>pop2_RNase P</td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='firstLook-row_B' class='even-row'>B</th><td id='B01' title='B01
+pop2_RNase P
+RNase P' group='pop2RNase PRNase P' class='' style=''>pop2_RNase P</td><td id='B02' title='B02
+STD_RNase P_10000.0
+RNase P' group='STDRNase P100000RNase P' class='' style=''>STD_RNase P_10000.0</td><td id='B03' title='B03
+STD_RNase P_10000.0
+RNase P' group='STDRNase P100000RNase P' class='' style=''>STD_RNase P_10000.0</td><td id='B04' title='B04
+STD_RNase P_10000.0
+RNase P' group='STDRNase P100000RNase P' class='' style=''>STD_RNase P_10000.0</td><td id='B05' title='B05
+STD_RNase P_5000.0
+RNase P' group='STDRNase P50000RNase P' class='' style=''>STD_RNase P_5000.0</td><td id='B06' title='B06
+STD_RNase P_5000.0
+RNase P' group='STDRNase P50000RNase P' class='' style=''>STD_RNase P_5000.0</td><td id='B07' title='B07
+STD_RNase P_5000.0
+RNase P' group='STDRNase P50000RNase P' class='' style=''>STD_RNase P_5000.0</td><td id='B08' title='B08
+STD_RNase P_2500.0
+RNase P' group='STDRNase P25000RNase P' class='' style=''>STD_RNase P_2500.0</td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='firstLook-row_C' class='odd-row'>C</th><td id='C01' title='C01
+STD_RNase P_2500.0
+RNase P' group='STDRNase P25000RNase P' class='' style=''>STD_RNase P_2500.0</td><td id='C02' title='C02
+STD_RNase P_2500.0
+RNase P' group='STDRNase P25000RNase P' class='' style=''>STD_RNase P_2500.0</td><td id='C03' title='C03
+STD_RNase P_1250.0
+RNase P' group='STDRNase P12500RNase P' class='' style=''>STD_RNase P_1250.0</td><td id='C04' title='C04
+STD_RNase P_1250.0
+RNase P' group='STDRNase P12500RNase P' class='' style=''>STD_RNase P_1250.0</td><td id='C05' title='C05
+STD_RNase P_1250.0
+RNase P' group='STDRNase P12500RNase P' class='' style=''>STD_RNase P_1250.0</td><td id='C06' title='C06
+STD_RNase P_625.0
+RNase P' group='STDRNase P6250RNase P' class='' style=''>STD_RNase P_625.0</td><td id='C07' title='C07
+STD_RNase P_625.0
+RNase P' group='STDRNase P6250RNase P' class='' style=''>STD_RNase P_625.0</td><td id='C08' title='C08
+STD_RNase P_625.0
+RNase P' group='STDRNase P6250RNase P' class='' style=''>STD_RNase P_625.0</td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='firstLook-row_D' class='even-row'>D</th><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='firstLook-row_E' class='odd-row'>E</th><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='firstLook-row_F' class='even-row'>F</th><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='firstLook-row_G' class='odd-row'>G</th><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='firstLook-row_H' class='even-row'>H</th><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr></tbody></table>
+</div>
+<p>PCR plate is fully customizable and can be interactive - selectable wells.</p>
+</div>
+<div id="pcr-plate-customization" class="section level1">
+<h1>PCR Plate Customization</h1>
+<p>There are several parameters that can be changed:</p>
+<ul>
+<li>wells selection</li>
+<li>plate visualization by CSS</li>
+<li>wells labels and marks</li>
+</ul>
+<div id="wells-selection" class="section level2">
+<h2>Wells Selection</h2>
+<p>Some PCR plate wells can be marked as selected by <code>selection = c(TO_SELECT)</code> (<code>TO_SELECT</code> can be <em>position</em> or <em>react.id</em>)</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pcrPlateInput</span>(<span class="dt">inputId =</span> <span class="st">&quot;testPlateSel&quot;</span>, 
+              <span class="dt">label =</span> <span class="st">&quot;Selection&quot;</span>,
+              <span class="dt">plateDescription =</span> rdml<span class="op">$</span><span class="kw">AsTable</span>(),
+              <span class="dt">selection =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">12</span>, <span class="co"># optional preselected wells</span>
+              <span class="dt">interactive =</span> <span class="ot">FALSE</span>
+) </code></pre></div>
+<style type="text/css">table.pcr-plate-tbl{  width: 100%;  border-collapse: separate;  border-spacing: 1px;}table.pcr-plate-tbl td, table.pcr-plate-tbl th{  width: 4rem;  height: 2rem;  border: 2px solid #ccc;  text-align: center;}table.pcr-plate-tbl td{  max-width: 4rem;  word-wrap: break-word;}table.pcr-plate-tbl th{  border-color: white;  color: white;}table.pcr-plate-tbl thead th:nth-child(even){  background-color: #3CA9E8;}table.pcr-plate-tbl thead th:nth-child(odd){  background-color: #178ACC;}th.odd-row{  background-color: #3CA9E8;}th.even-row{  background-color: #178ACC;}td.selected-well{  border: 2px solid black !important;}th.toggle-all {  background: transparent !important;  position: relative;}th.toggle-all:after {    content: "";    position: absolute;    bottom: 0;    right: 0;	width: 0;	height: 0;    display: block;	border-left: 1em solid transparent;	border-bottom: 1em solid transparent;	border-bottom: 1em solid grey;}</style>
+<div id="testPlateSel" class="pcr-plate">
+<label for="testPlateSel">Selection</label>
+<table id="testPlateSel-pcrPlateTbl" class="pcr-plate-tbl"><thead><tr><th id="testPlateSel-toggleall" class="toggle-all"></th><th id='testPlateSel-col_01'>1</th><th id='testPlateSel-col_02'>2</th><th id='testPlateSel-col_03'>3</th><th id='testPlateSel-col_04'>4</th><th id='testPlateSel-col_05'>5</th><th id='testPlateSel-col_06'>6</th><th id='testPlateSel-col_07'>7</th><th id='testPlateSel-col_08'>8</th><th id='testPlateSel-col_09'>9</th><th id='testPlateSel-col_10'>10</th><th id='testPlateSel-col_11'>11</th><th id='testPlateSel-col_12'>12</th></tr></thead><tbody><tr><th id='testPlateSel-row_A' class='odd-row'>A</th><td id='A01' title='A01
+NTC_RNase P
+RNase P' group='NTCRNase PRNase P' class=' selected-well' style=''>NTC_RNase P</td><td id='A02' title='A02
+NTC_RNase P
+RNase P' group='NTCRNase PRNase P' class=' selected-well' style=''>NTC_RNase P</td><td id='A03' title='A03
+NTC_RNase P
+RNase P' group='NTCRNase PRNase P' class=' selected-well' style=''>NTC_RNase P</td><td id='A04' title='A04
+pop1_RNase P
+RNase P' group='pop1RNase PRNase P' class=' selected-well' style=''>pop1_RNase P</td><td id='A05' title='A05
+pop1_RNase P
+RNase P' group='pop1RNase PRNase P' class=' selected-well' style=''>pop1_RNase P</td><td id='A06' title='A06
+pop1_RNase P
+RNase P' group='pop1RNase PRNase P' class=' selected-well' style=''>pop1_RNase P</td><td id='A07' title='A07
+pop2_RNase P
+RNase P' group='pop2RNase PRNase P' class=' selected-well' style=''>pop2_RNase P</td><td id='A08' title='A08
+pop2_RNase P
+RNase P' group='pop2RNase PRNase P' class=' selected-well' style=''>pop2_RNase P</td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='testPlateSel-row_B' class='even-row'>B</th><td id='B01' title='B01
+pop2_RNase P
+RNase P' group='pop2RNase PRNase P' class='' style=''>pop2_RNase P</td><td id='B02' title='B02
+STD_RNase P_10000.0
+RNase P' group='STDRNase P100000RNase P' class='' style=''>STD_RNase P_10000.0</td><td id='B03' title='B03
+STD_RNase P_10000.0
+RNase P' group='STDRNase P100000RNase P' class='' style=''>STD_RNase P_10000.0</td><td id='B04' title='B04
+STD_RNase P_10000.0
+RNase P' group='STDRNase P100000RNase P' class='' style=''>STD_RNase P_10000.0</td><td id='B05' title='B05
+STD_RNase P_5000.0
+RNase P' group='STDRNase P50000RNase P' class='' style=''>STD_RNase P_5000.0</td><td id='B06' title='B06
+STD_RNase P_5000.0
+RNase P' group='STDRNase P50000RNase P' class='' style=''>STD_RNase P_5000.0</td><td id='B07' title='B07
+STD_RNase P_5000.0
+RNase P' group='STDRNase P50000RNase P' class='' style=''>STD_RNase P_5000.0</td><td id='B08' title='B08
+STD_RNase P_2500.0
+RNase P' group='STDRNase P25000RNase P' class='' style=''>STD_RNase P_2500.0</td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='testPlateSel-row_C' class='odd-row'>C</th><td id='C01' title='C01
+STD_RNase P_2500.0
+RNase P' group='STDRNase P25000RNase P' class='' style=''>STD_RNase P_2500.0</td><td id='C02' title='C02
+STD_RNase P_2500.0
+RNase P' group='STDRNase P25000RNase P' class='' style=''>STD_RNase P_2500.0</td><td id='C03' title='C03
+STD_RNase P_1250.0
+RNase P' group='STDRNase P12500RNase P' class='' style=''>STD_RNase P_1250.0</td><td id='C04' title='C04
+STD_RNase P_1250.0
+RNase P' group='STDRNase P12500RNase P' class='' style=''>STD_RNase P_1250.0</td><td id='C05' title='C05
+STD_RNase P_1250.0
+RNase P' group='STDRNase P12500RNase P' class='' style=''>STD_RNase P_1250.0</td><td id='C06' title='C06
+STD_RNase P_625.0
+RNase P' group='STDRNase P6250RNase P' class='' style=''>STD_RNase P_625.0</td><td id='C07' title='C07
+STD_RNase P_625.0
+RNase P' group='STDRNase P6250RNase P' class='' style=''>STD_RNase P_625.0</td><td id='C08' title='C08
+STD_RNase P_625.0
+RNase P' group='STDRNase P6250RNase P' class='' style=''>STD_RNase P_625.0</td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='testPlateSel-row_D' class='even-row'>D</th><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='testPlateSel-row_E' class='odd-row'>E</th><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='testPlateSel-row_F' class='even-row'>F</th><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='testPlateSel-row_G' class='odd-row'>G</th><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='testPlateSel-row_H' class='even-row'>H</th><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr></tbody></table>
+</div>
+</div>
+<div id="css" class="section level2">
+<h2>CSS</h2>
+<p>All visualion of PCR plate can be modified by custom CSS. This CSS can be loaded as file or as text and can be global or plate instance specific.</p>
+<p>Description of the default CSS file:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">/</span><span class="er">*</span><span class="st"> </span>Global plate style <span class="op">*</span><span class="er">/</span>
+<span class="st">  </span>table.pcr<span class="op">-</span>plate<span class="op">-</span>tbl{
+    width<span class="op">:</span><span class="st"> </span><span class="dv">100</span>%;
+    border<span class="op">-</span>collapse<span class="op">:</span><span class="st"> </span>separate;
+    border<span class="op">-</span>spacing<span class="op">:</span><span class="st"> </span>1px;
+  }
+<span class="op">/</span><span class="er">*</span><span class="st"> </span>Global plate style <span class="op">*</span><span class="er">/</span>
+<span class="st">  </span>table.pcr<span class="op">-</span>plate<span class="op">-</span>tbl td, table.pcr<span class="op">-</span>plate<span class="op">-</span>tbl th{
+    width<span class="op">:</span><span class="st"> </span>4rem;
+    height<span class="op">:</span><span class="st"> </span>2rem;
+    border<span class="op">:</span><span class="st"> </span>2px solid <span class="co">#ccc;</span>
+    text<span class="op">-</span>align<span class="op">:</span><span class="st"> </span>center;
+  }
+<span class="op">/</span><span class="er">*</span><span class="st"> </span>Plate well style <span class="op">*</span><span class="er">/</span>
+<span class="st">  </span>table.pcr<span class="op">-</span>plate<span class="op">-</span>tbl td{
+    max<span class="op">-</span>width<span class="op">:</span><span class="st"> </span>4rem;
+    word<span class="op">-</span>wrap<span class="op">:</span><span class="st"> </span><span class="cf">break</span><span class="op">-</span>word;
+  }
+<span class="op">/</span><span class="er">*</span><span class="st"> </span>Plate header <span class="op">*</span><span class="er">/</span>
+<span class="st">  </span>table.pcr<span class="op">-</span>plate<span class="op">-</span>tbl th{
+    border<span class="op">-</span>color<span class="op">:</span><span class="st"> </span>white;
+    color<span class="op">:</span><span class="st"> </span>white;
+  }
+<span class="op">/</span><span class="er">*</span><span class="st"> </span>Plate header even column<span class="op">*</span><span class="er">/</span>
+<span class="st">  </span>table.pcr<span class="op">-</span>plate<span class="op">-</span>tbl thead th<span class="op">:</span>nth<span class="op">-</span><span class="kw">child</span>(even){
+    background<span class="op">-</span>color<span class="op">:</span><span class="st"> </span><span class="co">#3CA9E8;</span>
+<span class="st">  </span>}
+<span class="op">/</span><span class="er">*</span><span class="st"> </span>Plate header odd column <span class="op">*</span><span class="er">/</span>
+<span class="st">  </span>table.pcr<span class="op">-</span>plate<span class="op">-</span>tbl thead th<span class="op">:</span>nth<span class="op">-</span><span class="kw">child</span>(odd){
+    background<span class="op">-</span>color<span class="op">:</span><span class="st"> </span><span class="co">#178ACC;</span>
+<span class="st">  </span>}
+<span class="op">/</span><span class="er">*</span><span class="st"> </span>Plate header odd row <span class="op">*</span><span class="er">/</span>
+<span class="st">  </span>th.odd<span class="op">-</span>row{
+    background<span class="op">-</span>color<span class="op">:</span><span class="st"> </span><span class="co">#3CA9E8;</span>
+<span class="st">  </span>}
+<span class="op">/</span><span class="er">*</span><span class="st"> </span>Plate header even row <span class="op">*</span><span class="er">/</span>
+<span class="st">  </span>th.even<span class="op">-</span>row{
+    background<span class="op">-</span>color<span class="op">:</span><span class="st"> </span><span class="co">#178ACC;</span>
+<span class="st">  </span>}
+<span class="op">/</span><span class="er">*</span><span class="st"> </span>Selected well <span class="op">*</span><span class="er">/</span>
+<span class="st">  </span>td.selected<span class="op">-</span>well{
+    border<span class="op">:</span><span class="st"> </span>2px solid black <span class="op">!</span>important;
+  }
+<span class="op">/</span><span class="er">*</span><span class="st"> </span>Toggle all sign <span class="op">*</span><span class="er">/</span>
+<span class="st">  </span>th.toggle<span class="op">-</span>all {
+    background<span class="op">:</span><span class="st"> </span>transparent <span class="op">!</span>important;
+    position<span class="op">:</span><span class="st"> </span>relative;
+  }
+<span class="op">/</span><span class="er">*</span><span class="st"> </span>Toggle all sign <span class="op">*</span><span class="er">/</span>
+<span class="st">  </span>th.toggle<span class="op">-</span>all<span class="op">:</span>after {
+    content<span class="op">:</span><span class="st"> &quot;&quot;</span>;
+    position<span class="op">:</span><span class="st"> </span>absolute;
+    bottom<span class="op">:</span><span class="st"> </span><span class="dv">0</span>;
+    right<span class="op">:</span><span class="st"> </span><span class="dv">0</span>;
+    width<span class="op">:</span><span class="st"> </span><span class="dv">0</span>;
+    height<span class="op">:</span><span class="st"> </span><span class="dv">0</span>;
+    display<span class="op">:</span><span class="st"> </span>block;
+    border<span class="op">-</span>left<span class="op">:</span><span class="st"> </span>1em solid transparent;
+    border<span class="op">-</span>bottom<span class="op">:</span><span class="st"> </span>1em solid transparent;
+    border<span class="op">-</span>bottom<span class="op">:</span><span class="st"> </span>1em solid grey;
+  }</code></pre></div>
+<p>So if you want to set your own style of plate you can do it by:</p>
+<ul>
+<li>providing your CSS file <code>cssFile = YOUR_FILE</code></li>
+<li>setting CSS file to NULL and providing CSS as text <code>cssFile = &quot;&quot;, cssText = YOUR_TEXT</code></li>
+<li>extend default file with your text <code>cssText = YOUR_TEXT</code></li>
+</ul>
+<p>Note that inside Shiny app CSS loads as singleton (once for all plates) but in <strong>Rmd</strong> file it loads for every plate but works globally too - you can prevent such loading by setting <code>cssFile = &quot;&quot;</code></p>
+<p>To make CSS rule only for current plate add <code>#{{id}}</code> befor CSS rule. For example if you want set selection border to red and well color to light yellow.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pcrPlateInput</span>(<span class="dt">inputId =</span> <span class="st">&quot;customCSS&quot;</span>, <span class="co"># Shiny input ID</span>
+              <span class="dt">label =</span> <span class="st">&quot;Custom CSS: red selection, yellow background&quot;</span>,
+              <span class="dt">plateDescription =</span> rdml<span class="op">$</span><span class="kw">AsTable</span>(),
+              <span class="dt">selection =</span> <span class="kw">c</span>(<span class="st">&quot;A01&quot;</span>, <span class="st">&quot;C08&quot;</span>), <span class="co"># optional preselected wells</span>
+              <span class="dt">cssFile =</span> <span class="st">&quot;&quot;</span>,
+              <span class="dt">cssText =</span> <span class="st">&quot;#{{id}} td.selected-well{border: 2px solid red !important;}</span>
+<span class="st">                        #{{id}} table.pcr-plate-tbl td{background-color: #ffffe0;}</span>
+<span class="st">              &quot;</span>
+) </code></pre></div>
+<div id="customCSS" class="pcr-plate">
+<label for="customCSS">Custom CSS: red selection, yellow background</label>
+<table id="customCSS-pcrPlateTbl" class="pcr-plate-tbl interactive"><thead><tr><th id="customCSS-toggleall" class="toggle-all"></th><th id='customCSS-col_01'>1</th><th id='customCSS-col_02'>2</th><th id='customCSS-col_03'>3</th><th id='customCSS-col_04'>4</th><th id='customCSS-col_05'>5</th><th id='customCSS-col_06'>6</th><th id='customCSS-col_07'>7</th><th id='customCSS-col_08'>8</th><th id='customCSS-col_09'>9</th><th id='customCSS-col_10'>10</th><th id='customCSS-col_11'>11</th><th id='customCSS-col_12'>12</th></tr></thead><tbody><tr><th id='customCSS-row_A' class='odd-row'>A</th><td id='A01' title='A01
+NTC_RNase P
+RNase P' group='NTCRNase PRNase P' class=' selected-well' style=''>NTC_RNase P</td><td id='A02' title='A02
+NTC_RNase P
+RNase P' group='NTCRNase PRNase P' class='' style=''>NTC_RNase P</td><td id='A03' title='A03
+NTC_RNase P
+RNase P' group='NTCRNase PRNase P' class='' style=''>NTC_RNase P</td><td id='A04' title='A04
+pop1_RNase P
+RNase P' group='pop1RNase PRNase P' class='' style=''>pop1_RNase P</td><td id='A05' title='A05
+pop1_RNase P
+RNase P' group='pop1RNase PRNase P' class='' style=''>pop1_RNase P</td><td id='A06' title='A06
+pop1_RNase P
+RNase P' group='pop1RNase PRNase P' class='' style=''>pop1_RNase P</td><td id='A07' title='A07
+pop2_RNase P
+RNase P' group='pop2RNase PRNase P' class='' style=''>pop2_RNase P</td><td id='A08' title='A08
+pop2_RNase P
+RNase P' group='pop2RNase PRNase P' class='' style=''>pop2_RNase P</td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='customCSS-row_B' class='even-row'>B</th><td id='B01' title='B01
+pop2_RNase P
+RNase P' group='pop2RNase PRNase P' class='' style=''>pop2_RNase P</td><td id='B02' title='B02
+STD_RNase P_10000.0
+RNase P' group='STDRNase P100000RNase P' class='' style=''>STD_RNase P_10000.0</td><td id='B03' title='B03
+STD_RNase P_10000.0
+RNase P' group='STDRNase P100000RNase P' class='' style=''>STD_RNase P_10000.0</td><td id='B04' title='B04
+STD_RNase P_10000.0
+RNase P' group='STDRNase P100000RNase P' class='' style=''>STD_RNase P_10000.0</td><td id='B05' title='B05
+STD_RNase P_5000.0
+RNase P' group='STDRNase P50000RNase P' class='' style=''>STD_RNase P_5000.0</td><td id='B06' title='B06
+STD_RNase P_5000.0
+RNase P' group='STDRNase P50000RNase P' class='' style=''>STD_RNase P_5000.0</td><td id='B07' title='B07
+STD_RNase P_5000.0
+RNase P' group='STDRNase P50000RNase P' class='' style=''>STD_RNase P_5000.0</td><td id='B08' title='B08
+STD_RNase P_2500.0
+RNase P' group='STDRNase P25000RNase P' class='' style=''>STD_RNase P_2500.0</td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='customCSS-row_C' class='odd-row'>C</th><td id='C01' title='C01
+STD_RNase P_2500.0
+RNase P' group='STDRNase P25000RNase P' class='' style=''>STD_RNase P_2500.0</td><td id='C02' title='C02
+STD_RNase P_2500.0
+RNase P' group='STDRNase P25000RNase P' class='' style=''>STD_RNase P_2500.0</td><td id='C03' title='C03
+STD_RNase P_1250.0
+RNase P' group='STDRNase P12500RNase P' class='' style=''>STD_RNase P_1250.0</td><td id='C04' title='C04
+STD_RNase P_1250.0
+RNase P' group='STDRNase P12500RNase P' class='' style=''>STD_RNase P_1250.0</td><td id='C05' title='C05
+STD_RNase P_1250.0
+RNase P' group='STDRNase P12500RNase P' class='' style=''>STD_RNase P_1250.0</td><td id='C06' title='C06
+STD_RNase P_625.0
+RNase P' group='STDRNase P6250RNase P' class='' style=''>STD_RNase P_625.0</td><td id='C07' title='C07
+STD_RNase P_625.0
+RNase P' group='STDRNase P6250RNase P' class='' style=''>STD_RNase P_625.0</td><td id='C08' title='C08
+STD_RNase P_625.0
+RNase P' group='STDRNase P6250RNase P' class=' selected-well' style=''>STD_RNase P_625.0</td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='customCSS-row_D' class='even-row'>D</th><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='customCSS-row_E' class='odd-row'>E</th><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='customCSS-row_F' class='even-row'>F</th><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='customCSS-row_G' class='odd-row'>G</th><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='customCSS-row_H' class='even-row'>H</th><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr></tbody></table>
+</div>
+</div>
+<div id="wells-labels-and-marks" class="section level2">
+<h2>Wells Labels and Marks</h2>
+<p>Well label, on hover text and other marks can be setted by templates. To do this <strong>pcrPlateInput</strong> use <strong>whisker</strong> package - so you can provide column names of plate description as shortcuts inside templates <code>{{COLUMN}}</code> (or <code>{{{COLUMN}}}</code> - without escaping basic HTML characters).</p>
+<ul>
+<li><code>wellLabelTemplate = &quot;{{sample}}&quot;</code> - text inside well (label)</li>
+<li><code>onHoverWellTextTemplate = &quot;{{position}}\u000A{{sample}}\u000A{{target}}&quot;</code> - on hover text</li>
+<li><code>wellClassTemplate = NULL</code> - specific class for current well</li>
+<li><code>wellStyleTemplate = NULL</code> - specific CSS style for current well</li>
+</ul>
+<p>For example we want to show <em>sample name</em>, <em>Cq</em> and <em>Cq &lt; 30</em> or <em>Cq &gt; 35</em> with colored circle as label; <em>target name</em> and <em>dye</em> as on hover text; mark <em>sample type</em> with border color by class; set different background color for each <em>sample name</em>. Also legend will be added by <code>legend = YOUR_HTML_LEGEND</code>.</p>
+<p>Note: if your plate description contains several rows with the same position - only the first will be used! So for example to print all targets for one well combine them to the new column like this <code>tbl %&gt;% group_by(position) %&gt;% mutate(targets = paste(target, collapse = &quot;, &quot;))</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(shiny) <span class="co"># to use tags</span></code></pre></div>
+<pre><code>## 
+## Attaching package: 'shiny'</code></pre>
+<pre><code>## The following object is masked from 'package:shinyMolBio':
+## 
+##     runExample</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">plateDescription &lt;-<span class="st"> </span>rdml<span class="op">$</span><span class="kw">AsTable</span>(<span class="dt">cq =</span> <span class="kw">round</span>(data<span class="op">$</span>cq)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(fdata.name) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sampleType =</span> sample.type,  <span class="co"># whisker does not support dots!</span>
+         <span class="dt">dyeId =</span> target.dyeId,   <span class="co"># whisker does not support dots!</span>
+         <span class="dt">mark =</span> {
+           <span class="cf">if</span> (cq <span class="op">&lt;</span><span class="st"> </span><span class="dv">30</span>) <span class="st">&quot;&lt;span class='filled-circle1'&gt;&lt;/span&gt;&quot;</span>
+           <span class="cf">else</span> <span class="cf">if</span> (cq <span class="op">&gt;</span><span class="st"> </span><span class="dv">35</span>) <span class="st">&quot;&lt;span class='filled-circle2'&gt;&lt;/span&gt;&quot;</span>
+           <span class="cf">else</span> <span class="st">&quot;&quot;</span>
+           })
+
+uniqSamples &lt;-<span class="st"> </span><span class="kw">unique</span>(plateDescription<span class="op">$</span>sample)
+sampleColors &lt;-<span class="st"> </span><span class="kw">topo.colors</span>(<span class="kw">length</span>(uniqSamples), <span class="dt">alpha =</span> <span class="fl">0.3</span>)
+<span class="kw">names</span>(sampleColors) &lt;-<span class="st"> </span>uniqSamples
+plateDescription &lt;-<span class="st"> </span>plateDescription <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(sample) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">color =</span> sampleColors[sample] <span class="op">%&gt;%</span>
+<span class="st">           </span><span class="kw">col2rgb</span>() <span class="op">%&gt;%</span>
+<span class="st">           </span>.[,<span class="dv">1</span>] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">c</span>(<span class="fl">0.2</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">           </span><span class="kw">paste</span>(<span class="dt">collapse =</span> <span class="st">&quot;,&quot;</span>))
+
+<span class="kw">pcrPlateInput</span>(<span class="st">&quot;customLabel&quot;</span>, <span class="st">&quot;Custom labels and marks&quot;</span>,
+              plateDescription,
+              <span class="dt">wellLabelTemplate =</span> <span class="st">&quot;{{{mark}}}{{sample}} Cq={{cq}}&quot;</span>,
+              <span class="dt">onHoverWellTextTemplate =</span> <span class="st">&quot;{{target}}: {{dyeId}}&quot;</span>,
+              <span class="dt">wellClassTemplate =</span> <span class="st">&quot;{{sampleType}}&quot;</span>,
+              <span class="dt">wellStyleTemplate =</span> <span class="st">&quot;background-color:rgba({{color}});&quot;</span>,
+              <span class="dt">cssFile =</span> <span class="st">&quot;&quot;</span>,
+              <span class="dt">cssText =</span> <span class="st">&quot;#{{id}} td.selected-well{border: 2px solid red !important;}</span>
+<span class="st">               #{{id}} .ntc{border: 3px solid Plum;}</span>
+<span class="st">               #{{id}} .unkn{border: 3px solid Salmon;}</span>
+<span class="st">               #{{id}} .pos{border: 3px solid PaleGreen ;}</span>
+<span class="st">               #{{id}} .neg{border: 3px solid LightGrey ;}</span>
+<span class="st">               #{{id}} .std{border: 3px solid DeepSkyBlue ;}</span>
+<span class="st">               #{{id}} .filled-circle1 {padding: 2px 11px;</span>
+<span class="st">                  border-radius: 100%; background-color: Maroon;}</span>
+<span class="st">               #{{id}} .filled-circle2 {padding: 2px 11px;</span>
+<span class="st">                  border-radius: 100%; background-color: Orange;}&quot;</span>,
+              <span class="dt">legend =</span>
+                tags<span class="op">$</span><span class="kw">div</span>(
+                  tags<span class="op">$</span><span class="kw">span</span>(<span class="dt">class =</span> <span class="st">&quot;filled-circle1&quot;</span>), <span class="st">&quot;Cq &lt; 30&quot;</span>,
+                  tags<span class="op">$</span><span class="kw">br</span>(),
+                  tags<span class="op">$</span><span class="kw">span</span>(<span class="dt">class =</span> <span class="st">&quot;filled-circle2&quot;</span>), <span class="st">&quot;Cq &gt; 35&quot;</span>,
+                  tags<span class="op">$</span><span class="kw">br</span>(),
+                  tags<span class="op">$</span><span class="kw">span</span>(
+                    tags<span class="op">$</span><span class="kw">span</span>(<span class="dt">class =</span> <span class="st">&quot;ntc&quot;</span>, <span class="st">&quot;NTC&quot;</span>),
+                    tags<span class="op">$</span><span class="kw">span</span>(<span class="dt">class =</span> <span class="st">&quot;unkn&quot;</span>, <span class="st">&quot;Unknown&quot;</span>),
+                    tags<span class="op">$</span><span class="kw">span</span>(<span class="dt">class =</span> <span class="st">&quot;pos&quot;</span>, <span class="st">&quot;Positive&quot;</span>),
+                    tags<span class="op">$</span><span class="kw">span</span>(<span class="dt">class =</span> <span class="st">&quot;neg&quot;</span>, <span class="st">&quot;Negative&quot;</span>),
+                    tags<span class="op">$</span><span class="kw">span</span>(<span class="dt">class =</span> <span class="st">&quot;std&quot;</span>, <span class="st">&quot;Standard&quot;</span>)
+                  )
+                ),
+              <span class="dt">interactive =</span> <span class="ot">FALSE</span>
+)</code></pre></div>
+<style type="text/css">#customLabel td.selected-well{border: 2px solid red !important;}
+               #customLabel .ntc{border: 3px solid Plum;}
+               #customLabel .unkn{border: 3px solid Salmon;}
+               #customLabel .pos{border: 3px solid PaleGreen ;}
+               #customLabel .neg{border: 3px solid LightGrey ;}
+               #customLabel .std{border: 3px solid DeepSkyBlue ;}
+               #customLabel .filled-circle1 {padding: 2px 11px;
+                  border-radius: 100%; background-color: Maroon;}
+               #customLabel .filled-circle2 {padding: 2px 11px;
+                  border-radius: 100%; background-color: Orange;}</style>
+<div id="customLabel" class="pcr-plate">
+<label for="customLabel">Custom labels and marks</label>
+<table id="customLabel-pcrPlateTbl" class="pcr-plate-tbl"><thead><tr><th id="customLabel-toggleall" class="toggle-all"></th><th id='customLabel-col_01'>1</th><th id='customLabel-col_02'>2</th><th id='customLabel-col_03'>3</th><th id='customLabel-col_04'>4</th><th id='customLabel-col_05'>5</th><th id='customLabel-col_06'>6</th><th id='customLabel-col_07'>7</th><th id='customLabel-col_08'>8</th><th id='customLabel-col_09'>9</th><th id='customLabel-col_10'>10</th><th id='customLabel-col_11'>11</th><th id='customLabel-col_12'>12</th></tr></thead><tbody><tr><th id='customLabel-row_A' class='odd-row'>A</th><td id='A01' title='RNase P: FAM' group='NTCRNase PRNase P' class='ntc' style='background-color:rgba(76,0,255,0.2);'><span class='filled-circle2'></span>NTC_RNase P Cq=40</td><td id='A02' title='RNase P: FAM' group='NTCRNase PRNase P' class='ntc' style='background-color:rgba(76,0,255,0.2);'><span class='filled-circle2'></span>NTC_RNase P Cq=40</td><td id='A03' title='RNase P: FAM' group='NTCRNase PRNase P' class='ntc' style='background-color:rgba(76,0,255,0.2);'><span class='filled-circle2'></span>NTC_RNase P Cq=40</td><td id='A04' title='RNase P: FAM' group='pop1RNase PRNase P' class='unkn' style='background-color:rgba(0,25,255,0.2);'><span class='filled-circle1'></span>pop1_RNase P Cq=29</td><td id='A05' title='RNase P: FAM' group='pop1RNase PRNase P' class='unkn' style='background-color:rgba(0,25,255,0.2);'><span class='filled-circle1'></span>pop1_RNase P Cq=29</td><td id='A06' title='RNase P: FAM' group='pop1RNase PRNase P' class='unkn' style='background-color:rgba(0,25,255,0.2);'><span class='filled-circle1'></span>pop1_RNase P Cq=29</td><td id='A07' title='RNase P: FAM' group='pop2RNase PRNase P' class='unkn' style='background-color:rgba(0,128,255,0.2);'><span class='filled-circle1'></span>pop2_RNase P Cq=28</td><td id='A08' title='RNase P: FAM' group='pop2RNase PRNase P' class='unkn' style='background-color:rgba(0,128,255,0.2);'><span class='filled-circle1'></span>pop2_RNase P Cq=28</td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='customLabel-row_B' class='even-row'>B</th><td id='B01' title='RNase P: FAM' group='pop2RNase PRNase P' class='unkn' style='background-color:rgba(0,128,255,0.2);'><span class='filled-circle1'></span>pop2_RNase P Cq=28</td><td id='B02' title='RNase P: FAM' group='STDRNase P100000RNase P' class='std' style='background-color:rgba(0,229,255,0.2);'><span class='filled-circle1'></span>STD_RNase P_10000.0 Cq=27</td><td id='B03' title='RNase P: FAM' group='STDRNase P100000RNase P' class='std' style='background-color:rgba(0,229,255,0.2);'><span class='filled-circle1'></span>STD_RNase P_10000.0 Cq=27</td><td id='B04' title='RNase P: FAM' group='STDRNase P100000RNase P' class='std' style='background-color:rgba(0,229,255,0.2);'><span class='filled-circle1'></span>STD_RNase P_10000.0 Cq=27</td><td id='B05' title='RNase P: FAM' group='STDRNase P50000RNase P' class='std' style='background-color:rgba(0,255,77,0.2);'><span class='filled-circle1'></span>STD_RNase P_5000.0 Cq=28</td><td id='B06' title='RNase P: FAM' group='STDRNase P50000RNase P' class='std' style='background-color:rgba(0,255,77,0.2);'><span class='filled-circle1'></span>STD_RNase P_5000.0 Cq=28</td><td id='B07' title='RNase P: FAM' group='STDRNase P50000RNase P' class='std' style='background-color:rgba(0,255,77,0.2);'><span class='filled-circle1'></span>STD_RNase P_5000.0 Cq=28</td><td id='B08' title='RNase P: FAM' group='STDRNase P25000RNase P' class='std' style='background-color:rgba(230,255,0,0.2);'><span class='filled-circle1'></span>STD_RNase P_2500.0 Cq=29</td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='customLabel-row_C' class='odd-row'>C</th><td id='C01' title='RNase P: FAM' group='STDRNase P25000RNase P' class='std' style='background-color:rgba(230,255,0,0.2);'><span class='filled-circle1'></span>STD_RNase P_2500.0 Cq=29</td><td id='C02' title='RNase P: FAM' group='STDRNase P25000RNase P' class='std' style='background-color:rgba(230,255,0,0.2);'><span class='filled-circle1'></span>STD_RNase P_2500.0 Cq=29</td><td id='C03' title='RNase P: FAM' group='STDRNase P12500RNase P' class='std' style='background-color:rgba(255,255,0,0.2);'>STD_RNase P_1250.0 Cq=30</td><td id='C04' title='RNase P: FAM' group='STDRNase P12500RNase P' class='std' style='background-color:rgba(255,255,0,0.2);'>STD_RNase P_1250.0 Cq=30</td><td id='C05' title='RNase P: FAM' group='STDRNase P12500RNase P' class='std' style='background-color:rgba(255,255,0,0.2);'>STD_RNase P_1250.0 Cq=30</td><td id='C06' title='RNase P: FAM' group='STDRNase P6250RNase P' class='std' style='background-color:rgba(255,224,179,0.2);'>STD_RNase P_625.0 Cq=31</td><td id='C07' title='RNase P: FAM' group='STDRNase P6250RNase P' class='std' style='background-color:rgba(255,224,179,0.2);'>STD_RNase P_625.0 Cq=31</td><td id='C08' title='RNase P: FAM' group='STDRNase P6250RNase P' class='std' style='background-color:rgba(255,224,179,0.2);'>STD_RNase P_625.0 Cq=31</td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='customLabel-row_D' class='even-row'>D</th><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='customLabel-row_E' class='odd-row'>E</th><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='customLabel-row_F' class='even-row'>F</th><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='customLabel-row_G' class='odd-row'>G</th><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr><tr><th id='customLabel-row_H' class='even-row'>H</th><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td><td class='empty-well'></td></tr></tbody></table>
+<div>
+<span class="filled-circle1"></span>
+Cq &lt; 30
+<br/>
+<span class="filled-circle2"></span>
+Cq &gt; 35
+<br/>
+<span>
+<span class="ntc">NTC</span>
+<span class="unkn">Unknown</span>
+<span class="pos">Positive</span>
+<span class="neg">Negative</span>
+<span class="std">Standard</span>
+</span>
+</div>
+</div>
+</div>
+</div>
+<div id="interactive-pcr-plate" class="section level1">
+<h1>Interactive PCR Plate</h1>
+<p>Run <code>shinyMolBio::runExample(&quot;pcrPlateInput&quot;)</code> to see interactive PCR plate in action. This demo <strong>Shiny App</strong> allows you to open PCR plate via <strong>RDML</strong> package and view in two independent plates: one with default style and second with custom. You can click on wells and see which of them are selected after that. Available click targets are:</p>
+<ul>
+<li>Click-Well - toggle selection of the well</li>
+<li>Dbl-Click-Well - select only this well (deselect other)</li>
+<li>Ctrl-Click-Well - select group of wells defined by <code>wellGroupTemplate</code></li>
+<li>Click-TopLeftCorner - toggle selection of the total plate</li>
+<li>Click-ColumnHeader - toggle selection of the column</li>
+<li>Dbl-Click-ColumnHeader - select only this column (deselect other)</li>
+<li>Click-RowHeader - toggle selection of the row</li>
+<li>Dbl-Click-RowHeader - select only this row (deselect other)</li>
+</ul>
+<p>Also this app shows action of <code>updatePcrPlateInput</code> function. Clicking on <em>Select Random Well</em> button selects well on the second plate.</p>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
