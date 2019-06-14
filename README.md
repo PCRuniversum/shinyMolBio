@@ -3,6 +3,10 @@
 # shinyMolBio
 Molecular biology visualization tools for Shiny apps
 
+# Manual
+
+The manual is available [online](https://kablag.github.io/shinyMolBio/)
+
 ## pcrPlateInput
 
 Create an input control for representing PCR plate and dynamically selecting wells inside it.
