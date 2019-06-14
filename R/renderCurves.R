@@ -275,6 +275,7 @@ renderCurves <- function(inputId,
       select_("quantFluor", thBy) %>%
       distinct()
     p <- add_segments(p,
+                      data = ths,
                       x = minX, xend = maxX,
                       y = ~quantFluor, yend = ~quantFluor,
                       name = ~get(thBy),

@@ -1,7 +1,8 @@
 Package: shinyMolBio
 Type: Package
-Title: Molecular biology visualization tools for Shiny apps
+Title: Molecular Biology Visualization Tools for Shiny Apps
 Version: 0.1
+Date: 2019-06-14
 Authors@R: c(
   person("Konstantin A.", "Blagodatskikh",
   email = "k.blag@yandex.ru", role = c("cre", "aut")))
@@ -30,5 +31,4 @@ Collate:
 Suggests:
   knitr,
   chipPCR
-VignetteBuilder: knitr
 RoxygenNote: 6.1.1
