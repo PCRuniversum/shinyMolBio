@@ -10,10 +10,10 @@
 #'         labelFormatType$new("123")),
 #'        selection = NULL,
 #'        wellLabelTemplate = "{{sample}}",
-#'        onHoverWellTextTemplate = "{{position}}\u000A{{sample}}\u000A{{target}}",
+#'        onHoverWellTextTemplate = "{{position}}\u000A{{sample}}\u000A{{targets}}",
 #'        wellClassTemplate = NULL,
 #'        wellStyleTemplate = NULL,
-#'        wellGroupTemplate = "{{sample}}-{{target}}",
+#'        wellGroupTemplate = "{{sample}}-{{targets}}",
 #'        cssFile = system.file("/css/pcrPlateInputStyle.css",
 #'                  package = "shinyMolBio"),
 #'        cssText = NULL,
@@ -40,7 +40,8 @@
 #'
 #' @author Konstantin A. Blagodatskikh <k.blag@@yandex.ru>
 #' @keywords PCR RDML Shiny Input
-#' @import RDML shiny tidyverse whisker stringr checkmate lazyeval
+#' @import RDML shiny dplyr whisker stringr checkmate
+#' @importFrom purrr map
 #'
 #' @family input elements
 #' @seealso \code{\link{updatePcrPlateInput}}
@@ -68,10 +69,10 @@ pcrPlateInput <- function(inputId,
                           pcrFormat = pcrFormatType$new(8, 12, labelFormatType$new("ABC"), labelFormatType$new("123")),
                           selection = NULL,
                           wellLabelTemplate = "{{sample}}",
-                          onHoverWellTextTemplate = "{{position}}\u000A{{sample}}\u000A{{target}}",
+                          onHoverWellTextTemplate = "{{position}}\u000A{{sample}}\u000A{{targets}}",
                           wellClassTemplate = NULL,
                           wellStyleTemplate = NULL,
-                          wellGroupTemplate = "{{sample}}-{{target}}",
+                          wellGroupTemplate = "{{sample}}-{{targets}}",
                           cssFile = system.file("/css/pcrPlateInputStyle.css",
                                                 package = "shinyMolBio"),
                           cssText = NULL,
@@ -91,15 +92,18 @@ pcrPlateInput <- function(inputId,
   assertString(wellGroupTemplate, null.ok = TRUE)
   assertString(cssFile)
   assertString(cssText, null.ok = TRUE)
-  # assertString(legend, null.ok = TRUE)
   assert(checkNull(legend),
          checkClass(legend, "shiny.tag"))
   assertFlag(interactive)
 
   ns <- NS(inputId)
+
+
   plateDescription <- plateDescription %>%
-    ungroup() %>%
-    distinct(react.id, .keep_all = TRUE)
+    group_by(.data$position) %>%
+    mutate(targets = paste(.data$target, collapse = "; "),
+           target.dyeIds = paste(.data$target.dyeId, collapse = "; ")) %>%
+    distinct(.data$react.id, .keep_all = TRUE)
 
   selectionColumn <- {
     if (is.numeric(selection))
@@ -108,16 +112,9 @@ pcrPlateInput <- function(inputId,
       "position"
   }
 
-  plateDescription <- plateDescription %>%
-    group_by(position) %>%
-    summarise_all(funs(first)) %>%
-    group_by(fdata.name) %>%
-    mutate_(selection = interp( ~ {
-      if (x %in% selection)
-        " selected-well"
-      else
-        ""
-    }, x = as.name(selectionColumn)))
+  plateDescription[, "selection"] <- ""
+  plateDescription[plateDescription[[selectionColumn]] %in% selection,
+                   "selection"] <- " selected-well"
 
   htmlPlate <-
     sprintf(paste0('<table id="', ns("pcrPlateTbl"),
@@ -150,8 +147,8 @@ pcrPlateInput <- function(inputId,
                       function(col) {
                         well <- sprintf("%s%02i", row, col)
 
-                        trow <- plateDescription %>%
-                          filter(position == well)
+                        trow <-
+                          filter(plateDescription, .data$position == well)
                         if (!length(trow$fdata.name))
                           return("<td class='empty-well'></td>")
                         # paste0(
@@ -159,9 +156,9 @@ pcrPlateInput <- function(inputId,
                                 trow$position,
                                 whisker.render(onHoverWellTextTemplate,
                                                trow),
-                                whisker.render(wellGroupTemplate,
-                                               trow) %>%
-                                  str_replace_all("[[:punct:]]", ""),
+                                gsub(pattern = "[[:punct:]]",
+                                     whisker.render(wellGroupTemplate, trow),
+                                     replacement = ""),
                                 whisker.render(wellClassTemplate,
                                                trow),
                                 trow$selection,
@@ -174,7 +171,7 @@ pcrPlateInput <- function(inputId,
                     paste(collapse = ""))
         }) %>%
       paste(collapse = "")) %>%
-    HTML
+    HTML()
   css <- tags$style(type = "text/css",
                     paste0(whisker.render(
                       suppressWarnings(readLines(cssFile, warn = FALSE, encoding = "UTF-8")) %>%
@@ -184,6 +181,7 @@ pcrPlateInput <- function(inputId,
                     whisker.render(cssText, list(id = inputId))
                     )
   )
+
   tagList(
     if (interactive) {
       tags$head(
