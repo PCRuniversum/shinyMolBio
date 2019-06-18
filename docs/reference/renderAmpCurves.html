@@ -129,7 +129,8 @@ an <code>UI output</code> slot.</p>
 
     <pre class="usage"><span class='fu'>renderAmpCurves</span>(<span class='no'>inputId</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>ampCurves</span>, <span class='kw'>colorBy</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>linetypeBy</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>logScale</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>showCq</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>showLegend</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>thBy</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>cssFile</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>cssText</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>interactive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+  <span class='kw'>thBy</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>plotlyCode</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>cssFile</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>cssText</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>interactive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -171,6 +172,10 @@ an <code>UI output</code> slot.</p>
       <th>thBy</th>
       <td><p>Column name that separates threshold values (<code>quantFluor</code>
 column have to be provided!).</p></td>
+    </tr>
+    <tr>
+      <th>plotlyCode</th>
+      <td><p>Your quoted custom plotly code.</p></td>
     </tr>
     <tr>
       <th>cssFile</th>

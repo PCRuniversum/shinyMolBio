@@ -5,8 +5,8 @@
 \title{Renders a melting curves viewer}
 \usage{
 renderMeltCurves(inputId, label = NULL, meltCurves, colorBy = NULL,
-  linetypeBy = NULL, showTm = FALSE, showLegend = FALSE, cssFile =
-  NULL, cssText = NULL, interactive = TRUE)
+  linetypeBy = NULL, showTm = FALSE, showLegend = FALSE, plotlyCode = NULL,
+  cssFile = NULL, cssText = NULL, interactive = TRUE)
 }
 \arguments{
 \item{inputId}{The \code{input} slot that will be used to modify plot.}
@@ -23,6 +23,8 @@ renderMeltCurves(inputId, label = NULL, meltCurves, colorBy = NULL,
 \item{showTm}{Shows Tm with dots (\code{tm} column have to be provided!)}
 
 \item{showLegend}{Show plot legend.}
+
+\item{plotlyCode}{Your quoted custom plotly code.}
 
 \item{cssFile}{Path to the css styles file.}
 

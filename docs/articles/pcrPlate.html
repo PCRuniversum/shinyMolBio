@@ -586,19 +586,23 @@ RNase P" group="STDRNase P6250RNase P" class="" style="">STD_RNase P_625.0</td>
 </li>
 </ul>
 <p>Note that inside Shiny app CSS loads as singleton (once for all plates) but in <strong>Rmd</strong> file it loads for every plate but works globally too - you can prevent such loading by setting <code>cssFile = ""</code></p>
-<p>To make CSS rule only for current plate add <code>#{{id}}</code> befor CSS rule. For example if you want set selection border to red and well color to light yellow.</p>
+<p>To make CSS rule only for current plate add <code>#{{id}}</code> before CSS rule. For example if you want set selection border to red and well color to light yellow.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/pcrPlateInput.html">pcrPlateInput</a></span>(<span class="dt">inputId =</span> <span class="st">"customCSS"</span>, <span class="co"># Shiny input ID</span>
-              <span class="dt">label =</span> <span class="st">"Custom CSS: red selection, yellow background"</span>,
+              <span class="dt">label =</span> <span class="st">"Custom CSS: red selection and yellow plate background"</span>,
               <span class="dt">plateDescription =</span> rdml<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/RDML/topics/astable-function">AsTable</a></span>(),
               <span class="dt">selection =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"A01"</span>, <span class="st">"C08"</span>), <span class="co"># optional preselected wells</span>
               <span class="dt">cssFile =</span> <span class="st">""</span>,
               <span class="dt">cssText =</span> <span class="st">"#{{id}} td.selected-well{border: 2px solid red !important;}</span>
 <span class="st">                        #{{id}} table.pcr-plate-tbl td{background-color: #ffffe0;}</span>
-<span class="st">              "</span>
+<span class="st">              "</span>,
+              <span class="dt">interactive =</span> <span class="ot">FALSE</span>
 ) </code></pre></div>
+<style type="text/css">#customCSS td.selected-well{border: 2px solid red !important;}
+                        #customCSS table.pcr-plate-tbl td{background-color: #ffffe0;}
+              </style>
 <div id="customCSS" class="pcr-plate">
-<label for="customCSS">Custom CSS: red selection, yellow background</label>
-<table class="table pcr-plate-tbl interactive">
+<label for="customCSS">Custom CSS: red selection and yellow plate background</label>
+<table class="table pcr-plate-tbl">
 <thead><tr>
 <th id="customCSS-toggleall" class="toggle-all"></th>
 <th id="customCSS-col_01">1</th>

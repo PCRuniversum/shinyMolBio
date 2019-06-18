@@ -24,7 +24,7 @@ rdml <- RDML$new(system.file("/extdata/stepone_std.rdml", package = "RDML"))
 ```
 ```{r, results='asis'}
 renderAmpCurves(inputId = "firstLook", # Shiny input ID
-              label = "Example", # optional plot label 
+              label = "First Look", # optional plot label 
               ampCurves = rdml$GetFData(long.table = TRUE), # Amplification curves
               interactive = FALSE
 ) 
@@ -38,12 +38,14 @@ Curve color can be directly provided by adding column **color** to **ampCurves**
 
 ```{r, results='asis'}
 renderAmpCurves(inputId = "color1",
+                "Color by Sample Name",
               ampCurves = rdml$GetFData(long.table = TRUE),
               colorBy = "sample", # sample name will define color
               interactive = FALSE
 ) 
 
 renderAmpCurves(inputId = "color2",
+                "All 'red'",
               ampCurves = rdml$GetFData(long.table = TRUE) %>% 
                 mutate(color = "red"), # All curves will be red
               interactive = FALSE
@@ -56,6 +58,7 @@ Curve linetype can be setted by choosing column that defines linetype with **lin
 
 ```{r, results='asis'}
 renderAmpCurves(inputId = "linetype",
+                "Different Linetypes",
               ampCurves = rdml$GetFData(long.table = TRUE),
               linetypeBy = "sample.type", # sample.type will define color
               interactive = FALSE
@@ -67,7 +70,8 @@ renderAmpCurves(inputId = "linetype",
 You can show *Cq* or *Tm* values on curves as markers setting `showCq = TRUE` or `showTm = TRUE`. Then input table have to contain *cq* or *tm* column.
 
 ```{r, results='asis'}
-renderAmpCurves(inputId = "cq", 
+renderAmpCurves(inputId = "cq",
+                "Show Cq Values",
               ampCurves = rdml$GetFData(
                 rdml$AsTable(cq = data$cq), # Get Cq values from file
                 long.table = TRUE), 
@@ -109,13 +113,44 @@ for (react in rdml$experiment[[1]]$run[[1]]$react) {
   }
 }
 
-renderAmpCurves("th", "th", 
-                rdml$GetFData(
-                  # Add threshold values to table
-                  rdml$AsTable(quantFluor = data$quantFluor),
-                  long.table = TRUE), 
+
+tbl <- rdml$AsTable(quantFluor = data$quantFluor, # Add threshold values to table
+                    cq = data$cq)
+renderAmpCurves("th", 
+                "Show Thershold Lines", 
+                rdml$GetFData(tbl, long.table = TRUE), 
                 colorBy = "target",
-                thBy = "target") # Add threshold lines (separated by targets)
+                thBy = "target", # Add threshold lines (separated by targets)
+                interactive = FALSE) 
+```
+
+# Custom Plotly Code
+
+You can add custom qouted plotly code by **plotlyCode** parameter. Note that you have to add value **p** inside your code to link it with render output.
+
+```{r, results='asis'}
+markTbl <- tbl %>% 
+  filter(position %in% c("D03", "D07"),
+         target == "bACT")
+
+renderAmpCurves("th", 
+                "Show Thershold Lines", 
+                rdml$GetFData(tbl, long.table = TRUE), 
+                colorBy = "target",
+                plotlyCode = quote(
+                  # Add Cq values for tubes D03 and D07 for target bACT as blue points
+                  add_markers(p,
+                              data = markTbl,
+                              name = ~sample,
+                              x = ~cq,
+                              y = ~quantFluor,
+                              marker = list(color = "blue",
+                                            size = 15)) %>%
+                    # Set background color to light yellow
+                    layout(paper_bgcolor='#ffffe0',
+                           plot_bgcolor='#ffffe0')
+                ),
+                interactive = FALSE)
 ```
 
 # Hiding curves

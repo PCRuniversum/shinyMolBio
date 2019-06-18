@@ -6,7 +6,8 @@
 \usage{
 renderAmpCurves(inputId, label = NULL, ampCurves, colorBy = NULL,
   linetypeBy = NULL, logScale = FALSE, showCq = FALSE, showLegend = FALSE,
-  thBy = NULL, cssFile = NULL, cssText = NULL, interactive = TRUE)
+  thBy = NULL, plotlyCode = NULL, cssFile = NULL, cssText = NULL,
+  interactive = TRUE)
 }
 \arguments{
 \item{inputId}{The \code{input} slot that will be used to modify plot.}
@@ -28,6 +29,8 @@ renderAmpCurves(inputId, label = NULL, ampCurves, colorBy = NULL,
 
 \item{thBy}{Column name that separates threshold values (\code{quantFluor}
 column have to be provided!).}
+
+\item{plotlyCode}{Your quoted custom plotly code.}
 
 \item{cssFile}{Path to the css styles file.}
 

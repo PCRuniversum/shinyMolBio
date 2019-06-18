@@ -5,7 +5,8 @@
 #'
 #' @usage renderAmpCurves(inputId, label = NULL, ampCurves, colorBy = NULL,
 #'   linetypeBy = NULL, logScale = FALSE, showCq = FALSE, showLegend = FALSE,
-#'   thBy = NULL, cssFile = NULL, cssText = NULL, interactive = TRUE)
+#'   thBy = NULL, plotlyCode = NULL, cssFile = NULL, cssText = NULL,
+#'   interactive = TRUE)
 #'
 #' @param inputId The \code{input} slot that will be used to modify plot.
 #' @param label Display label for the control, or \code{NULL} for no label.
@@ -18,6 +19,7 @@
 #' @param showLegend Show plot legend.
 #' @param thBy Column name that separates threshold values (\code{quantFluor}
 #'   column have to be provided!).
+#' @param plotlyCode Your quoted custom plotly code.
 #' @param cssFile Path to the css styles file.
 #' @param cssText CSS styles as text.
 #' @param interactive Should be this \code{pcrPlate} interactive or not.
@@ -45,6 +47,7 @@ renderAmpCurves <- function(inputId,
                             showCq = FALSE,
                             showLegend = FALSE,
                             thBy = NULL,
+                            plotlyCode = NULL,
                             cssFile = NULL,
                             cssText = NULL,
                             interactive = TRUE) {
@@ -52,13 +55,13 @@ renderAmpCurves <- function(inputId,
               must.include = c("fdata.name", "cyc", "fluor"))
   assertLogical(logScale)
   ampCurves <- ampCurves %>%
-    rename(x = cyc,
-           y = fluor)
+    rename(x = .data$cyc,
+           y = .data$fluor)
   if (showCq) {
     assertNames(colnames(ampCurves),
                 must.include = c("cq"))
     ampCurves <- ampCurves %>%
-      rename(markers = cq)
+      rename(markers = .data$cq)
   }
 
   renderCurves(inputId,
@@ -73,6 +76,7 @@ renderAmpCurves <- function(inputId,
                showMarkers = showCq,
                showLegend = showLegend,
                thBy = thBy,
+               plotlyCode = plotlyCode,
                cssFile = cssFile,
                cssText = cssText,
                interactive = interactive)
@@ -84,8 +88,8 @@ renderAmpCurves <- function(inputId,
 #' output} slot.
 #'
 #' @usage renderMeltCurves(inputId, label = NULL, meltCurves, colorBy = NULL,
-#'   linetypeBy = NULL, showTm = FALSE, showLegend = FALSE, cssFile =
-#'   NULL, cssText = NULL, interactive = TRUE)
+#'   linetypeBy = NULL, showTm = FALSE, showLegend = FALSE, plotlyCode = NULL,
+#'   cssFile = NULL, cssText = NULL, interactive = TRUE)
 #'
 #' @param inputId The \code{input} slot that will be used to modify plot.
 #' @param label Display label for the control, or \code{NULL} for no label.
@@ -95,6 +99,7 @@ renderAmpCurves <- function(inputId,
 #' @param linetypeBy Column name that contains linetype levels data.
 #' @param showTm Shows Tm with dots (\code{tm} column have to be provided!)
 #' @param showLegend Show plot legend.
+#' @param plotlyCode Your quoted custom plotly code.
 #' @param cssFile Path to the css styles file.
 #' @param cssText CSS styles as text.
 #' @param interactive Should be this \code{pcrPlate} interactive or not.
@@ -120,19 +125,20 @@ renderMeltCurves <- function(inputId,
                             linetypeBy = NULL,
                             showTm = FALSE,
                             showLegend = FALSE,
+                            plotlyCode = NULL,
                             cssFile = NULL,
                             cssText = NULL,
                             interactive = TRUE) {
   assertNames(colnames(meltCurves),
               must.include = c("fdata.name", "tmp", "fluor"))
   meltCurves <- meltCurves %>%
-    rename(x = tmp,
-           y = fluor)
+    rename(x = .data$tmp,
+           y = .data$fluor)
   if (showTm) {
     assertNames(colnames(meltCurves),
                 must.include = c("tm"))
     meltCurves <- meltCurves %>%
-      rename(markers = tm)
+      rename(markers = .data$tm)
   }
 
   renderCurves(inputId,
@@ -146,6 +152,7 @@ renderMeltCurves <- function(inputId,
                logScale = FALSE,
                showMarkers = showTm,
                showLegend = showLegend,
+               plotlyCode = plotlyCode,
                cssFile = cssFile,
                cssText = cssText,
                interactive = interactive)
@@ -164,6 +171,7 @@ renderCurves <- function(inputId,
                          showMarkers = FALSE,
                          thBy = NULL,
                          showLegend = FALSE,
+                         plotlyCode = NULL,
                          cssFile = NULL,
                          cssText = NULL,
                          interactive = TRUE) {
@@ -183,21 +191,23 @@ renderCurves <- function(inputId,
   assertLogical(showMarkers)
   assertLogical(showLegend)
 
-  curves <- curves %>%
-    mutate(curveName = sprintf("%s %s %s %s", position, target.dyeId,
-                               sample, sample.type)) %>%
-    group_by(fdata.name, x) %>%
-    mutate(legendGroup = paste(if (!is.null(colorBy)) get(colorBy),
-                               if (!is.null(linetypeBy)) get(linetypeBy),
-                               collapse = " ")) %>%
-    ungroup()
-
   # assertLogical(showBaseline)
   assertString(cssFile, null.ok = TRUE)
   assertString(cssText, null.ok = TRUE)
   assertLogical(interactive)
 
-  ns <- NS(inputId)
+  curves <- curves %>%
+    mutate(curveName = sprintf("%s %s %s %s", .data$position,
+                               .data$target.dyeId,
+                               .data$sample,
+                               .data$sample.type)) %>%
+    group_by(.data$fdata.name, .data$x) %>%
+    mutate(legendGroup = paste(if (!is.null(colorBy)) get(colorBy),
+                               if (!is.null(linetypeBy)) get(linetypeBy),
+                               collapse = " ")) %>%
+    ungroup()
+
+  # ns <- NS(inputId)
 
   # assign colors to curves
   if (!("color" %in% colnames(curves))) {
@@ -244,14 +254,14 @@ renderCurves <- function(inputId,
     # replace all NA cq with max cycle
     curves[is.na(curves$markers), "markers"] <- maxX
     curves <- curves %>%
-      group_by(fdata.name) %>%
+      group_by(.data$fdata.name) %>%
       mutate(isMarker =
-               replace(rep(FALSE, length(x)),
-                       sapply(unique(markers), # set TRUE to closest cyc
+               replace(rep(FALSE, length(.data$x)),
+                       sapply(unique(.data$markers), # set TRUE to closest cyc
                               function(marker)
-                                which.min(abs(x - marker))), TRUE))
+                                which.min(abs(.data$x - marker))), TRUE))
     cqs <- curves %>%
-      filter(isMarker == TRUE)
+      filter(.data$isMarker == TRUE)
     p <- add_trace(p,
                    data = cqs,
                    split = ~fdata.name,
@@ -272,7 +282,7 @@ renderCurves <- function(inputId,
     maxX <- max(curves$x)
     minX <- min(curves$x)
     ths <- curves %>%
-      select_("quantFluor", thBy) %>%
+      select(.data$quantFluor, .data[[thBy]]) %>%
       distinct()
     p <- add_segments(p,
                       data = ths,
@@ -296,10 +306,17 @@ renderCurves <- function(inputId,
                                       warn = FALSE, encoding = "UTF-8")) %>%
                             paste0(collapse = ""),
                           list(id = inputId)
-                        )} else { "" },
-                    whisker.render(cssText, list(id = inputId))
+                        )} else {
+                          ""
+                        },
+                      whisker.render(cssText, list(id = inputId))
                     )
-  )
+    )
+
+  if (!is.null(plotlyCode)) {
+    p <- eval(plotlyCode)
+  }
+
   tagList(
     if (interactive) {
       tags$head(
@@ -338,9 +355,7 @@ updateCurves <- function(session, inputId,
   assertClass(session, "ShinySession")
   assertString(inputId)
   assertString(label, null.ok = TRUE)
-  # assertInteger(hideCurves,
-  #               any.missing = FALSE, null.ok = TRUE)
   assertCharacter(hideCurves, any.missing = FALSE, null.ok = TRUE)
-  message <- .dropNulls(list(label = label, hideCurves = hideCurves))# - 1L)
+  message <- .dropNulls(list(label = label, hideCurves = hideCurves))
   session$sendInputMessage(inputId, message)
 }
