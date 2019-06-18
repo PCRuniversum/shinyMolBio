@@ -2,6 +2,7 @@
 ## See https://github.com/metacran/r-builder for details.
 
 language: r
+cache: packages
 
 r:
   - oldrel
