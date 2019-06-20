@@ -61,6 +61,7 @@ wells inside it.
 }
 \examples{
 ## Only run examples in interactive R sessions
+library(RDML)
 if (interactive()) {
 ui <- fluidPage(
     pcrPlateInput("plate1",

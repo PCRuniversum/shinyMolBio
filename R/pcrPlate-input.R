@@ -40,14 +40,16 @@
 #'
 #' @author Konstantin A. Blagodatskikh <k.blag@@yandex.ru>
 #' @keywords PCR RDML Shiny Input
-#' @import RDML shiny dplyr whisker stringr checkmate
+#' @import RDML shiny dplyr stringr checkmate
 #' @importFrom purrr map
+#' @importFrom  whisker whisker.render
 #'
 #' @family input elements
 #' @seealso \code{\link{updatePcrPlateInput}}
 #'
 #' @examples
 #' ## Only run examples in interactive R sessions
+#' library(RDML)
 #' if (interactive()) {
 #' ui <- fluidPage(
 #'     pcrPlateInput("plate1",
@@ -215,6 +217,7 @@ pcrPlateInput <- function(inputId,
 #' @export
 #' @examples
 #' ## Only run examples in interactive R sessions
+#' library(RDML)
 #' if (interactive()) {
 #' ui <- fluidPage(
 #'     pcrPlateInput("plate1",
@@ -226,11 +229,11 @@ pcrPlateInput <- function(inputId,
 #'    actionButton("selectWellBtn",
 #'                 "Select Well A01-A03")
 #'  )
-#'  server <- function(input, output) {
+#'  server <- function(input, output, session) {
 #'    output$selected <- renderText({ input$plate1 })
 #'
 #'    observeEvent(
-#'                input$selectRandomWellBtn,
+#'                input$selectWellBtn,
 #'                {
 #'            updatePcrPlateInput(session,
 #'            "plate1",

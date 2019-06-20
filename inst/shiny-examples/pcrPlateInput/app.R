@@ -160,14 +160,11 @@ server <- function(input, output, session) {
     req(input$pcrPlate2)
     input$showDyes
     isolate({
-      # cat("upd curves\n")
       toHideCurves <-
         rdmlFile()$table %>%
         filter(!(position %in% input$pcrPlate2) |
                  !(target.dyeId %in% input$showDyes)) %>%
         .$fdata.name
-        # which(!(rdmlFile()$table$position %in% input$pcrPlate2) |
-        #           !(rdmlFile()$table$target.dyeId %in% input$showDyes))
       updateCurves(session,
                    "pcrCurves1",
                    hideCurves = toHideCurves)
