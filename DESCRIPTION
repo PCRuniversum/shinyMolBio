@@ -6,8 +6,8 @@ Date: 2019-06-20
 Authors@R: c(
   person("Konstantin A.", "Blagodatskikh",
   email = "k.blag@yandex.ru", role = c("cre", "aut")))
-Description: This package is intended for interactive visualization of 'RDML' 
-  files via 'shiny' apps. It provides (1) PCR plate interface with ability to select
+Description: Interactive visualization of 'RDML' files via 'shiny' apps. 
+  Package provides (1) PCR plate interface with ability to select
   individual tubes and (2) amplification/melting plots.
 License: MIT + file LICENSE
 URL: https://github.com/kablag/shinyMolBio
