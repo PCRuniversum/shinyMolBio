@@ -244,13 +244,19 @@ pcrPlateInput <- function(inputId,
 #' }
 updatePcrPlateInput <- function(session, inputId,
                                 label = NULL,
-                                selection = NULL) {
+                                selection = NULL,
+                                highlight = NULL) {
   assertClass(session, "ShinySession")
   assertString(inputId)
   assertString(label, null.ok = TRUE)
   assert(checkNull(selection),
          checkNumeric(selection),
          checkCharacter(selection))
-  message <- .dropNulls(list(label = label, selection = selection))
+  assert(checkNull(highlight),
+         checkNumeric(highlight),
+         checkCharacter(highlight))
+  message <- .dropNulls(list(label = label,
+                             selection = selection,
+                             highlight = highlight))
   session$sendInputMessage(inputId, message)
 }

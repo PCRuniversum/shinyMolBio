@@ -59,8 +59,18 @@ server <- function(input, output, session) {
 
   output$plate1Selected <- renderText({
     req(input$pcrPlate1)
-    paste("Selected wells:",
-          paste(input$pcrPlate1, collapse = ", "))
+
+      updatePcrPlateInput(
+        session,
+        "pcrPlate2",
+        highlight =  if (length(input$pcrPlate1) != length(unique(rdmlFile()$table$position))) {
+          input$pcrPlate1
+        } else {
+          ""
+        })
+
+      paste("Selected wells:",
+            paste(input$pcrPlate1, collapse = ", "))
   })
 
   output$plate2 <- renderUI({

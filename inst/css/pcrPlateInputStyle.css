@@ -32,6 +32,9 @@ th.even-row{
 td.selected-well{
   border: 2px solid black !important;
 }
+td.highlighted-well{
+  background-color: lightyellow !important;
+}
 th.toggle-all {
   background: transparent !important;
   position: relative;
