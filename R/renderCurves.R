@@ -351,11 +351,15 @@ renderCurves <- function(inputId,
 #' @export
 updateCurves <- function(session, inputId,
                          label = NULL,
-                         hideCurves = NULL) {
+                         hideCurves = NULL,
+                         highlightCurves = NULL) {
   assertClass(session, "ShinySession")
   assertString(inputId)
   assertString(label, null.ok = TRUE)
   assertCharacter(hideCurves, any.missing = FALSE, null.ok = TRUE)
-  message <- .dropNulls(list(label = label, hideCurves = hideCurves))
+  assertCharacter(highlightCurves, any.missing = FALSE, null.ok = TRUE)
+  message <- .dropNulls(list(label = label,
+                             hideCurves = hideCurves,
+                             highlightCurves = highlightCurves))
   session$sendInputMessage(inputId, message)
 }

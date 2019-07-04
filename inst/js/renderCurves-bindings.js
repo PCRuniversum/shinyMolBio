@@ -22,7 +22,7 @@ $.extend(renderAmpCurvesBinding, {
   },
 
   // Given the DOM element for the input, set the value
-  setValue: function(el, hideCurves) {
+  hideCurves: function(el, hideCurves) {
     if (Array.isArray(hideCurves) === false)
       hideCurves = [hideCurves];
 
@@ -35,6 +35,23 @@ $.extend(renderAmpCurvesBinding, {
           curve.visible = false;
         } else {
           curve.visible = true;}
+    });
+    Plotly.redraw(graphDiv);
+  },
+
+  highlightCurves: function(el, highlightCurves) {
+    if (Array.isArray(highlightCurves) === false)
+      highlightCurves = [highlightCurves];
+
+    var graphDiv = el.getElementsByClassName('plotly')[0];
+    graphDiv.data.forEach(function(curve) {
+      if (highlightCurves.some(function(highlightCurve) {
+        return curve.customdata.includes(highlightCurve);
+              }))
+              {
+          curve.line.width = 4;
+        } else {
+          curve.line.width = 2;}
     });
     Plotly.redraw(graphDiv);
   },
@@ -58,7 +75,11 @@ $.extend(renderAmpCurvesBinding, {
   // Messages sent by updateCurves() are received by this function.
   receiveMessage: function(el, data) {
     if (data.hasOwnProperty('hideCurves')){
-      this.setValue(el, data.hideCurves)
+      this.hideCurves(el, data.hideCurves)
+    };
+
+    if (data.hasOwnProperty('highlightCurves')){
+      this.highlightCurves(el, data.highlightCurves)
     };
 
     if (data.hasOwnProperty('label'))

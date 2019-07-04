@@ -97,24 +97,12 @@ $.extend(pcrPlateInputBinding, {
     return selected;
   },
 
-  // Given the DOM element for the input, set the value
-  setSelection: function(el, selection) {
-    if (Array.isArray(selection) === false)
-      selection = [selection]
-    selection = selection.map(function(el) {return '#' + el});
-    $(el).find(selection.join(',')).addClass('selected-well');
-  },
-
-  setHighlight: function(el, highlight) {
-    if (Array.isArray(highlight) === false)
-      highlight = [highlight]
-    //highlightedEls = el.getElementsByClassName('highlighted-well');
-    //for (let item of highlightedEls) {
-    //  item.classList.remove("highlighted-well");
-    //}
-    $(el).find(".highlighted-well").removeClass('highlighted-well');
-    highlight = highlight.map(function(el) {return '#' + el});
-    $(el).find(highlight.join(',')).addClass('highlighted-well');
+  setSomething: function(el, wells, something) {
+    if (Array.isArray(wells) === false)
+      wells = [wells]
+    $(el).find("." + something).removeClass(something);
+    wells = wells.map(function(el) {return '#' + el});
+    $(el).find(wells.join(',')).addClass(something);
   },
 
   // Set up the event listeners so that interactions with the
@@ -137,11 +125,11 @@ $.extend(pcrPlateInputBinding, {
   receiveMessage: function(el, data) {
 
     if (data.hasOwnProperty('selection')){
-      this.setSelection(el, data.selection)
+      this.setSomething(el, data.selection, "selected-well")
     };
 
-    if (data.hasOwnProperty('highlight')){
-      this.setHighlight(el, data.highlight)
+    if (data.hasOwnProperty('highlightning')){
+      this.setSomething(el, data.highlightning, "highlighted-well")
     };
 
     if (data.hasOwnProperty('label'))

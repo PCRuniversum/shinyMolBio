@@ -2,6 +2,7 @@ library(shiny)
 library(RDML)
 library(shinyMolBio)
 library(tidyverse)
+library(DT)
 
 ui <- fluidPage(
   sidebarLayout(
@@ -12,14 +13,21 @@ ui <- fluidPage(
     mainPanel(
       uiOutput("plate1"),
       textOutput("plate1Selected"),
-      uiOutput("plate2"),
-      textOutput("plate2Selected"),
-      actionButton("selectRandomWellBtn",
-                   "Select Random Well"),
-      uiOutput("showDyesUI"),
-      checkboxInput("logScale", "Log Scale"),
-      uiOutput("curves1")
-      ,
+      fluidRow(
+        column(6,
+               uiOutput("showDyesUI"),
+          uiOutput("plate2"),
+          textOutput("plate2Selected"),
+          actionButton("selectRandomWellBtn",
+                       "Select Random Well")
+        ),
+        column(6,
+               checkboxInput("logScale", "Log Scale"),
+               uiOutput("curves1")
+        ),
+        dataTableOutput("table"),
+        verbatimTextOutput("hoverfDataName")
+      ),
       uiOutput("mcurves1")
     )
   )
@@ -44,8 +52,8 @@ server <- function(input, output, session) {
     list(table =  rdml$AsTable(cq = data$cq) %>%
            filter(exp.id == expId
                   # &
-                    # run.id == runId
-                  ),
+                  # run.id == runId
+           ),
          format = rdml$experiment[[expId]]$run[[1]]$pcrFormat,
          rdml = rdml)
   })
@@ -59,18 +67,8 @@ server <- function(input, output, session) {
 
   output$plate1Selected <- renderText({
     req(input$pcrPlate1)
-
-      updatePcrPlateInput(
-        session,
-        "pcrPlate2",
-        highlight =  if (length(input$pcrPlate1) != length(unique(rdmlFile()$table$position))) {
-          input$pcrPlate1
-        } else {
-          ""
-        })
-
-      paste("Selected wells:",
-            paste(input$pcrPlate1, collapse = ", "))
+    paste("Selected wells:",
+          paste(input$pcrPlate1, collapse = ", "))
   })
 
   output$plate2 <- renderUI({
@@ -148,14 +146,14 @@ server <- function(input, output, session) {
   output$mcurves1 <- renderUI({
     req(rdmlFile())#, input$pcrPlate2)
     renderMeltCurves("meltCurves1", "curves1",
-                    rdmlFile()$rdml$GetFData(rdmlFile()$table,
-                                             dp.type = "mdp",
-                                             long.table = TRUE) %>%
-                      group_by(fdata.name) %>%
-                      mutate(fluor = c(NA, diff(fluor))),
-                    # plotlyCode = plotly::layout(yaxis = list(title = "Fluorescence")),
-                    colorBy = "sample",
-                    linetypeBy = "target.dyeId")
+                     rdmlFile()$rdml$GetFData(rdmlFile()$table,
+                                              dp.type = "mdp",
+                                              long.table = TRUE) %>%
+                       group_by(fdata.name) %>%
+                       mutate(fluor = c(NA, diff(fluor))),
+                     # plotlyCode = plotly::layout(yaxis = list(title = "Fluorescence")),
+                     colorBy = "sample",
+                     linetypeBy = "target.dyeId")
   })
 
   output$showDyesUI <- renderUI({
@@ -184,6 +182,38 @@ server <- function(input, output, session) {
       paste("Selected wells:",
             paste(input$pcrPlate2, collapse = ", "))
     })
+  })
+
+  output$hoverfDataName <- renderText({
+    hoverfDataName <- input$hoverfDataName
+    updateCurves(session,
+                 "pcrCurves1",
+                 highlightCurves = hoverfDataName)
+    updateCurves(session,
+                 "meltCurves1",
+                 highlightCurves = hoverfDataName)
+    updatePcrPlateInput(
+      session,
+      "pcrPlate2",
+      highlightning = str_sub(hoverfDataName, end = 3))
+    paste("Highlighted:", hoverfDataName)
+  })
+
+  output$table <- renderDataTable({
+    req(rdmlFile())
+    DT::datatable(rdmlFile()$table,
+                  rownames = FALSE,
+                  options = list(
+                    rowCallback = DT::JS('function(row, data) {
+                                           $(row).mouseenter(function(){
+                                           Shiny.onInputChange("hoverfDataName", data[0]);
+                                           });
+                                           $(row).mouseout(function(){
+                                           Shiny.onInputChange("hoverfDataName", "");
+                                           });
+  }')
+                  )
+    )
   })
 }
 
