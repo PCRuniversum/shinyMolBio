@@ -9,6 +9,18 @@ $(document).on("click", ".pcr-plate-tbl.interactive thead tr th.toggle-all", fun
     notempty.addClass('selected-well');
   $(this).parents(".pcr-plate").trigger('change');
 });
+// all hover
+$(document).on("mouseenter", ".pcr-plate-tbl.interactive thead tr th.toggle-all", function(event) {
+  var notempty = $(this).parents(".pcr-plate").find('td:not(.empty-well)');
+  if (notempty.length === 0)
+    return;
+  var ids = [];
+  notempty.each(function() { ids.push(this.id);});
+  Shiny.onInputChange($(this).parents(".pcr-plate")[0].id + "_hover", ids);
+});
+$(document).on("mouseout", ".pcr-plate-tbl.interactive thead tr th.toggle-all", function(event) {
+    Shiny.onInputChange($(this).parents(".pcr-plate")[0].id + "_hover", " ");
+});
 
 // select column click
 $(document).on("click", ".pcr-plate-tbl.interactive thead tr th", function() {
@@ -21,6 +33,19 @@ $(document).on("click", ".pcr-plate-tbl.interactive thead tr th", function() {
   else
     notempty.addClass('selected-well');
   $(this).parents(".pcr-plate").trigger('change');
+});
+// column hover
+$(document).on("mouseenter", ".pcr-plate-tbl.interactive thead tr th", function(event) {
+  var index = this.cellIndex + 1;
+  var notempty = $(this).parents(".pcr-plate").find('td:nth-child(' + index + '):not(.empty-well)');
+  if (notempty.length === 0)
+    return;
+  var ids = [];
+  notempty.each(function() { ids.push(this.id);});
+  Shiny.onInputChange($(this).parents(".pcr-plate")[0].id + "_hover", ids);
+});
+$(document).on("mouseout", ".pcr-plate-tbl.interactive thead tr th", function(event) {
+    Shiny.onInputChange($(this).parents(".pcr-plate")[0].id + "_hover", " ");
 });
 
 // select column dblclick
@@ -41,6 +66,18 @@ $(document).on("click", ".pcr-plate-tbl.interactive tbody tr th", function() {
   else
     notempty.addClass('selected-well');
   $(this).parents(".pcr-plate").trigger('change');
+});
+// row hover
+$(document).on("mouseenter", ".pcr-plate-tbl.interactive tbody tr th", function(event) {
+  var notempty = $(this).parent().find('td:not(.empty-well)');
+  if (notempty.length === 0)
+    return;
+  var ids = [];
+  notempty.each(function() { ids.push(this.id);});
+  Shiny.onInputChange($(this).parents(".pcr-plate")[0].id + "_hover", ids);
+});
+$(document).on("mouseout", ".pcr-plate-tbl.interactive tbody tr th", function(event) {
+    Shiny.onInputChange($(this).parents(".pcr-plate")[0].id + "_hover", " ");
 });
 // select row dblclick
 $(document).on("dblclick", ".pcr-plate-tbl.interactive tbody tr th", function() {
@@ -64,6 +101,15 @@ $(document).on("click", ".pcr-plate-tbl.interactive tbody td:not(.empty-well)", 
     }
     $(this).parents(".pcr-plate").trigger('change');
 });
+
+// mouse hover well
+$(document).on("mouseenter", ".pcr-plate-tbl.interactive tbody td:not(.empty-well)", function(event) {
+    Shiny.onInputChange($(this).parents(".pcr-plate")[0].id + "_hover", this.id);
+});
+$(document).on("mouseout", ".pcr-plate-tbl.interactive tbody td:not(.empty-well)", function(event) {
+    Shiny.onInputChange($(this).parents(".pcr-plate")[0].id + "_hover", " ");
+});
+
 // select well dblclick
 $(document).on("dblclick", ".pcr-plate-tbl.interactive tbody td:not(.empty-well)", function() {
     $(this).parent().parent().find('td.selected-well').removeClass('selected-well');

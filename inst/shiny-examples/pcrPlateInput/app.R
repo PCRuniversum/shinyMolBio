@@ -199,6 +199,21 @@ server <- function(input, output, session) {
     paste("Highlighted:", hoverfDataName)
   })
 
+  observeEvent(
+    input$pcrPlate2_hover,
+    {
+      fdataNames <- rdmlFile()$table %>%
+        filter(position %in% input$pcrPlate2_hover) %>%
+        .$fdata.name
+      updateCurves(session,
+                   "pcrCurves1",
+                   highlightCurves = fdataNames)
+      updateCurves(session,
+                   "meltCurves1",
+                   highlightCurves = fdataNames)
+    }
+  )
+
   output$table <- renderDataTable({
     req(rdmlFile())
     DT::datatable(rdmlFile()$table,
