@@ -1,3 +1,7 @@
+var pcrPlateHighlightWells = function(el, ids) {
+  var binding = Shiny.inputBindings.getBindings().find(function (binding) {return binding.binding.name === "Kablag.pcrPlateInput";});
+  binding.binding.setSomething(el, ids, "highlighted-well");
+};
 // select all click
 $(document).on("click", ".pcr-plate-tbl.interactive thead tr th.toggle-all", function() {
   var notempty = $(this).parents(".pcr-plate").find('td:not(.empty-well)');
@@ -16,11 +20,11 @@ $(document).on("mouseenter", ".pcr-plate-tbl.interactive thead tr th.toggle-all"
     return;
   var ids = [];
   notempty.each(function() { ids.push(this.id);});
-  Shiny.inputBindings.getBindings("pcrPlateInputBinding")[0].binding.setSomething($(this).parents(".pcr-plate"), ids, "highlighted-well");
+  pcrPlateHighlightWells($(this).parents(".pcr-plate")[0], ids);
   Shiny.onInputChange($(this).parents(".pcr-plate")[0].id + "_hover", ids);
 });
 $(document).on("mouseout", ".pcr-plate-tbl.interactive thead tr th.toggle-all", function(event) {
-  Shiny.inputBindings.getBindings("pcrPlateInputBinding")[0].binding.setSomething($(this).parents(".pcr-plate"), "", "highlighted-well");
+  pcrPlateHighlightWells($(this).parents(".pcr-plate")[0], "");
     Shiny.onInputChange($(this).parents(".pcr-plate")[0].id + "_hover", "");
 });
 
@@ -44,11 +48,11 @@ $(document).on("mouseenter", ".pcr-plate-tbl.interactive thead tr th", function(
     return;
   var ids = [];
   notempty.each(function() { ids.push(this.id);});
-  Shiny.inputBindings.getBindings("pcrPlateInputBinding")[0].binding.setSomething($(this).parents(".pcr-plate"), ids, "highlighted-well");
+  pcrPlateHighlightWells($(this).parents(".pcr-plate")[0], ids);
   Shiny.onInputChange($(this).parents(".pcr-plate")[0].id + "_hover", ids);
 });
 $(document).on("mouseout", ".pcr-plate-tbl.interactive thead tr th", function(event) {
-  Shiny.inputBindings.getBindings("pcrPlateInputBinding")[0].binding.setSomething($(this).parents(".pcr-plate"), "", "highlighted-well");
+  pcrPlateHighlightWells($(this).parents(".pcr-plate")[0], "");
     Shiny.onInputChange($(this).parents(".pcr-plate")[0].id + "_hover", "");
 });
 
@@ -78,11 +82,11 @@ $(document).on("mouseenter", ".pcr-plate-tbl.interactive tbody tr th", function(
     return;
   var ids = [];
   notempty.each(function() { ids.push(this.id);});
-  Shiny.inputBindings.getBindings("pcrPlateInputBinding")[0].binding.setSomething($(this).parents(".pcr-plate"), ids, "highlighted-well");
+  pcrPlateHighlightWells($(this).parents(".pcr-plate")[0], ids);
   Shiny.onInputChange($(this).parents(".pcr-plate")[0].id + "_hover", ids);
 });
 $(document).on("mouseout", ".pcr-plate-tbl.interactive tbody tr th", function(event) {
-  Shiny.inputBindings.getBindings("pcrPlateInputBinding")[0].binding.setSomething($(this).parents(".pcr-plate"), "", "highlighted-well");
+  pcrPlateHighlightWells($(this).parents(".pcr-plate")[0], "");
     Shiny.onInputChange($(this).parents(".pcr-plate")[0].id + "_hover", "");
 });
 // select row dblclick
@@ -110,11 +114,11 @@ $(document).on("click", ".pcr-plate-tbl.interactive tbody td:not(.empty-well)", 
 
 // mouse hover well
 $(document).on("mouseenter", ".pcr-plate-tbl.interactive tbody td:not(.empty-well)", function(event) {
-  Shiny.inputBindings.getBindings("pcrPlateInputBinding")[0].binding.setSomething($(this).parents(".pcr-plate"),  this.id, "highlighted-well");
+  pcrPlateHighlightWells($(this).parents(".pcr-plate")[0], this.id);
     Shiny.onInputChange($(this).parents(".pcr-plate")[0].id + "_hover", this.id);
 });
 $(document).on("mouseout", ".pcr-plate-tbl.interactive tbody td:not(.empty-well)", function(event) {
-  Shiny.inputBindings.getBindings("pcrPlateInputBinding")[0].binding.setSomething($(this).parents(".pcr-plate"), "", "highlighted-well");
+  pcrPlateHighlightWells($(this).parents(".pcr-plate")[0], "");
     Shiny.onInputChange($(this).parents(".pcr-plate")[0].id + "_hover", "");
 });
 
