@@ -16,10 +16,10 @@ ui <- fluidPage(
       fluidRow(
         column(6,
                uiOutput("showDyesUI"),
-          uiOutput("plate2"),
-          textOutput("plate2Selected"),
-          actionButton("selectRandomWellBtn",
-                       "Select Random Well")
+               uiOutput("plate2"),
+               textOutput("plate2Selected"),
+               actionButton("selectRandomWellBtn",
+                            "Select Random Well")
         ),
         column(6,
                checkboxInput("logScale", "Log Scale"),
@@ -208,6 +208,7 @@ server <- function(input, output, session) {
       updateCurves(session,
                    "pcrCurves1",
                    highlightCurves = fdataNames)
+
       updateCurves(session,
                    "meltCurves1",
                    highlightCurves = fdataNames)

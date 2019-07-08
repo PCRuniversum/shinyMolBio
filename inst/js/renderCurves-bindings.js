@@ -56,6 +56,32 @@ $.extend(renderAmpCurvesBinding, {
     Plotly.redraw(graphDiv);
   },
 
+  markCurves: function(el, toMarkCurves, markType) {
+    if (Array.isArray(toMarkCurves) === false)
+      toMarkCurves = [toMarkCurves];
+
+    var graphDiv = el.getElementsByClassName('plotly')[0];
+    graphDiv.data.forEach(function(curve) {
+      if (toMarkCurves.some(function(toMarkCurve) {
+        return curve.customdata[0] === toMarkCurve;
+              }))
+              {
+                if (markType === "highlight") {
+          curve.line.width = 4;
+                } else {
+                  curve.visible = false;
+                }
+        } else {
+          if (markType === "highlight") {
+          curve.line.width = 2;
+                } else {
+                  curve.visible = true;
+                }
+        }
+    });
+    Plotly.redraw(graphDiv);
+  },
+
   // Set up the event listeners so that interactions with the
   // input will result in data being sent to server.
   // callback is a function that queues data to be sent to
@@ -75,11 +101,11 @@ $.extend(renderAmpCurvesBinding, {
   // Messages sent by updateCurves() are received by this function.
   receiveMessage: function(el, data) {
     if (data.hasOwnProperty('hideCurves')){
-      this.hideCurves(el, data.hideCurves)
+      this.markCurves(el, data.hideCurves, "hide")
     };
 
     if (data.hasOwnProperty('highlightCurves')){
-      this.highlightCurves(el, data.highlightCurves)
+      this.markCurves(el, data.highlightCurves, "highlight")
     };
 
     if (data.hasOwnProperty('label'))
