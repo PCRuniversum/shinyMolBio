@@ -21,41 +21,6 @@ $.extend(renderAmpCurvesBinding, {
     return true;
   },
 
-  // Given the DOM element for the input, set the value
-  hideCurves: function(el, hideCurves) {
-    if (Array.isArray(hideCurves) === false)
-      hideCurves = [hideCurves];
-
-    var graphDiv = el.getElementsByClassName('plotly')[0];
-    graphDiv.data.forEach(function(curve) {
-      if (hideCurves.some(function(hideCurve) {
-        return curve.customdata.includes(hideCurve);
-              }))
-              {
-          curve.visible = false;
-        } else {
-          curve.visible = true;}
-    });
-    Plotly.redraw(graphDiv);
-  },
-
-  highlightCurves: function(el, highlightCurves) {
-    if (Array.isArray(highlightCurves) === false)
-      highlightCurves = [highlightCurves];
-
-    var graphDiv = el.getElementsByClassName('plotly')[0];
-    graphDiv.data.forEach(function(curve) {
-      if (highlightCurves.some(function(highlightCurve) {
-        return curve.customdata.includes(highlightCurve);
-              }))
-              {
-          curve.line.width = 4;
-        } else {
-          curve.line.width = 2;}
-    });
-    Plotly.redraw(graphDiv);
-  },
-
   markCurves: function(el, toMarkCurves, markType) {
     if (Array.isArray(toMarkCurves) === false)
       toMarkCurves = [toMarkCurves];
