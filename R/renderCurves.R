@@ -270,7 +270,8 @@ renderCurves <- function(inputId,
                    hoverinfo = "x+y+name",
                    legendgroup = ~legendGroup,
                    x = ~x, y = ~y,
-                   marker = list(color = cqs$color),
+                   marker = list(color = cqs$color,
+                                 size = 7),
                    type = "scatter", mode = "markers",
                    showlegend = FALSE
     )

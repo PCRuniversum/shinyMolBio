@@ -33,16 +33,30 @@ $.extend(renderAmpCurvesBinding, {
               {
                 if (markType === "highlight") {
           curve.line.width = 4;
+          curve.opacity = 1;
+          curve.marker.size = 10;
                 } else {
                   curve.visible = false;
                 }
         } else {
           if (markType === "highlight") {
           curve.line.width = 2;
+          curve.opacity = 0.3;
+          curve.marker.size = 7;
                 } else {
                   curve.visible = true;
                 }
         }
+    });
+    Plotly.redraw(graphDiv);
+  },
+
+  removeHighlightCurves: function(el) {
+    var graphDiv = el.getElementsByClassName('plotly')[0];
+    graphDiv.data.forEach(function(curve) {
+          curve.line.width = 2;
+          curve.opacity = 1;
+          curve.marker.size = 7;
     });
     Plotly.redraw(graphDiv);
   },
@@ -66,11 +80,15 @@ $.extend(renderAmpCurvesBinding, {
   // Messages sent by updateCurves() are received by this function.
   receiveMessage: function(el, data) {
     if (data.hasOwnProperty('hideCurves')){
-      this.markCurves(el, data.hideCurves, "hide")
+      this.markCurves(el, data.hideCurves, "hide");
     };
 
     if (data.hasOwnProperty('highlightCurves')){
-      this.markCurves(el, data.highlightCurves, "highlight")
+      if (data.highlightCurves.length === 0) {
+        this.removeHighlightCurves(el);
+      } else {
+        this.markCurves(el, data.highlightCurves, "highlight");
+      }
     };
 
     if (data.hasOwnProperty('label'))
