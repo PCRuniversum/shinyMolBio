@@ -225,7 +225,7 @@ server <- function(input, output, session) {
                                            Shiny.onInputChange("hoverfDataName", data[0]);
                                            });
                                            $(row).mouseout(function(){
-                                           Shiny.onInputChange("hoverfDataName", []);
+                                           Shiny.onInputChange("hoverfDataName", "");
                                            });
   }')
                   )

@@ -26,29 +26,37 @@ $.extend(renderAmpCurvesBinding, {
       toMarkCurves = [toMarkCurves];
 
     var graphDiv = el.getElementsByClassName('plotly')[0];
-    graphDiv.data.forEach(function(curve) {
+    var indecesToMark = [];
+    graphDiv.data.forEach(function(curve, i) {
       if (toMarkCurves.some(function(toMarkCurve) {
         return curve.customdata[0] === toMarkCurve;
               }))
               {
+                indecesToMark.push(i);
                 if (markType === "highlight") {
-          curve.line.width = 4;
-          curve.opacity = 1;
-          curve.marker.size = 10;
+                  curve.line.width = 4;
+                  curve.opacity = 1;
+                  curve.marker.size = 10;
                 } else {
                   curve.visible = false;
                 }
-        } else {
-          if (markType === "highlight") {
-          curve.line.width = 2;
-          curve.opacity = 0.3;
-          curve.marker.size = 7;
+              } else {
+                if (markType === "highlight") {
+                  curve.line.width = 2;
+                  curve.opacity = 0.3;
+                  curve.marker.size = 7;
                 } else {
                   curve.visible = true;
                 }
         }
     });
-    Plotly.redraw(graphDiv);
+    if (markType === "highlight") {
+      var newIndeces = indecesToMark.map(function(_, i)
+        { return graphDiv.data.length - i - 1; });
+      Plotly.moveTraces(graphDiv, indecesToMark, newIndeces);
+    } else {
+      Plotly.redraw(graphDiv);
+    }
   },
 
   removeHighlightCurves: function(el) {
