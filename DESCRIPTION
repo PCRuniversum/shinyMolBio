@@ -2,15 +2,16 @@ Package: shinyMolBio
 Type: Package
 Title: Molecular Biology Visualization Tools for 'Shiny' Apps
 Version: 0.2
-Date: 2019-07-05
+Date: 2019-08-02
 Authors@R: c(
   person("Konstantin A.", "Blagodatskikh",
   email = "k.blag@yandex.ru", role = c("cre", "aut")))
 Description: Interactive visualization of 'RDML' files via 'shiny' apps. 
   Package provides (1) PCR plate interface with ability to select
-  individual tubes and (2) amplification/melting plots.
+  individual tubes and (2) amplification/melting plots with fast hiding and 
+  highlighting individual curves.
 License: MIT + file LICENSE
-URL: https://github.com/kablag/shinyMolBio
+URL: https://github.com/kablag/shinyMolBio, https://kablag.github.io/shinyMolBio/
 Encoding: UTF-8
 LazyData: true
 Depends:
@@ -24,7 +25,6 @@ Imports:
   stringr,
   whisker,
   plotly,
-  lazyeval,
   RColorBrewer
 Collate:
   'global.R'

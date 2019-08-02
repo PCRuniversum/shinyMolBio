@@ -69,7 +69,6 @@ renderAmpCurves <- function(inputId,
                curves = ampCurves,
                xAxisTitle = "Cycles",
                yAxisTitle = if (logScale) "log(RFU)" else "RFU",
-               # plotlyCode = NULL,
                colorBy = colorBy,
                linetypeBy = linetypeBy,
                logScale = logScale,
@@ -120,7 +119,6 @@ renderAmpCurves <- function(inputId,
 renderMeltCurves <- function(inputId,
                             label = NULL,
                             meltCurves,
-                            # plotlyCode = NULL,
                             colorBy = NULL,
                             linetypeBy = NULL,
                             showTm = FALSE,
@@ -146,7 +144,6 @@ renderMeltCurves <- function(inputId,
                curves = meltCurves,
                xAxisTitle = "Temperature",
                yAxisTitle = "-d(RFU)/dT",
-               # plotlyCode = NULL,
                colorBy = colorBy,
                linetypeBy = linetypeBy,
                logScale = FALSE,
@@ -164,7 +161,6 @@ renderCurves <- function(inputId,
                          curves,
                          xAxisTitle,
                          yAxisTitle,
-                         # plotlyCode = NULL,
                          colorBy = NULL,
                          linetypeBy = NULL,
                          logScale = FALSE,
@@ -180,7 +176,6 @@ renderCurves <- function(inputId,
   assertDataFrame(curves)
   assertString(xAxisTitle)
   assertString(yAxisTitle)
-  # assertString(plotlyCode, null.ok = TRUE)
   assertString(colorBy, null.ok = TRUE)
   assertString(linetypeBy, null.ok = TRUE)
   assertString(thBy, null.ok = TRUE)
@@ -295,8 +290,6 @@ renderCurves <- function(inputId,
 
   }
 
-  # if (!is.null(plotlyCode))
-  # p <- p %>% eval(parse(plotlyCode))
   css <-
     tags$style(type = "text/css",
                     paste0(
@@ -346,6 +339,8 @@ renderCurves <- function(inputId,
 #' @param inputId The id of the \code{input} object.
 #' @param label The label to set for the input object.
 #' @param hideCurves The \code{fdata.names} of the curves to be hiden.
+#' @param highlightCurves The \code{fdata.names} of the curves to be
+#' highlighted.
 #'
 #' @author Konstantin A. Blagodatskikh <k.blag@@yandex.ru>
 #' @keywords PCR RDML Shiny Input

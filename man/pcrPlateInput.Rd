@@ -10,6 +10,7 @@ pcrPlateInput(inputId,
        pcrFormat = pcrFormatType$new(8, 12, labelFormatType$new("ABC"),
         labelFormatType$new("123")),
        selection = NULL,
+       highlighting = NULL,
        wellLabelTemplate = "{{sample}}",
        onHoverWellTextTemplate = "{{position}}\u000A{{sample}}\u000A{{targets}}",
        wellClassTemplate = NULL,
@@ -33,6 +34,8 @@ AsTable()} function.}
 \item{pcrFormat}{PCR plate parametrs. Should be \code{pcrFormatType}.}
 
 \item{selection}{Set preselected wells (e.g. \code{c("A01", "A02")} or \code{c(1, 2)})}
+
+\item{highlighting}{Set highlighted wells (e.g. \code{c("A01", "A02")} or \code{c(1, 2)})}
 
 \item{wellLabelTemplate}{Template of the well label.}
 

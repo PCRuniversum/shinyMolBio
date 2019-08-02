@@ -9,6 +9,7 @@
 #'        pcrFormat = pcrFormatType$new(8, 12, labelFormatType$new("ABC"),
 #'         labelFormatType$new("123")),
 #'        selection = NULL,
+#'        highlighting = NULL,
 #'        wellLabelTemplate = "{{sample}}",
 #'        onHoverWellTextTemplate = "{{position}}\u000A{{sample}}\u000A{{targets}}",
 #'        wellClassTemplate = NULL,
@@ -27,6 +28,7 @@
 #'   AsTable()} function.
 #' @param pcrFormat PCR plate parametrs. Should be \code{pcrFormatType}.
 #' @param selection Set preselected wells (e.g. \code{c("A01", "A02")} or \code{c(1, 2)})
+#' @param highlighting Set highlighted wells (e.g. \code{c("A01", "A02")} or \code{c(1, 2)})
 #' @param wellLabelTemplate Template of the well label.
 #' @param onHoverWellTextTemplate Template of the text on hover.
 #' @param wellClassTemplate Template of the well class (css class).
@@ -70,6 +72,7 @@ pcrPlateInput <- function(inputId,
                           plateDescription,
                           pcrFormat = pcrFormatType$new(8, 12, labelFormatType$new("ABC"), labelFormatType$new("123")),
                           selection = NULL,
+                          highlighting = NULL,
                           wellLabelTemplate = "{{sample}}",
                           onHoverWellTextTemplate = "{{position}}\u000A{{sample}}\u000A{{targets}}",
                           wellClassTemplate = NULL,
@@ -87,6 +90,9 @@ pcrPlateInput <- function(inputId,
   assert(checkNull(selection),
          checkNumeric(selection),
          checkCharacter(selection))
+  assert(checkNull(highlighting),
+         checkNumeric(highlighting),
+         checkCharacter(highlighting))
   assertString(wellLabelTemplate, null.ok = TRUE)
   assertString(onHoverWellTextTemplate, null.ok = TRUE)
   assertString(wellClassTemplate, null.ok = TRUE)
@@ -113,10 +119,19 @@ pcrPlateInput <- function(inputId,
     else
       "position"
   }
+  highlightingColumn <- {
+    if (is.numeric(highlighting))
+      "react.id"
+    else
+      "position"
+  }
 
   plateDescription[, "selection"] <- ""
   plateDescription[plateDescription[[selectionColumn]] %in% selection,
                    "selection"] <- " selected-well"
+  plateDescription[, "highlighting"] <- ""
+  plateDescription[plateDescription[[highlightingColumn]] %in% highlighting,
+                   "highlighting"] <- " highlighted-well"
 
   htmlPlate <-
     sprintf(paste0('<table id="', ns("pcrPlateTbl"),
@@ -154,7 +169,7 @@ pcrPlateInput <- function(inputId,
                         if (!length(trow$fdata.name))
                           return("<td class='empty-well'></td>")
                         # paste0(
-                        sprintf("<td id='%s' title='%s' group='%s' class='%s%s' style='%s'>%s</td>",
+                        sprintf("<td id='%s' title='%s' group='%s' class='%s%s%s' style='%s'>%s</td>",
                                 trow$position,
                                 whisker.render(onHoverWellTextTemplate,
                                                trow),
@@ -164,6 +179,7 @@ pcrPlateInput <- function(inputId,
                                 whisker.render(wellClassTemplate,
                                                trow),
                                 trow$selection,
+                                trow$highlighting,
                                 whisker.render(wellStyleTemplate,
                                                trow),
                                 whisker.render(wellLabelTemplate,
@@ -211,6 +227,7 @@ pcrPlateInput <- function(inputId,
 #' @param inputId The id of the \code{input} object.
 #' @param label The label to set for the input object.
 #' @param selection The positions of the wells to be selected.
+#' @param highlighting The positions of the wells to be highlighted.
 #'
 #' @author Konstantin A. Blagodatskikh <k.blag@@yandex.ru>
 #' @keywords PCR RDML Shiny Input
@@ -245,18 +262,18 @@ pcrPlateInput <- function(inputId,
 updatePcrPlateInput <- function(session, inputId,
                                 label = NULL,
                                 selection = NULL,
-                                highlightning = NULL) {
+                                highlighting = NULL) {
   assertClass(session, "ShinySession")
   assertString(inputId)
   assertString(label, null.ok = TRUE)
   assert(checkNull(selection),
          checkNumeric(selection),
          checkCharacter(selection))
-  assert(checkNull(highlightning),
-         checkNumeric(highlightning),
-         checkCharacter(highlightning))
+  assert(checkNull(highlighting),
+         checkNumeric(highlighting),
+         checkCharacter(highlighting))
   message <- .dropNulls(list(label = label,
                              selection = selection,
-                             highlightning = highlightning))
+                             highlighting = highlighting))
   session$sendInputMessage(inputId, message)
 }

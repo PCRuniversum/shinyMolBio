@@ -56,6 +56,19 @@ pcrPlateInput(inputId = "testPlateSel",
 ) 
 ```
 
+## Wells Highlighting
+
+Some PCR plate wells can be marked as highlighted by `highlightning = c(TO_HIGHLIGHT)` (`TO_HIGHLIGHT` can be *position* or *react.id*)
+```{r, results='asis'}
+pcrPlateInput(inputId = "testPlateHl", 
+              label = "Highlight",
+              plateDescription = rdml$AsTable(),
+              selection = 1:12, # optional preselected wells
+              highlighting = 3:6, # optional highlighted wells
+              interactive = FALSE
+) 
+```
+
 ## CSS
 
 All visualion of PCR plate can be modified by custom CSS. This CSS can be loaded as file or as text and can be global or plate instance specific.
@@ -133,15 +146,15 @@ So if you want to set your own style of plate you can do it by:
 
 Note that inside Shiny app CSS loads as singleton (once for all plates) but in **Rmd** file it loads for every plate but works globally too - you can prevent such loading by setting `cssFile = ""`
 
-To make CSS rule only for current plate add `#{{id}}` before CSS rule. For example if you want set selection border to red and well color to light yellow.
+To make CSS rule only for current plate add `#{{id}}` before CSS rule. For example if you want set selection border to red and well color to light green
 ```{r, results='asis'}
 pcrPlateInput(inputId = "customCSS", # Shiny input ID
-              label = "Custom CSS: red selection and yellow plate background",
+              label = "Custom CSS: red selection and light green plate background",
               plateDescription = rdml$AsTable(),
               selection = c("A01", "C08"), # optional preselected wells
               cssFile = "",
               cssText = "#{{id}} td.selected-well{border: 2px solid red !important;}
-                        #{{id}} table.pcr-plate-tbl td{background-color: #ffffe0;}
+                        #{{id}} table.pcr-plate-tbl td{background-color: #ebffe0;}
               ",
               interactive = FALSE
 ) 
@@ -230,5 +243,6 @@ Run `shinyMolBio::runExample("pcrPlateInput")` to see interactive PCR plate in a
 * Dbl-Click-ColumnHeader - select only this column (deselect other)
 * Click-RowHeader - toggle selection of the row
 * Dbl-Click-RowHeader - select only this row (deselect other)
+* Hover - highlights well
 
 Also this app shows action of `updatePcrPlateInput` function. Clicking on *Select Random Well* button selects well on the second plate.

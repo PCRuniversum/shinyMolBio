@@ -188,8 +188,8 @@ $.extend(pcrPlateInputBinding, {
       this.setSomething(el, data.selection, "selected-well")
     };
 
-    if (data.hasOwnProperty('highlightning')){
-      this.setSomething(el, data.highlightning, "highlighted-well")
+    if (data.hasOwnProperty('highlighting')){
+      this.setSomething(el, data.highlighting, "highlighted-well")
     };
 
     if (data.hasOwnProperty('label'))

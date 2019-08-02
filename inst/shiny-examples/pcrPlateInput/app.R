@@ -195,7 +195,7 @@ server <- function(input, output, session) {
     updatePcrPlateInput(
       session,
       "pcrPlate2",
-      highlightning = str_sub(hoverfDataName, end = 3))
+      highlighting = str_sub(hoverfDataName, end = 3))
     paste("Highlighted:", hoverfDataName)
   })
 

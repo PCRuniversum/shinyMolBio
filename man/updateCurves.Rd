@@ -4,7 +4,8 @@
 \alias{updateCurves}
 \title{Change the value of a render PCR curves control on the client}
 \usage{
-updateCurves(session, inputId, label = NULL, hideCurves = NULL)
+updateCurves(session, inputId, label = NULL, hideCurves = NULL,
+  highlightCurves = NULL)
 }
 \arguments{
 \item{session}{The \code{session} object passed to function given to
@@ -15,6 +16,9 @@ updateCurves(session, inputId, label = NULL, hideCurves = NULL)
 \item{label}{The label to set for the input object.}
 
 \item{hideCurves}{The \code{fdata.names} of the curves to be hiden.}
+
+\item{highlightCurves}{The \code{fdata.names} of the curves to be
+highlighted.}
 }
 \description{
 Change the value of a render PCR curves control on the client

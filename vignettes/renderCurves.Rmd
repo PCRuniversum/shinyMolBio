@@ -126,7 +126,8 @@ renderAmpCurves("th",
 
 # Custom Plotly Code
 
-You can add custom qouted plotly code by **plotlyCode** parameter. Note that you have to add value **p** inside your code to link it with render output.
+You can add custom qouted plotly code by **plotlyCode** parameter. Note that you
+have to add value **p** inside your quoted code to link it with render output.
 
 ```{r, results='asis'}
 markTbl <- tbl %>% 
@@ -147,13 +148,15 @@ renderAmpCurves("th",
                               marker = list(color = "blue",
                                             size = 15)) %>%
                     # Set background color to light yellow
-                    layout(paper_bgcolor='#ffffe0',
-                           plot_bgcolor='#ffffe0')
+                    layout(paper_bgcolor = '#ffffe0',
+                           plot_bgcolor = '#ffffe0')
                 ),
                 interactive = FALSE)
 ```
 
-# Hiding curves
+# Hiding and highlighting curves
 
-Individual curves can be hidden without plot redraw. Use *updateCurves* function with *fdata.name* as *hideCurves* param.
-Run `shinyMolBio::runExample("pcrPlateInput")` to see this in action.
+Individual curves can be hidden without plot redraw. Use *updateCurves* function with *fdata.name* as *hideCurves* param. Or highlighted with *fdata.name* as *highlightCurves* param.
+Run `shinyMolBio::runExample("pcrPlateInput")` to see this in action. 
+Curves hiding occures after wells selection at PCR plate and higlighting after 
+mouse hovering above PCR plate or details table.

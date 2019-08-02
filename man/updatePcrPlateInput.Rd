@@ -4,7 +4,8 @@
 \alias{updatePcrPlateInput}
 \title{Change the value of a PCR plate input control on the client}
 \usage{
-updatePcrPlateInput(session, inputId, label = NULL, selection = NULL)
+updatePcrPlateInput(session, inputId, label = NULL, selection = NULL,
+  highlighting = NULL)
 }
 \arguments{
 \item{session}{The \code{session} object passed to function given to \code{shinyServer}.}
@@ -14,6 +15,8 @@ updatePcrPlateInput(session, inputId, label = NULL, selection = NULL)
 \item{label}{The label to set for the input object.}
 
 \item{selection}{The positions of the wells to be selected.}
+
+\item{highlighting}{The positions of the wells to be highlighted.}
 }
 \description{
 Change the value of a PCR plate input control on the client
