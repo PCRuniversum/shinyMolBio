@@ -9,7 +9,7 @@ Molecular biology visualization tools for Shiny apps
 
 # Manual
 
-The manual is available [online](https://kablag.github.io/shinyMolBio/)
+The manual is available [online](https://pcruniversum.github.io/shinyMolBio/)
 
 ## pcrPlateInput
 
