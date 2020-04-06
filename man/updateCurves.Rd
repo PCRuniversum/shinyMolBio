@@ -4,8 +4,13 @@
 \alias{updateCurves}
 \title{Change the value of a render PCR curves control on the client}
 \usage{
-updateCurves(session, inputId, label = NULL, hideCurves = NULL,
-  highlightCurves = NULL)
+updateCurves(
+  session,
+  inputId,
+  label = NULL,
+  hideCurves = NULL,
+  highlightCurves = NULL
+)
 }
 \arguments{
 \item{session}{The \code{session} object passed to function given to

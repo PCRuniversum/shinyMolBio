@@ -37,7 +37,7 @@
 #' library(RDML)
 #' rdml <- RDML$new(system.file("/extdata/test.rdml", package = "shinyMolBio"))
 #' curves <- renderAmpCurves("curves1", ampCurves = rdml$GetFData(long.table = TRUE))
-#' curves[[2]][[3]][[2]]
+#' curves
 renderAmpCurves <- function(inputId,
                             label = NULL,
                             ampCurves,
@@ -86,14 +86,17 @@ renderAmpCurves <- function(inputId,
 #' Renders a reactive melting plot that is suitable for assigning to an \code{UI
 #' output} slot.
 #'
-#' @usage renderMeltCurves(inputId, label = NULL, meltCurves, colorBy = NULL,
-#'   linetypeBy = NULL, showTm = FALSE, showLegend = FALSE, plotlyCode = NULL,
-#'   cssFile = NULL, cssText = NULL, interactive = TRUE)
+#' @usage renderMeltCurves(inputId, label = NULL, meltCurves,
+#'   fluorColumn = "fluor", colorBy = NULL, linetypeBy = NULL, showTm = FALSE,
+#'   showLegend = FALSE, plotlyCode = NULL, cssFile = NULL, cssText = NULL,
+#'   interactive = TRUE)
 #'
 #' @param inputId The \code{input} slot that will be used to modify plot.
 #' @param label Display label for the control, or \code{NULL} for no label.
 #' @param meltCurves Melting curves data with \code{RDML$GetFData(dp.type =
 #'   "mdp", long.table = TRUE)} format.
+#' @param fluorColumn Column name that contains fluorescence values
+#' (can be \code{diffFluor} for derivative curves).
 #' @param colorBy Column name that contains color levels data.
 #' @param linetypeBy Column name that contains linetype levels data.
 #' @param showTm Shows Tm with dots (\code{tm} column have to be provided!)
@@ -115,10 +118,11 @@ renderAmpCurves <- function(inputId,
 #' rdml <- RDML$new(system.file("/extdata/test.rdml", package = "shinyMolBio"))
 #' curves <- renderMeltCurves("curves1", meltCurves = rdml$GetFData(dp.type = "mdp",
 #'  long.table = TRUE))
-#' curves[[2]][[3]][[2]]
+#' curves
 renderMeltCurves <- function(inputId,
                             label = NULL,
                             meltCurves,
+                            fluorColumn = "fluor",
                             colorBy = NULL,
                             linetypeBy = NULL,
                             showTm = FALSE,
@@ -128,10 +132,10 @@ renderMeltCurves <- function(inputId,
                             cssText = NULL,
                             interactive = TRUE) {
   assertNames(colnames(meltCurves),
-              must.include = c("fdata.name", "tmp", "fluor"))
+              must.include = c("fdata.name", "tmp", fluorColumn))
   meltCurves <- meltCurves %>%
     rename(x = .data$tmp,
-           y = .data$fluor)
+           y = .data[[fluorColumn]])
   if (showTm) {
     assertNames(colnames(meltCurves),
                 must.include = c("tm"))
@@ -311,7 +315,7 @@ renderCurves <- function(inputId,
     p <- eval(plotlyCode)
   }
 
-  tagList(
+  tl <- tagList(
     if (interactive) {
       tags$head(
         singleton(
@@ -328,7 +332,33 @@ renderCurves <- function(inputId,
         p
     )
   )
+  class(tl) <- c("pcrCurves", class(tl))
+  tl
 }
+
+#' Printing pcrCurves
+#'
+#' Print a \code{pcrCurves}
+#'
+#' @usage ## S3 method for class 'pcrCurves'
+#' print(x)
+#'
+#' @param x object of class \code{pcrCurves}
+#'
+#' @author Konstantin A. Blagodatskikh <k.blag@@yandex.ru>
+#' @keywords PCR RDML Shiny Input
+#'
+#' @seealso \code{\link{renderAmpCurves}}, \code{\link{renderMeltCurves}}
+#'
+#' @export
+#' @examples
+#' library(RDML)
+#' rdml <- RDML$new(system.file("/extdata/test.rdml", package = "shinyMolBio"))
+#' curves <- renderMeltCurves("curves1", meltCurves = rdml$GetFData(dp.type = "mdp",
+#'  long.table = TRUE))
+#' curves
+print.pcrCurves <- function(curves)
+  print(curves[[2]][[3]][[2]])
 
 #' Change the value of a render PCR curves control on the client
 #'

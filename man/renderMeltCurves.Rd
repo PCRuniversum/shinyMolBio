@@ -4,9 +4,10 @@
 \alias{renderMeltCurves}
 \title{Renders a melting curves viewer}
 \usage{
-renderMeltCurves(inputId, label = NULL, meltCurves, colorBy = NULL,
-  linetypeBy = NULL, showTm = FALSE, showLegend = FALSE, plotlyCode = NULL,
-  cssFile = NULL, cssText = NULL, interactive = TRUE)
+renderMeltCurves(inputId, label = NULL, meltCurves,
+  fluorColumn = "fluor", colorBy = NULL, linetypeBy = NULL, showTm = FALSE,
+  showLegend = FALSE, plotlyCode = NULL, cssFile = NULL, cssText = NULL,
+  interactive = TRUE)
 }
 \arguments{
 \item{inputId}{The \code{input} slot that will be used to modify plot.}
@@ -15,6 +16,9 @@ renderMeltCurves(inputId, label = NULL, meltCurves, colorBy = NULL,
 
 \item{meltCurves}{Melting curves data with \code{RDML$GetFData(dp.type =
 "mdp", long.table = TRUE)} format.}
+
+\item{fluorColumn}{Column name that contains fluorescence values
+(can be \code{diffFluor} for derivative curves).}
 
 \item{colorBy}{Column name that contains color levels data.}
 
@@ -41,12 +45,13 @@ library(RDML)
 rdml <- RDML$new(system.file("/extdata/test.rdml", package = "shinyMolBio"))
 curves <- renderMeltCurves("curves1", meltCurves = rdml$GetFData(dp.type = "mdp",
  long.table = TRUE))
-curves[[2]][[3]][[2]]
+curves
 }
 \seealso{
 \code{\link{updateCurves}}
 
-Other render elements: \code{\link{renderAmpCurves}}
+Other render elements: 
+\code{\link{renderAmpCurves}()}
 }
 \author{
 Konstantin A. Blagodatskikh <k.blag@yandex.ru>

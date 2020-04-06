@@ -46,12 +46,13 @@ an \code{UI output} slot.
 library(RDML)
 rdml <- RDML$new(system.file("/extdata/test.rdml", package = "shinyMolBio"))
 curves <- renderAmpCurves("curves1", ampCurves = rdml$GetFData(long.table = TRUE))
-curves[[2]][[3]][[2]]
+curves
 }
 \seealso{
 \code{\link{updateCurves}}
 
-Other render elements: \code{\link{renderMeltCurves}}
+Other render elements: 
+\code{\link{renderMeltCurves}()}
 }
 \author{
 Konstantin A. Blagodatskikh <k.blag@yandex.ru>

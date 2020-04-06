@@ -154,6 +154,25 @@ renderAmpCurves("th",
                 interactive = FALSE)
 ```
 
+# Melting curves
+
+**renderMeltCurves** function provides all functionality described previosly in **renderAmpCurves** examples. Differences are *showTm* param instead of *showCq* and there is no *thBy* param.
+
+```{r, results='asis'}
+# load RDML file
+rdml <- RDML$new(system.file("/extdata/BioRad_qPCR_melt.rdml",
+                             package = "RDML"))
+mdps <- rdml$GetFData(dp.type = "mdp", long.table = TRUE)
+mdps[, diffFluor := c(0, diff(fluor)) * -1, by = fdata.name]
+
+renderMeltCurves("melt", 
+                "Show melting curves",
+                mdps,
+                fluorColumn = "diffFluor",
+                colorBy = "target",
+                interactive = FALSE)
+```
+
 # Hiding and highlighting curves
 
 Individual curves can be hidden without plot redraw. Use *updateCurves* function with *fdata.name* as *hideCurves* param. Or highlighted with *fdata.name* as *highlightCurves* param.

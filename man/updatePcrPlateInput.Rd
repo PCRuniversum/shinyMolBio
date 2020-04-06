@@ -4,8 +4,13 @@
 \alias{updatePcrPlateInput}
 \title{Change the value of a PCR plate input control on the client}
 \usage{
-updatePcrPlateInput(session, inputId, label = NULL, selection = NULL,
-  highlighting = NULL)
+updatePcrPlateInput(
+  session,
+  inputId,
+  label = NULL,
+  selection = NULL,
+  highlighting = NULL
+)
 }
 \arguments{
 \item{session}{The \code{session} object passed to function given to \code{shinyServer}.}
