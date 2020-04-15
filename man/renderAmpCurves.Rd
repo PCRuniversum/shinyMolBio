@@ -52,6 +52,7 @@ curves
 \code{\link{updateCurves}}
 
 Other render elements: 
+\code{\link{renderADplot}()},
 \code{\link{renderMeltCurves}()}
 }
 \author{

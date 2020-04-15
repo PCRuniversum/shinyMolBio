@@ -200,7 +200,7 @@ pcrPlateInput <- function(inputId,
                     )
   )
 
-  tagList(
+  tl <- tagList(
     if (interactive) {
       tags$head(
         singleton(
@@ -217,6 +217,31 @@ pcrPlateInput <- function(inputId,
         legend
     )
   )
+  class(tl) <- c("pcrPlate", class(tl))
+  tl
+}
+
+#' Printing PCR plate input control
+#'
+#' Print a \code{pcrPlate}
+#'
+#' @usage ## S3 method for class 'pcrPlate'
+#' print(x)
+#'
+#' @param x object of class \code{pcrPlate}
+#'
+#' @author Konstantin A. Blagodatskikh <k.blag@@yandex.ru>
+#' @keywords PCR RDML Shiny Input
+#'
+#' @seealso \code{\link{pcrPlateInput}}
+#'
+#' @export
+print.pcrPlate <- function(plate) {
+  tmpFile <- tempfile(fileext = ".html")
+  cat(as.character(plate), file = tmpFile)
+  viewer <- getOption("viewer")
+  viewer(tmpFile)
+  # unlink(tmpFile)
 }
 
 #' Change the value of a PCR plate input control on the client

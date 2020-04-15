@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Renders a melting curves viewer — renderMeltCurves • shinyMolBio</title>
+<title>Renders an allelic discrimination viewer — renderADplot • shinyMolBio</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,9 @@
 
 
 
-<meta property="og:title" content="Renders a melting curves viewer — renderMeltCurves" />
-<meta property="og:description" content="Renders a reactive melting plot that is suitable for assigning to an UI
-output slot." />
+<meta property="og:title" content="Renders an allelic discrimination viewer — renderADplot" />
+<meta property="og:description" content="Renders a reactive allelic discrimination plot that is suitable for
+assigning to an UI output slot." />
 
 
 
@@ -124,20 +124,22 @@ output slot." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Renders a melting curves viewer</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kablag/shinyMolBio/blob/master/R/renderCurves.R'><code>R/renderCurves.R</code></a></small>
-    <div class="hidden name"><code>renderMeltCurves.Rd</code></div>
+    <h1>Renders an allelic discrimination viewer</h1>
+    <small class="dont-index">Source: <a href='https://github.com/kablag/shinyMolBio/blob/master/R/renderADplot.R'><code>R/renderADplot.R</code></a></small>
+    <div class="hidden name"><code>renderADplot.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Renders a reactive melting plot that is suitable for assigning to an <code>UI
-output</code> slot.</p>
+    <p>Renders a reactive allelic discrimination plot that is suitable for
+assigning to an <code>UI output</code> slot.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>renderMeltCurves</span>(<span class='no'>inputId</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>meltCurves</span>,
-  <span class='kw'>fluorColumn</span> <span class='kw'>=</span> <span class='st'>"fluor"</span>, <span class='kw'>colorBy</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>linetypeBy</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>showTm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>showLegend</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>plotlyCode</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>cssFile</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>cssText</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>interactive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>renderADplot</span>(<span class='no'>inputId</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>adData</span>,
+        <span class='kw'>targetColumn</span> <span class='kw'>=</span> <span class='st'>"target.dyeId"</span>, <span class='kw'>xAxisTarget</span> <span class='kw'>=</span> <span class='st'>"FAM"</span>,
+        <span class='kw'>yAxisTarget</span> <span class='kw'>=</span> <span class='st'>"HEX"</span>, <span class='kw'>valueColumn</span> <span class='kw'>=</span> <span class='st'>"endPointRFU"</span>,
+        <span class='kw'>colorBy</span> <span class='kw'>=</span> <span class='st'>"genotype"</span>, <span class='kw'>polar</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>showLegend</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+        <span class='kw'>plotlyCode</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>cssFile</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>cssText</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+        <span class='kw'>interactive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -151,26 +153,29 @@ output</code> slot.</p>
       <td><p>Display label for the control, or <code>NULL</code> for no label.</p></td>
     </tr>
     <tr>
-      <th>meltCurves</th>
-      <td><p>Melting curves data with <code>RDML$GetFData(dp.type =
-"mdp", long.table = TRUE)</code> format.</p></td>
+      <th>adData</th>
+      <td><p>Allelic descrimination data with
+<code>RDML$AsTable()</code> format.</p></td>
     </tr>
     <tr>
-      <th>fluorColumn</th>
-      <td><p>Column name that contains fluorescence values
-(can be <code>diffFluor</code> for derivative curves).</p></td>
+      <th>targetColumn</th>
+      <td><p>Column name that contains axis splitting (dye or target).</p></td>
+    </tr>
+    <tr>
+      <th>xAxisTarget</th>
+      <td><p>X axis target (dye) name.</p></td>
+    </tr>
+    <tr>
+      <th>valueColumn</th>
+      <td><p>Column name that contains discrimination value (RFU or cq).</p></td>
     </tr>
     <tr>
       <th>colorBy</th>
       <td><p>Column name that contains color levels data.</p></td>
     </tr>
     <tr>
-      <th>linetypeBy</th>
-      <td><p>Column name that contains linetype levels data.</p></td>
-    </tr>
-    <tr>
-      <th>showTm</th>
-      <td><p>Shows Tm with dots (<code>tm</code> column have to be provided!)</p></td>
+      <th>polar</th>
+      <td><p>Enables polar coordinates.</p></td>
     </tr>
     <tr>
       <th>showLegend</th>
@@ -190,16 +195,16 @@ output</code> slot.</p>
     </tr>
     <tr>
       <th>interactive</th>
-      <td><p>Should be this <code>pcrPlate</code> interactive or not.</p></td>
+      <td><p>Should be this <code>adPLot</code> interactive or not.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='updateCurves.html'>updateCurves</a></code></p>
+    <div class='dont-index'><p><code><a href='updateADplot.html'>updateADplot</a></code></p>
 <p>Other render elements: 
-<code><a href='renderADplot.html'>renderADplot</a>()</code>,
-<code><a href='renderAmpCurves.html'>renderAmpCurves</a>()</code></p></div>
+<code><a href='renderAmpCurves.html'>renderAmpCurves</a>()</code>,
+<code><a href='renderMeltCurves.html'>renderMeltCurves</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>RDML</span>)
@@ -209,12 +214,14 @@ output</code> slot.</p>
 #&gt; 
 #&gt; 	run: Amp Step 3_HEX
 #&gt; 
-#&gt; Combining Bio-Rad runs</div><div class='input'><span class='no'>curves</span> <span class='kw'>&lt;-</span> <span class='fu'>renderMeltCurves</span>(<span class='st'>"curves1"</span>, <span class='kw'>meltCurves</span> <span class='kw'>=</span> <span class='no'>rdml</span>$<span class='fu'><a href='https://rdrr.io/pkg/RDML/man/GetFData-function.html'>GetFData</a></span>(<span class='kw'>dp.type</span> <span class='kw'>=</span> <span class='st'>"mdp"</span>,
- <span class='kw'>long.table</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))</div><div class='output co'>#&gt; <span class='error'>Error: Assertion failed. One of the following must apply:</span>
-#&gt; <span class='error'> * checkClass(out): Must inherit from class 'adpsType', but has class</span>
-#&gt; <span class='error'> * 'NULL'</span>
-#&gt; <span class='error'> * checkClass(out): Must inherit from class 'mdpsType', but has class</span>
-#&gt; <span class='error'> * 'NULL'</span></div><div class='input'><span class='no'>curves</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'curves' not found</span></div></pre>
+#&gt; Combining Bio-Rad runs</div><div class='input'><span class='no'>tbl</span> <span class='kw'>&lt;-</span> <span class='no'>rdml</span>$<span class='fu'><a href='https://rdrr.io/pkg/RDML/man/astable-function.html'>AsTable</a></span>(<span class='kw'>endPointRFU</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>tail</a></span>(<span class='no'>data</span>$<span class='no'>adp</span>$<span class='no'>fpoints</span>$<span class='no'>fluor</span>, <span class='fl'>5</span>)))
+<span class='no'>tbl</span> <span class='kw'>&lt;-</span> <span class='fu'>group_by</span>(<span class='no'>tbl</span>, <span class='no'>position</span>)</div><div class='output co'>#&gt; <span class='error'>Error in group_by(tbl, position): could not find function "group_by"</span></div><div class='input'><span class='no'>tbl</span> <span class='kw'>&lt;-</span> <span class='fu'>mutate</span>(<span class='no'>tbl</span>,
+              <span class='kw'>genotype</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(
+                <span class='kw'>if</span> (<span class='no'>endPointRFU</span>[<span class='fl'>1</span>] <span class='kw'>&gt;</span> <span class='fl'>400</span> <span class='kw'>&amp;&amp;</span> <span class='no'>endPointRFU</span>[<span class='fl'>2</span>] <span class='kw'>&gt;</span> <span class='fl'>400</span>) <span class='st'>"AG"</span>
+                <span class='kw'>else</span> <span class='kw'>if</span> (<span class='no'>endPointRFU</span>[<span class='fl'>1</span>] <span class='kw'>&gt;</span> <span class='fl'>400</span>) <span class='st'>"AA"</span>
+                <span class='kw'>else</span> <span class='kw'>if</span> (<span class='no'>endPointRFU</span>[<span class='fl'>2</span>] <span class='kw'>&gt;</span> <span class='fl'>400</span>) <span class='st'>"GG"</span>
+                <span class='kw'>else</span> <span class='st'>"NA"</span>
+              ))</div><div class='output co'>#&gt; <span class='error'>Error in mutate(tbl, genotype = paste(if (endPointRFU[1] &gt; 400 &amp;&amp; endPointRFU[2] &gt;     400) "AG" else if (endPointRFU[1] &gt; 400) "AA" else if (endPointRFU[2] &gt;     400) "GG" else "NA")): could not find function "mutate"</span></div><div class='input'><span class='fu'>renderADplot</span>(<span class='st'>"f"</span>, <span class='st'>"aa"</span>, <span class='no'>tbl</span>, <span class='kw'>polar</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>showLegend</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in renderADplot("f", "aa", tbl, polar = TRUE, showLegend = TRUE): Assertion on 'colnames(adData)' failed: Must include the elements {position,target.dyeId,endPointRFU,genotype}.</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

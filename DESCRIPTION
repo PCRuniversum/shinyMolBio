@@ -1,8 +1,8 @@
 Package: shinyMolBio
 Type: Package
 Title: Molecular Biology Visualization Tools for 'Shiny' Apps
-Version: 0.2
-Date: 2019-08-02
+Version: 0.3
+Date: 2020-04-10
 Authors@R: c(
   person("Konstantin A.", "Blagodatskikh",
   email = "k.blag@yandex.ru", role = c("cre", "aut")))
@@ -30,8 +30,9 @@ Collate:
   'global.R'
   'pcrPlate-input.R'
   'renderCurves.R'
+  'renderADplot.R'
   'runExample.R'
 Suggests:
   knitr,
   chipPCR
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0

@@ -319,7 +319,7 @@ renderCurves <- function(inputId,
     if (interactive) {
       tags$head(
         singleton(
-          includeScript(system.file("/js/renderCurves-bindings.js",
+          includeScript(system.file("js/renderCurves-bindings.js",
                                     package = "shinyMolBio"))
         ),
         singleton(css)

@@ -14,7 +14,10 @@ ui <- fluidPage(
     column(6,
            uiOutput("showDyesUI"),
            uiOutput("ampCurvesUI")),
-    column(6, "aldescr plot")
+    column(6,
+           checkboxInput("polarCoord",
+                         "Polar Coordinates"),
+           uiOutput("adPlotUI"))
   ),
   fluidRow(
     column(6, uiOutput("ampPlateUI")),
@@ -36,14 +39,24 @@ server <- function(input, output, session) {
   rdmlFile <- reactive({
     req(values$path)
     rdml <- RDML$new(values$path)
-    expId <- as.character(rdml$experiment[[1]]$id)
+    # expId <- as.character(rdml$experiment[[1]]$id)
     # runId <- as.character(rdml$experiment[[expId]]$run[[1]]$id)
-    list(table =  rdml$AsTable(cq = data$cq) %>%
-           filter(exp.id == expId
-                  # &
-                  # run.id == runId
-           ),
-         format = rdml$experiment[[expId]]$run[[1]]$pcrFormat,
+    list(table =
+           rdml$AsTable(
+             cq = data$cq,
+             endPointRFU = mean(tail(data$adp$fpoints$fluor, 5))) %>%
+           group_by(position) %>%
+           mutate(genotype = paste(
+             if (endPointRFU[1] > 400 && endPointRFU[2] > 400) "AG"
+             else if (endPointRFU[1] > 400) "AA"
+             else if (endPointRFU[2] > 400) "GG"
+             else "NA"
+           )),# %>%
+         # filter(exp.id == expId
+         # &
+         # run.id == runId
+         # )
+         format = rdml$experiment[[1]]$run[[1]]$pcrFormat,
          rdml = rdml)
   })
 
@@ -74,6 +87,30 @@ server <- function(input, output, session) {
                 multiple = TRUE)
   })
 
+  output$adPlotUI <- renderUI({
+    req(rdmlFile())#, input$pcrPlate2)
+    renderADplot("adPlot", "Allelic Discrimination Plot",
+                 rdmlFile()$table,
+                 polar = input$polarCoord)
+  })
+
+  observeEvent(
+    input$pcrPlate,
+    {
+      toHideCurves <-
+        rdmlFile()$table %>%
+        filter(!(position %in% input$pcrPlate))
+
+      updateCurves(session,
+                   "ampCurves",
+                   hideCurves = toHideCurves %>%
+                     pull(fdata.name))
+      updateADplot(session,
+                   "adPlot",
+                   hidePoints = toHideCurves %>%
+                     pull(position))
+    })
+
   observeEvent(
     input$pcrPlate_hover,
     {
@@ -83,6 +120,9 @@ server <- function(input, output, session) {
       updateCurves(session,
                    "ampCurves",
                    highlightCurves = fdataNames)
+      updateADplot(session,
+                   "adPlot",
+                   highlightPoints = input$pcrPlate_hover)
     }
   )
 
