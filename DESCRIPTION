@@ -1,17 +1,17 @@
 Package: shinyMolBio
 Type: Package
 Title: Molecular Biology Visualization Tools for 'Shiny' Apps
-Version: 0.3
-Date: 2020-04-10
+Version: 0.4
+Date: 2020-05-07
 Authors@R: c(
   person("Konstantin A.", "Blagodatskikh",
   email = "k.blag@yandex.ru", role = c("cre", "aut")))
 Description: Interactive visualization of 'RDML' files via 'shiny' apps. 
   Package provides (1) PCR plate interface with ability to select
-  individual tubes and (2) amplification/melting plots with fast hiding and 
-  highlighting individual curves.
+  individual tubes; (2) amplification/melting plots with fast hiding and 
+  highlighting individual curves; (3) 2D allelic discrimination plot.
 License: MIT + file LICENSE
-URL: https://github.com/kablag/shinyMolBio, https://kablag.github.io/shinyMolBio/
+URL: https://github.com/PCRuniversum/shinyMolBio, https://pcruniversum.github.io/shinyMolBio/
 Encoding: UTF-8
 LazyData: true
 Depends:

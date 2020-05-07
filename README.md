@@ -21,4 +21,10 @@ Create an input control for representing PCR plate and dynamically selecting wel
 
 Create a plot with the real-time PCR amplification curves.
 
-<img src="https://raw.githubusercontent.com/kablag/shinyMolBio/master/docs/pic/example_ampCurves.png" alt="example_ampCurves" width="100%">
+<img src="https://raw.githubusercontent.com/kablag/shinyMolBio/master/docs/pic/exmpl_ampCurves.png" alt="example_ampCurves" width="100%">
+
+## renderADplot
+
+Create an allelic discrimination plot.
+
+<img src="https://raw.githubusercontent.com/kablag/shinyMolBio/master/docs/pic/exmpl_AD.png" alt="example_AD" width="100%">
