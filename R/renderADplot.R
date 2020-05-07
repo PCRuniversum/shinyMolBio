@@ -16,7 +16,7 @@
 #'   \code{RDML$AsTable()} format.
 #' @param targetColumn Column name that contains axis splitting (dye or target).
 #' @param xAxisTarget X axis target (dye) name.
-#' @param xAxisTarget X axis target (dye) name.
+#' @param yAxisTarget X axis target (dye) name.
 #' @param valueColumn Column name that contains discrimination value (RFU or cq).
 #' @param colorBy Column name that contains color levels data.
 #' @param polar Enables polar coordinates.
@@ -132,13 +132,12 @@ renderADplot <- function(inputId,
   }
 
   p <- plot_ly() %>%
-    add_trace(data = adData2,
-              split = ~pointName,
+    add_markers(data = adData2,
+              # split = ~pointName,
               name = ~pointName,
               # legendgroup = ~colorBy,
               customdata = ~position,
-              hoverinfo = "x+y+name",
-              # legendgroup = ~legendGroup,
+              # hoverinfo = "x+y+name",
               x = if (polar) ~angle
               else ~get(xAxisTarget),
               y = if (polar) ~distance

@@ -11,8 +11,8 @@ vignette: >
 ---
 # Introduction
 
-**renderAmpCurves** and **renderMeltCurves** function represent amplification and melting data from real-time PCR experiments as curves based on **plotly** package.
-Main advantage of using this functions instead of regular plot renders is that it glued with **RDML** package. Minimal usage recures only `GetFData(long.table = TRUE)` function output. Also it have interactive feature - fast curves hiding without total plot redraw.
+**renderAmpCurves** and **renderMeltCurves** function represents amplification and melting data from real-time PCR experiments as curves based on **plotly** package.
+Main advantage of using this functions instead of regular plot renders is that it glued with **RDML** package. Minimal usage recures only `GetFData(long.table = TRUE)` function output. Also it has interactive feature - fast curves hiding without total plot redraw.
 
 ```{r, results='hide', message=FALSE, warning=FALSE}
 library(shinyMolBio)

@@ -44,7 +44,8 @@ server <- function(input, output, session) {
     list(table =
            rdml$AsTable(
              cq = data$cq,
-             endPointRFU = mean(tail(data$adp$fpoints$fluor, 5))) %>%
+             endPointRFU = round(mean(tail(data$adp$fpoints$fluor, 5)))) %>%
+           mutate(cq = round(cq)) %>%
            group_by(position) %>%
            mutate(genotype = paste(
              if (endPointRFU[1] > 400 && endPointRFU[2] > 400) "AG"
@@ -130,7 +131,8 @@ server <- function(input, output, session) {
     req(rdmlFile())
     DT::datatable(
       rdmlFile()$table %>%
-        select(position, sample, cq),
+        select(position, sample, dye = target.dyeId,
+               cq, RFU = endPointRFU, genotype),
       rownames = FALSE,
       options = list(
         rowCallback = DT::JS('function(row, data) {

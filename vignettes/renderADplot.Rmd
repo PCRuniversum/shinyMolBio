@@ -1,0 +1,126 @@
+---
+title: "renderADplot"
+author: "Konstantin A. Blagodatskikh"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{renderADplot overview}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+# Introduction
+
+**renderADplot** function visualizes standard allelic discrimination plot based on **plotly** package.
+Main advantage of using this functions instead of regular plot renders is that it glued with **RDML** package. Minimal usage recures only `GetFData(long.table = TRUE)` function output. Also it has interactive features.
+
+Standard allelic discrimination plot is a plot with two axis: one is signal for allele 1 and second is signal for allele 2. Signal can be end point RFU, Cq or another countable parametr. Column name that contains axis splitting is determined by **targetColumn** argument. Column name that contains signal level is determined by **valueColumn** argument. If **targetColumn** contains more than two unique values you can specify which to use by **xAxisTarget** and **yAxisTarget**.
+
+```{r, results='hide', message=FALSE, warning=FALSE}
+library(shinyMolBio)
+library(tidyverse)
+library(RDML)
+# load RDML file
+rdml <- RDML$new(system.file("/extdata/test.rdml", package = "shinyMolBio"))
+tbl <- rdml$AsTable(endPointRFU = mean(tail(data$adp$fpoints$fluor, 5)))
+tbl <- group_by(tbl, position)
+# generate genotypes by simple rule based on end point RFU signal:
+# Reaction1 > 400 - AA
+# Reaction2 > 400 - GG
+# Reaction1 and Reaction2 > 400 - AG
+tbl <- mutate(tbl,
+              genotype = paste(
+                if (endPointRFU[1] > 400 && endPointRFU[2] > 400) "AG"
+                else if (endPointRFU[1] > 400) "AA"
+                else if (endPointRFU[2] > 400) "GG"
+                else "NA"
+              ))
+```
+```{r, results='asis'}
+renderADplot(inputId = "firstLook", 
+             label = "AD plot with default arguments", 
+             adData = tbl,
+             targetColumn = "target.dyeId",
+             xAxisTarget = "FAM",
+             yAxisTarget = "HEX", 
+             valueColumn = "endPointRFU",
+             colorBy = "genotype",
+             interactive = FALSE)
+```
+
+# Curves customization
+
+## Color
+
+Curve color can be directly provided by adding column **color** to **adData** table or by choosing column that defines color with **colorBy** param.
+
+```{r, results='asis'}
+renderADplot(inputId = "color1", 
+             label = "Color by Sample Name", 
+             adData = tbl,
+             colorBy = "sample",
+             interactive = FALSE)
+
+renderADplot(inputId = "color1", 
+             label = "Color by Sample Name", 
+             adData = tbl %>% 
+               mutate(color = "red"),
+             interactive = FALSE)
+```
+
+## Polar coordinates
+
+Curve linetype can be setted by choosing column that defines linetype with **linetypeBy** param.
+
+You can view plot in polar coordinates with angle as X axis and distance as Y axis by 
+setting **polar = TRUE**.
+
+```{r, results='asis'}
+renderADplot(inputId = "polar", 
+             label = "Polar Coordinates", 
+             adData = tbl,
+             polar = TRUE,
+             interactive = FALSE)
+```
+
+
+# Custom Plotly Code
+
+You can add custom qouted plotly code by **plotlyCode** parameter. Note that you
+have to add value **p** inside your quoted code to link it with render output.
+
+```{r, results='asis'}
+centers <- tbl %>% 
+  group_by(target.dyeId, genotype) %>% 
+  summarise(endPointRFU = mean(endPointRFU)) %>% 
+  spread(target.dyeId, endPointRFU) %>% 
+  filter(genotype != "NA")
+
+renderADplot("th", 
+                "Show Thershold Lines", 
+                tbl,
+                plotlyCode = quote(
+                  # add markers to the centers of genotypes
+                  add_markers(p,
+                              data = centers,
+                              name = ~genotype,
+                              x = ~FAM,
+                              y = ~HEX,
+                              marker = list(color = "blue",
+                                            size = 50,
+                                            opacity = 0.2)) %>%
+                    # Set background color to light yellow
+                    layout(paper_bgcolor = '#ffffe0',
+                           plot_bgcolor = '#ffffe0')
+                ),
+                interactive = FALSE)
+```
+
+
+
+# Hiding and highlighting curves
+
+Individual points can be hidden without plot redraw. Use *updateADplot* function with *fdata.name* as *hidePoints* param. Or highlighted with *fdata.name* as *highlightPoints* param.
+Run `shinyMolBio::runExample("pcrPlateInput")` to see this in action. 
+Points hiding occures after wells selection at PCR plate and higlighting after 
+mouse hovering above PCR plate or details table.

@@ -23,6 +23,8 @@ renderADplot(inputId, label = NULL, adData,
 
 \item{xAxisTarget}{X axis target (dye) name.}
 
+\item{yAxisTarget}{X axis target (dye) name.}
+
 \item{valueColumn}{Column name that contains discrimination value (RFU or cq).}
 
 \item{colorBy}{Column name that contains color levels data.}
