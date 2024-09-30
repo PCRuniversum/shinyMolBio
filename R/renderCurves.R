@@ -26,7 +26,7 @@
 #'
 #' @author Konstantin A. Blagodatskikh <k.blag@@yandex.ru>
 #' @keywords PCR RDML Shiny Input
-#' @import plotly RColorBrewer
+#' @import plotly RColorBrewer data.table
 #' @importFrom grDevices colorRampPalette
 #'
 #' @family render elements
@@ -224,6 +224,20 @@ renderCurves <- function(inputId,
       curves$color <- "black"
     }
   }
+  # assign linetypes to curves
+  if (!("linetype" %in% colnames(curves))) {
+    if (!is.null(linetypeBy)) {
+      typeNames <-  unique(curves[[linetypeBy]])
+      needNTypes <- length(typeNames)
+      curvesTypes <- c("solid", "dot",
+                       "dash", "longdash",
+                       "dashdot", "longdashdot")[1:needNTypes]
+      names(curvesTypes) <- typeNames
+      curves$linetype <- curvesTypes[curves[[linetypeBy]]]
+    } else {
+      curves$linetype <- "solid"
+    }
+  }
 
   p <- plot_ly() %>%
     add_trace(data = curves,
@@ -232,14 +246,24 @@ renderCurves <- function(inputId,
               customdata = ~fdata.name,
               hoverinfo = "x+y+name",
               legendgroup = ~legendGroup,
+              showlegend = FALSE,
               x = ~x, y = ~y,
-              line = list(color = curves$color),
-              linetype = {
-                if (is.null(linetypeBy)) NULL
-                else ~get(linetypeBy)
-              },
+              line = list(color = curves$color,
+                          dash = curves$linetype),
               type = "scatter", mode = "lines"
-    ) %>%
+    )
+  # creating fake curves to view nice legend: one element in legend for one group
+  # without it every curve appears in legend
+  curves <- as.data.table(curves)
+  fakeCurves <- curves[, .SD[1], by = "legendGroup"]
+  p <- add_trace(p, data = fakeCurves,
+                 split = ~legendGroup,
+                 legendgroup = ~legendGroup,
+                 x = ~x, y = ~y,
+                 line = list(color = fakeCurves$color,
+                             dash = fakeCurves$linetype),
+                 type = "scatter", mode = "lines"
+                 ) |>
     plotly::layout(showlegend = showLegend,
                    xaxis = list(title = xAxisTitle),
                    yaxis = list(title = yAxisTitle,
