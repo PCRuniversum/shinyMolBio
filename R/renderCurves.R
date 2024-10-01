@@ -54,9 +54,10 @@ renderAmpCurves <- function(inputId,
   assertNames(colnames(ampCurves),
               must.include = c("fdata.name", "cyc", "fluor"))
   assertLogical(logScale)
-  ampCurves <- ampCurves %>%
-    rename(x = .data$cyc,
-           y = .data$fluor)
+  # ampCurves <- ampCurves %>%
+  #   rename(x = .data$cyc,
+  #          y = .data$fluor)
+  setnames(ampCurves, c("cyc", "fluor"), c("x", "y"))
   if (showCq) {
     assertNames(colnames(ampCurves),
                 must.include = c("cq"))
@@ -120,22 +121,23 @@ renderAmpCurves <- function(inputId,
 #'  long.table = TRUE))
 #' curves
 renderMeltCurves <- function(inputId,
-                            label = NULL,
-                            meltCurves,
-                            fluorColumn = "fluor",
-                            colorBy = NULL,
-                            linetypeBy = NULL,
-                            showTm = FALSE,
-                            showLegend = FALSE,
-                            plotlyCode = NULL,
-                            cssFile = NULL,
-                            cssText = NULL,
-                            interactive = TRUE) {
+                             label = NULL,
+                             meltCurves,
+                             fluorColumn = "fluor",
+                             colorBy = NULL,
+                             linetypeBy = NULL,
+                             showTm = FALSE,
+                             showLegend = FALSE,
+                             plotlyCode = NULL,
+                             cssFile = NULL,
+                             cssText = NULL,
+                             interactive = TRUE) {
   assertNames(colnames(meltCurves),
               must.include = c("fdata.name", "tmp", fluorColumn))
-  meltCurves <- meltCurves %>%
-    rename(x = .data$tmp,
-           y = .data[[fluorColumn]])
+  # meltCurves <- meltCurves %>%
+  #   rename(x = .data$tmp,
+  #          y = .data[[fluorColumn]])
+  setnames(ampCurves, c("tmp", fluorColumn), c("x", "y"))
   if (showTm) {
     assertNames(colnames(meltCurves),
                 must.include = c("tm"))
@@ -195,16 +197,30 @@ renderCurves <- function(inputId,
   assertString(cssText, null.ok = TRUE)
   assertLogical(interactive)
 
-  curves <- curves %>%
-    mutate(curveName = sprintf("%s %s %s %s", .data$position,
-                               .data$target.dyeId,
-                               .data$sample,
-                               .data$sample.type)) %>%
-    group_by(.data$fdata.name, .data$x) %>%
-    mutate(legendGroup = paste(if (!is.null(colorBy)) get(colorBy),
-                               if (!is.null(linetypeBy)) get(linetypeBy),
-                               collapse = " ")) %>%
-    ungroup()
+  # curves <- curves %>%
+  #   mutate(curveName = sprintf("%s %s %s %s", .data$position,
+  #                              .data$target.dyeId,
+  #                              .data$sample,
+  #                              .data$sample.type)) %>%
+  #   group_by(.data$fdata.name, .data$x) %>%
+  #   mutate(legendGroup = paste(if (!is.null(colorBy)) get(colorBy),
+  #                              if (!is.null(linetypeBy)) get(linetypeBy),
+  #                              collapse = " ")) %>%
+  #   ungroup()
+
+  curves[,
+         curveName :=
+           sprintf("%s %s %s %s", position,
+                   target.dyeId,
+                   sample,
+                   sample.type)
+  ][
+    , legendGroup := paste(if (!is.null(colorBy)) data.table::first(colorBy),
+                           if (!is.null(linetypeBy)) data.table::first(linetypeBy),
+                           collapse = " "),
+    by = c("fdata.name"), env = list(colorBy = colorBy,
+                                     linetypeBy = linetypeBy)#, "x")
+  ]
 
   # ns <- NS(inputId)
 
@@ -219,9 +235,11 @@ renderCurves <- function(inputId,
           colorRampPalette(brewer.pal(8, "Set2"))(needNColors)
       )
       names(curvesColors) <- colorNames
-      curves$color <- curvesColors[curves[[colorBy]]]
+      curves[, color := curvesColors[curves[[colorBy]]]]
+      # curves$color <- curvesColors[curves[[colorBy]]]
     } else {
-      curves$color <- "black"
+      curves[, color := "black"]
+      # curves$color <- "black"
     }
   }
   # assign linetypes to curves
@@ -233,9 +251,11 @@ renderCurves <- function(inputId,
                        "dash", "longdash",
                        "dashdot", "longdashdot")[1:needNTypes]
       names(curvesTypes) <- typeNames
-      curves$linetype <- curvesTypes[curves[[linetypeBy]]]
+      curves[, linetype := curvesTypes[curves[[linetypeBy]]]]
+      # curves$linetype <- curvesTypes[curves[[linetypeBy]]]
     } else {
-      curves$linetype <- "solid"
+      curves[, linetype := "solid"]
+      # curves$linetype <- "solid"
     }
   }
 
@@ -254,7 +274,7 @@ renderCurves <- function(inputId,
     )
   # creating fake curves to view nice legend: one element in legend for one group
   # without it every curve appears in legend
-  curves <- as.data.table(curves)
+  # curves <- as.data.table(curves)
   fakeCurves <- curves[, .SD[1], by = "legendGroup"]
   p <- add_trace(p, data = fakeCurves,
                  split = ~legendGroup,
@@ -263,7 +283,7 @@ renderCurves <- function(inputId,
                  line = list(color = fakeCurves$color,
                              dash = fakeCurves$linetype),
                  type = "scatter", mode = "lines"
-                 ) |>
+  ) |>
     plotly::layout(showlegend = showLegend,
                    xaxis = list(title = xAxisTitle),
                    yaxis = list(title = yAxisTitle,
@@ -275,16 +295,25 @@ renderCurves <- function(inputId,
     # prepare markers
     maxX <- max(curves$x, na.rm = TRUE)
     # replace all NA cq with max cycle
-    curves[is.na(curves$markers), "markers"] <- maxX
-    curves <- curves %>%
-      group_by(.data$fdata.name) %>%
-      mutate(isMarker =
-               replace(rep(FALSE, length(.data$x)),
-                       sapply(unique(.data$markers), # set TRUE to closest cyc
-                              function(marker)
-                                which.min(abs(.data$x - marker))), TRUE))
-    cqs <- curves %>%
-      filter(.data$isMarker == TRUE)
+    # curves[is.na(curves$markers), "markers"] <- maxX
+    # curves[is.na(curves$markers), "markers"] <- maxX
+    curves[is.na(markers), markers := maxX]
+    # curves <- curves %>%
+    #   group_by(.data$fdata.name) %>%
+    #   mutate(isMarker =
+    #            replace(rep(FALSE, length(.data$x)),
+    #                    sapply(unique(.data$markers), # set TRUE to closest cyc
+    #                           function(marker)
+    #                             which.min(abs(.data$x - marker))), TRUE))
+    curves[,
+           isMarker := replace(rep(FALSE, length(x)),
+                               sapply(unique(markers), # set TRUE to closest cyc
+                                      function(marker)
+                                        which.min(abs(x - marker))), TRUE),
+           by = "fdata.name"]
+    # cqs <- curves %>%
+    #   filter(.data$isMarker == TRUE)
+    cqs <- curves[isMarker == TRUE, ]
     p <- add_trace(p,
                    data = cqs,
                    split = ~fdata.name,
@@ -305,9 +334,14 @@ renderCurves <- function(inputId,
                 must.include = c("quantFluor"))
     maxX <- max(curves$x)
     minX <- min(curves$x)
-    ths <- curves %>%
-      select(.data$quantFluor, .data[[thBy]]) %>%
-      distinct()
+    # ths <- curves %>%
+    #   select(.data$quantFluor, .data[[thBy]]) %>%
+    #   distinct()
+    ths <- curves[, .(V1, V2),
+                  env = list(V1 = "quantFluor",
+                             V2 = thBy)] |>
+      unique()
+
     p <- add_segments(p,
                       data = ths,
                       x = minX, xend = maxX,
@@ -320,19 +354,19 @@ renderCurves <- function(inputId,
 
   css <-
     tags$style(type = "text/css",
-                    paste0(
-                      if (!is.null(cssFile)) {
-                        whisker.render(
-                          suppressWarnings(
-                            readLines(cssFile,
-                                      warn = FALSE, encoding = "UTF-8")) %>%
-                            paste0(collapse = ""),
-                          list(id = inputId)
-                        )} else {
-                          ""
-                        },
-                      whisker.render(cssText, list(id = inputId))
-                    )
+               paste0(
+                 if (!is.null(cssFile)) {
+                   whisker.render(
+                     suppressWarnings(
+                       readLines(cssFile,
+                                 warn = FALSE, encoding = "UTF-8")) %>%
+                       paste0(collapse = ""),
+                     list(id = inputId)
+                   )} else {
+                     ""
+                   },
+                 whisker.render(cssText, list(id = inputId))
+               )
     )
 
   if (!is.null(plotlyCode)) {
