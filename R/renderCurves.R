@@ -54,9 +54,6 @@ renderAmpCurves <- function(inputId,
   assertNames(colnames(ampCurves),
               must.include = c("fdata.name", "cyc", "fluor"))
   assertLogical(logScale)
-  # ampCurves <- ampCurves %>%
-  #   rename(x = .data$cyc,
-  #          y = .data$fluor)
   setnames(ampCurves, c("cyc", "fluor"), c("x", "y"))
   if (showCq) {
     assertNames(colnames(ampCurves),
@@ -134,9 +131,6 @@ renderMeltCurves <- function(inputId,
                              interactive = TRUE) {
   assertNames(colnames(meltCurves),
               must.include = c("fdata.name", "tmp", fluorColumn))
-  # meltCurves <- meltCurves %>%
-  #   rename(x = .data$tmp,
-  #          y = .data[[fluorColumn]])
   setnames(ampCurves, c("tmp", fluorColumn), c("x", "y"))
   if (showTm) {
     assertNames(colnames(meltCurves),
@@ -252,10 +246,8 @@ renderCurves <- function(inputId,
                        "dashdot", "longdashdot")[1:needNTypes]
       names(curvesTypes) <- typeNames
       curves[, linetype := curvesTypes[curves[[linetypeBy]]]]
-      # curves$linetype <- curvesTypes[curves[[linetypeBy]]]
     } else {
       curves[, linetype := "solid"]
-      # curves$linetype <- "solid"
     }
   }
 
@@ -274,7 +266,6 @@ renderCurves <- function(inputId,
     )
   # creating fake curves to view nice legend: one element in legend for one group
   # without it every curve appears in legend
-  # curves <- as.data.table(curves)
   fakeCurves <- curves[, .SD[1], by = "legendGroup"]
   p <- add_trace(p, data = fakeCurves,
                  split = ~legendGroup,
@@ -295,24 +286,15 @@ renderCurves <- function(inputId,
     # prepare markers
     maxX <- max(curves$x, na.rm = TRUE)
     # replace all NA cq with max cycle
-    # curves[is.na(curves$markers), "markers"] <- maxX
-    # curves[is.na(curves$markers), "markers"] <- maxX
     curves[is.na(markers), markers := maxX]
-    # curves <- curves %>%
-    #   group_by(.data$fdata.name) %>%
-    #   mutate(isMarker =
-    #            replace(rep(FALSE, length(.data$x)),
-    #                    sapply(unique(.data$markers), # set TRUE to closest cyc
-    #                           function(marker)
-    #                             which.min(abs(.data$x - marker))), TRUE))
-    curves[,
-           isMarker := replace(rep(FALSE, length(x)),
-                               sapply(unique(markers), # set TRUE to closest cyc
-                                      function(marker)
-                                        which.min(abs(x - marker))), TRUE),
-           by = "fdata.name"]
-    # cqs <- curves %>%
-    #   filter(.data$isMarker == TRUE)
+    curves[
+      ,
+      isMarker := replace(
+        rep(FALSE, length(x)),
+        sapply(unique(markers), # set TRUE to closest cyc
+               function(marker)
+                 which.min(abs(x - marker))), TRUE),
+      by = "fdata.name"]
     cqs <- curves[isMarker == TRUE, ]
     p <- add_trace(p,
                    data = cqs,
@@ -334,9 +316,6 @@ renderCurves <- function(inputId,
                 must.include = c("quantFluor"))
     maxX <- max(curves$x)
     minX <- min(curves$x)
-    # ths <- curves %>%
-    #   select(.data$quantFluor, .data[[thBy]]) %>%
-    #   distinct()
     ths <- curves[, .(V1, V2),
                   env = list(V1 = "quantFluor",
                              V2 = thBy)] |>
