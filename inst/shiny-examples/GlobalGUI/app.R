@@ -26,6 +26,11 @@ ui <- fluidPage(
 )
 
 server <- function(input, output, session) {
+
+  session$onSessionEnded(function() {
+    stopApp()
+  })
+
   values <- reactiveValues()
 
   observeEvent(input$exmplFile, {
@@ -48,7 +53,8 @@ server <- function(input, output, session) {
            mutate(cq = round(cq)) %>%
            group_by(position) %>%
            mutate(genotype = paste(
-             if (endPointRFU[1] > 400 && endPointRFU[2] > 400) "AG"
+             if (is.na(endPointRFU[1]) || is.na(endPointRFU[2])) "NA"
+             else if (endPointRFU[1] > 400 && endPointRFU[2] > 400) "AG"
              else if (endPointRFU[1] > 400) "AA"
              else if (endPointRFU[2] > 400) "GG"
              else "NA"
@@ -75,8 +81,10 @@ server <- function(input, output, session) {
                                              long.table = TRUE) %>%
                       mutate(quantFluor = 150),
                     # plotlyCode = plotly::layout(yaxis = list(title = "Fluorescence")),
-                    colorBy = "sample",
-                    linetypeBy = "target.dyeId",
+                    # colorBy = "sample",
+                    # linetypeBy = "target.dyeId",
+                    colorBy = "target",
+                    showLegend = TRUE,
                     showCq = TRUE)
   })
 

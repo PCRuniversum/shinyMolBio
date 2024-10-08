@@ -191,17 +191,6 @@ renderCurves <- function(inputId,
   assertString(cssText, null.ok = TRUE)
   assertLogical(interactive)
 
-  # curves <- curves %>%
-  #   mutate(curveName = sprintf("%s %s %s %s", .data$position,
-  #                              .data$target.dyeId,
-  #                              .data$sample,
-  #                              .data$sample.type)) %>%
-  #   group_by(.data$fdata.name, .data$x) %>%
-  #   mutate(legendGroup = paste(if (!is.null(colorBy)) get(colorBy),
-  #                              if (!is.null(linetypeBy)) get(linetypeBy),
-  #                              collapse = " ")) %>%
-  #   ungroup()
-
   curves[,
          curveName :=
            sprintf("%s %s %s %s", position,
@@ -233,7 +222,6 @@ renderCurves <- function(inputId,
       # curves$color <- curvesColors[curves[[colorBy]]]
     } else {
       curves[, color := "black"]
-      # curves$color <- "black"
     }
   }
   # assign linetypes to curves
@@ -260,19 +248,22 @@ renderCurves <- function(inputId,
               legendgroup = ~legendGroup,
               showlegend = FALSE,
               x = ~x, y = ~y,
-              line = list(color = curves$color,
-                          dash = curves$linetype),
+              color = ~I(color),
+              line = list(dash = ~I(linetype)),
               type = "scatter", mode = "lines"
     )
   # creating fake curves to view nice legend: one element in legend for one group
   # without it every curve appears in legend
   fakeCurves <- curves[, .SD[1], by = "legendGroup"]
+  browser()
   p <- add_trace(p, data = fakeCurves,
                  split = ~legendGroup,
                  legendgroup = ~legendGroup,
+                 customdata = ~legendGroup,
+                 name = ~legendGroup,
                  x = ~x, y = ~y,
-                 line = list(color = fakeCurves$color,
-                             dash = fakeCurves$linetype),
+                 color = ~I(color),
+                 line = list(dash = ~I(linetype)),
                  type = "scatter", mode = "lines"
   ) |>
     plotly::layout(showlegend = showLegend,
@@ -304,8 +295,8 @@ renderCurves <- function(inputId,
                    hoverinfo = "x+y+name",
                    legendgroup = ~legendGroup,
                    x = ~x, y = ~y,
-                   marker = list(color = cqs$color,
-                                 size = 7),
+                   color = ~I(color),
+                   marker = list(size = 7),
                    type = "scatter", mode = "markers",
                    showlegend = FALSE
     )
@@ -316,9 +307,11 @@ renderCurves <- function(inputId,
                 must.include = c("quantFluor"))
     maxX <- max(curves$x)
     minX <- min(curves$x)
-    ths <- curves[, .(V1, V2),
+    ths <- curves[, .(V1, V2, V3, V4),
                   env = list(V1 = "quantFluor",
-                             V2 = thBy)] |>
+                             V2 = thBy,
+                             V3 = "color",
+                             V4 = "legendGroup")] |>
       unique()
 
     p <- add_segments(p,
@@ -326,7 +319,11 @@ renderCurves <- function(inputId,
                       x = minX, xend = maxX,
                       y = ~quantFluor, yend = ~quantFluor,
                       name = ~get(thBy),
-                      color = ~get(thBy),
+                      split = ~legendGroup,
+                      legendgroup = ~legendGroup,
+                      customdata = ~legendGroup,
+                      showlegend = FALSE,
+                      color = ~I(color),
                       hoverinfo = "y+name")
 
   }
