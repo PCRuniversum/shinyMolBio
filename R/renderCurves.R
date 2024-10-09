@@ -255,7 +255,6 @@ renderCurves <- function(inputId,
   # creating fake curves to view nice legend: one element in legend for one group
   # without it every curve appears in legend
   fakeCurves <- curves[, .SD[1], by = "legendGroup"]
-  browser()
   p <- add_trace(p, data = fakeCurves,
                  split = ~legendGroup,
                  legendgroup = ~legendGroup,
