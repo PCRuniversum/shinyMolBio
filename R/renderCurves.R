@@ -12,6 +12,8 @@
 #' @param label Display label for the control, or \code{NULL} for no label.
 #' @param ampCurves Amplification curves data with
 #'   \code{RDML$GetFData(long.table = TRUE)} format.
+#'   Columns \code{hideCurve} and \code{highlightCurve} defines which curve will
+#'    be hidden or highlighted respectively.
 #' @param colorBy Column name that contains color levels data.
 #' @param linetypeBy Column name that contains linetype levels data.
 #' @param logScale Converts plot to \code{log(RFU)}.
@@ -54,6 +56,7 @@ renderAmpCurves <- function(inputId,
   assertNames(colnames(ampCurves),
               must.include = c("fdata.name", "cyc", "fluor"))
   assertLogical(logScale)
+  ampCurves <- copy(ampCurves)
   setnames(ampCurves, c("cyc", "fluor"), c("x", "y"))
   if (showCq) {
     assertNames(colnames(ampCurves),
@@ -93,6 +96,8 @@ renderAmpCurves <- function(inputId,
 #' @param label Display label for the control, or \code{NULL} for no label.
 #' @param meltCurves Melting curves data with \code{RDML$GetFData(dp.type =
 #'   "mdp", long.table = TRUE)} format.
+#'   Columns \code{hideCurve} and \code{highlightCurve} defines which curve will
+#'    be hidden or highlighted respectively.
 #' @param fluorColumn Column name that contains fluorescence values
 #' (can be \code{diffFluor} for derivative curves).
 #' @param colorBy Column name that contains color levels data.
@@ -131,7 +136,8 @@ renderMeltCurves <- function(inputId,
                              interactive = TRUE) {
   assertNames(colnames(meltCurves),
               must.include = c("fdata.name", "tmp", fluorColumn))
-  setnames(ampCurves, c("tmp", fluorColumn), c("x", "y"))
+  meltCurves <- copy(meltCurves)
+  setnames(meltCurves, c("tmp", fluorColumn), c("x", "y"))
   if (showTm) {
     assertNames(colnames(meltCurves),
                 must.include = c("tm"))
@@ -239,6 +245,15 @@ renderCurves <- function(inputId,
     }
   }
 
+  if (is.null(curves$hideCurve))
+    curves$hideCurve <- FALSE
+  if (is.null(curves$highlightCurve))
+    curves$highlightCurve <- 2
+  else
+    curves[,
+           highlightCurve := ifelse(
+             highlightCurve, 4, 2)]
+
   p <- plot_ly() %>%
     add_trace(data = curves,
               split = ~fdata.name,
@@ -249,7 +264,9 @@ renderCurves <- function(inputId,
               showlegend = FALSE,
               x = ~x, y = ~y,
               color = ~I(color),
-              line = list(dash = ~I(linetype)),
+              line = list(dash = ~I(linetype),
+                          width = ~highlightCurve),
+              visible = ~!hideCurve,
               type = "scatter", mode = "lines"
     )
   # creating fake curves to view nice legend: one element in legend for one group
@@ -296,6 +313,7 @@ renderCurves <- function(inputId,
                    x = ~x, y = ~y,
                    color = ~I(color),
                    marker = list(size = 7),
+                   visible = ~!hideCurve,
                    type = "scatter", mode = "markers",
                    showlegend = FALSE
     )

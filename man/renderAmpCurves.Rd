@@ -15,7 +15,9 @@ renderAmpCurves(inputId, label = NULL, ampCurves, colorBy = NULL,
 \item{label}{Display label for the control, or \code{NULL} for no label.}
 
 \item{ampCurves}{Amplification curves data with
-\code{RDML$GetFData(long.table = TRUE)} format.}
+\code{RDML$GetFData(long.table = TRUE)} format.
+Columns \code{hideCurve} and \code{highlightCurve} defines which curve will
+ be hidden or highlighted respectively.}
 
 \item{colorBy}{Column name that contains color levels data.}
 

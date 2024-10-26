@@ -15,7 +15,9 @@ renderMeltCurves(inputId, label = NULL, meltCurves,
 \item{label}{Display label for the control, or \code{NULL} for no label.}
 
 \item{meltCurves}{Melting curves data with \code{RDML$GetFData(dp.type =
-"mdp", long.table = TRUE)} format.}
+"mdp", long.table = TRUE)} format.
+Columns \code{hideCurve} and \code{highlightCurve} defines which curve will
+ be hidden or highlighted respectively.}
 
 \item{fluorColumn}{Column name that contains fluorescence values
 (can be \code{diffFluor} for derivative curves).}
