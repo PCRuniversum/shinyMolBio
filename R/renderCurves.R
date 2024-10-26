@@ -197,6 +197,7 @@ renderCurves <- function(inputId,
   assertString(cssText, null.ok = TRUE)
   assertLogical(interactive)
 
+  curves <- as.data.table(curves)
   curves[,
          curveName :=
            sprintf("%s %s %s %s", position,
