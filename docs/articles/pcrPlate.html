@@ -6,19 +6,20 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>pcrPlateInput • shinyMolBio</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="pcrPlateInput">
-<meta property="og:description" content="shinyMolBio">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,25 +32,19 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">shinyMolBio</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -67,9 +62,9 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/PCRuniversum/shinyMolBio/">
-    <span class="fab fa fab fa-github fa-lg"></span>
-     
+  <a href="https://github.com/PCRuniversum/shinyMolBio/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+
   </a>
 </li>
       </ul>
@@ -80,41 +75,45 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>pcrPlateInput</h1>
-                        <h4 class="author">Konstantin A. Blagodatskikh</h4>
+                        <h4 data-toc-skip class="author">Konstantin A.
+Blagodatskikh</h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/PCRuniversum/shinyMolBio/blob/master/vignettes/pcrPlate.Rmd"><code>vignettes/pcrPlate.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/PCRuniversum/shinyMolBio/blob/HEAD/vignettes/pcrPlate.Rmd" class="external-link"><code>vignettes/pcrPlate.Rmd</code></a></small>
       <div class="hidden name"><code>pcrPlate.Rmd</code></div>
 
     </div>
 
     
     
-<div id="introduction" class="section level1">
-<h1 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h1>
-<p>Propose of <strong>pcrPlateInput</strong> shiny control is to view runs as a PCR plate like any conventional real-time PCR software:</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">shinyMolBio</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">tidyverse</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">RDML</span>)
-<span class="co"># load RDML file</span>
-<span class="no">rdml</span> <span class="kw">&lt;-</span> <span class="no">RDML</span>$<span class="fu"><a href="https://rdrr.io/pkg/RDML/man/new-method.html">new</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"/extdata/stepone_std.rdml"</span>, <span class="kw">package</span> <span class="kw">=</span> <span class="st">"RDML"</span>))</pre></body></html></div>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="co"># create Shiny control</span>
-<span class="fu"><a href="../reference/pcrPlateInput.html">pcrPlateInput</a></span>(<span class="kw">inputId</span> <span class="kw">=</span> <span class="st">"firstLook"</span>, <span class="co"># Shiny input ID</span>
-              <span class="kw">label</span> <span class="kw">=</span> <span class="st">"Example"</span>, <span class="co"># optional plate label </span>
-              <span class="kw">plateDescription</span> <span class="kw">=</span> <span class="no">rdml</span>$<span class="fu"><a href="https://rdrr.io/pkg/RDML/man/astable-function.html">AsTable</a></span>(), <span class="co"># plate description (wells content)</span>
-              <span class="kw">interactive</span> <span class="kw">=</span> <span class="fl">FALSE</span>
-)</pre></body></html></div>
-<style type="text/css">table.pcr-plate-tbl{  width: 100%;  border-collapse: separate;  border-spacing: 1px;}table.pcr-plate-tbl td, table.pcr-plate-tbl th{  width: 4rem;  height: 2rem;  border: 2px solid #ccc;  text-align: center;}table.pcr-plate-tbl td{  max-width: 4rem;  word-wrap: break-word;}table.pcr-plate-tbl th{  border-color: white;  color: white;}table.pcr-plate-tbl thead th:nth-child(even){  background-color: #3CA9E8;}table.pcr-plate-tbl thead th:nth-child(odd){  background-color: #178ACC;}th.odd-row{  background-color: #3CA9E8;}th.even-row{  background-color: #178ACC;}td.selected-well{  border: 2px solid black !important;}td.highlighted-well{  background-color: lightyellow !important;}th.toggle-all {  background: transparent !important;  position: relative;}th.toggle-all:after {    content: "";    position: absolute;    bottom: 0;    right: 0;	width: 0;	height: 0;    display: block;	border-left: 1em solid transparent;	border-bottom: 1em solid transparent;	border-bottom: 1em solid grey;}</style>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
+<p>Propose of <strong>pcrPlateInput</strong> shiny control is to view
+runs as a PCR plate like any conventional real-time PCR software:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/PCRuniversum/shinyMolBio" class="external-link">shinyMolBio</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/kablag/RDML" class="external-link">RDML</a></span><span class="op">)</span></span>
+<span><span class="co"># load RDML file</span></span>
+<span><span class="va">rdml</span> <span class="op">&lt;-</span> <span class="va"><a href="https://rdrr.io/pkg/RDML/man/RDML.html" class="external-link">RDML</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"/extdata/stepone_std.rdml"</span>, package <span class="op">=</span> <span class="st">"RDML"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># create Shiny control</span></span>
+<span><span class="fu"><a href="../reference/pcrPlateInput.html">pcrPlateInput</a></span><span class="op">(</span>inputId <span class="op">=</span> <span class="st">"firstLook"</span>, <span class="co"># Shiny input ID</span></span>
+<span>              label <span class="op">=</span> <span class="st">"Example"</span>, <span class="co"># optional plate label </span></span>
+<span>              plateDescription <span class="op">=</span> <span class="va">rdml</span><span class="op">$</span><span class="fu">AsTable</span><span class="op">(</span><span class="op">)</span>, <span class="co"># plate description (wells content)</span></span>
+<span>              interactive <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span> </span></code></pre></div>
+<style type="text/css">table.pcr-plate-tbl{  width: 100%;  border-collapse: separate;  border-spacing: 1px;}table.pcr-plate-tbl td, table.pcr-plate-tbl th{  width: 4rem;  height: 2rem;  border: 2px solid #ccc;  text-align: center;}table.pcr-plate-tbl td{  max-width: 4rem;  word-wrap: break-word;}table.pcr-plate-tbl th{  border-color: white;  color: white;}table.pcr-plate-tbl thead th:nth-child(even){  background-color: #3CA9E8;}table.pcr-plate-tbl thead th:nth-child(odd){  background-color: #178ACC;}th.odd-row{  background-color: #3CA9E8;}th.even-row{  background-color: #178ACC;}td.selected-well{  border: 2px solid black !important;}td.highlighted-well{  background-color: lightyellow !important;}th.toggle-all {  background: transparent !important;  position: relative;}th.toggle-all:after {    content: "";    position: absolute;    bottom: 0;    right: 0;  width: 0;   height: 0;    display: block;   border-left: 1em solid transparent; border-bottom: 1em solid transparent;   border-bottom: 1em solid grey;}</style>
 <div id="firstLook" class="pcr-plate">
 <label for="firstLook">Example</label>
-<table class="table pcr-plate-tbl">
+<table id="firstLook-pcrPlateTbl" class="table pcr-plate-tbl">
 <thead><tr>
 <th id="firstLook-toggleall" class="toggle-all"></th>
 <th id="firstLook-col_01">1</th>
@@ -302,31 +301,35 @@ RNase P" group="STDRNase P6250RNase P" class="" style="">STD_RNase P_625.0</td>
 </tbody>
 </table>
 </div>
-<p>PCR plate is fully customizable and can be interactive - selectable wells.</p>
+<p>PCR plate is fully customizable and can be interactive - selectable
+wells.</p>
 </div>
-<div id="pcr-plate-customization" class="section level1">
-<h1 class="hasAnchor">
-<a href="#pcr-plate-customization" class="anchor"></a>PCR Plate Customization</h1>
+<div class="section level2">
+<h2 id="pcr-plate-customization">PCR Plate Customization<a class="anchor" aria-label="anchor" href="#pcr-plate-customization"></a>
+</h2>
 <p>There are several parameters that can be changed:</p>
 <ul>
 <li>wells selection</li>
 <li>plate visualization by CSS</li>
 <li>wells labels and marks</li>
 </ul>
-<div id="wells-selection" class="section level2">
-<h2 class="hasAnchor">
-<a href="#wells-selection" class="anchor"></a>Wells Selection</h2>
-<p>Some PCR plate wells can be marked as selected by <code>selection = c(TO_SELECT)</code> (<code>TO_SELECT</code> can be <em>position</em> or <em>react.id</em>)</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="../reference/pcrPlateInput.html">pcrPlateInput</a></span>(<span class="kw">inputId</span> <span class="kw">=</span> <span class="st">"testPlateSel"</span>,
-              <span class="kw">label</span> <span class="kw">=</span> <span class="st">"Selection"</span>,
-              <span class="kw">plateDescription</span> <span class="kw">=</span> <span class="no">rdml</span>$<span class="fu"><a href="https://rdrr.io/pkg/RDML/man/astable-function.html">AsTable</a></span>(),
-              <span class="kw">selection</span> <span class="kw">=</span> <span class="fl">1</span>:<span class="fl">12</span>, <span class="co"># optional preselected wells</span>
-              <span class="kw">interactive</span> <span class="kw">=</span> <span class="fl">FALSE</span>
-)</pre></body></html></div>
-<style type="text/css">table.pcr-plate-tbl{  width: 100%;  border-collapse: separate;  border-spacing: 1px;}table.pcr-plate-tbl td, table.pcr-plate-tbl th{  width: 4rem;  height: 2rem;  border: 2px solid #ccc;  text-align: center;}table.pcr-plate-tbl td{  max-width: 4rem;  word-wrap: break-word;}table.pcr-plate-tbl th{  border-color: white;  color: white;}table.pcr-plate-tbl thead th:nth-child(even){  background-color: #3CA9E8;}table.pcr-plate-tbl thead th:nth-child(odd){  background-color: #178ACC;}th.odd-row{  background-color: #3CA9E8;}th.even-row{  background-color: #178ACC;}td.selected-well{  border: 2px solid black !important;}td.highlighted-well{  background-color: lightyellow !important;}th.toggle-all {  background: transparent !important;  position: relative;}th.toggle-all:after {    content: "";    position: absolute;    bottom: 0;    right: 0;	width: 0;	height: 0;    display: block;	border-left: 1em solid transparent;	border-bottom: 1em solid transparent;	border-bottom: 1em solid grey;}</style>
+<div class="section level3">
+<h3 id="wells-selection">Wells Selection<a class="anchor" aria-label="anchor" href="#wells-selection"></a>
+</h3>
+<p>Some PCR plate wells can be marked as selected by
+<code>selection = c(TO_SELECT)</code> (<code>TO_SELECT</code> can be
+<em>position</em> or <em>react.id</em>)</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/pcrPlateInput.html">pcrPlateInput</a></span><span class="op">(</span>inputId <span class="op">=</span> <span class="st">"testPlateSel"</span>, </span>
+<span>              label <span class="op">=</span> <span class="st">"Selection"</span>,</span>
+<span>              plateDescription <span class="op">=</span> <span class="va">rdml</span><span class="op">$</span><span class="fu">AsTable</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>              selection <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">12</span>, <span class="co"># optional preselected wells</span></span>
+<span>              interactive <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span> </span></code></pre></div>
+<style type="text/css">table.pcr-plate-tbl{  width: 100%;  border-collapse: separate;  border-spacing: 1px;}table.pcr-plate-tbl td, table.pcr-plate-tbl th{  width: 4rem;  height: 2rem;  border: 2px solid #ccc;  text-align: center;}table.pcr-plate-tbl td{  max-width: 4rem;  word-wrap: break-word;}table.pcr-plate-tbl th{  border-color: white;  color: white;}table.pcr-plate-tbl thead th:nth-child(even){  background-color: #3CA9E8;}table.pcr-plate-tbl thead th:nth-child(odd){  background-color: #178ACC;}th.odd-row{  background-color: #3CA9E8;}th.even-row{  background-color: #178ACC;}td.selected-well{  border: 2px solid black !important;}td.highlighted-well{  background-color: lightyellow !important;}th.toggle-all {  background: transparent !important;  position: relative;}th.toggle-all:after {    content: "";    position: absolute;    bottom: 0;    right: 0;  width: 0;   height: 0;    display: block;   border-left: 1em solid transparent; border-bottom: 1em solid transparent;   border-bottom: 1em solid grey;}</style>
 <div id="testPlateSel" class="pcr-plate">
 <label for="testPlateSel">Selection</label>
-<table class="table pcr-plate-tbl">
+<table id="testPlateSel-pcrPlateTbl" class="table pcr-plate-tbl">
 <thead><tr>
 <th id="testPlateSel-toggleall" class="toggle-all"></th>
 <th id="testPlateSel-col_01">1</th>
@@ -515,21 +518,24 @@ RNase P" group="STDRNase P6250RNase P" class="" style="">STD_RNase P_625.0</td>
 </table>
 </div>
 </div>
-<div id="wells-highlighting" class="section level2">
-<h2 class="hasAnchor">
-<a href="#wells-highlighting" class="anchor"></a>Wells Highlighting</h2>
-<p>Some PCR plate wells can be marked as highlighted by <code>highlightning = c(TO_HIGHLIGHT)</code> (<code>TO_HIGHLIGHT</code> can be <em>position</em> or <em>react.id</em>)</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="../reference/pcrPlateInput.html">pcrPlateInput</a></span>(<span class="kw">inputId</span> <span class="kw">=</span> <span class="st">"testPlateHl"</span>,
-              <span class="kw">label</span> <span class="kw">=</span> <span class="st">"Highlight"</span>,
-              <span class="kw">plateDescription</span> <span class="kw">=</span> <span class="no">rdml</span>$<span class="fu"><a href="https://rdrr.io/pkg/RDML/man/astable-function.html">AsTable</a></span>(),
-              <span class="kw">selection</span> <span class="kw">=</span> <span class="fl">1</span>:<span class="fl">12</span>, <span class="co"># optional preselected wells</span>
-              <span class="kw">highlighting</span> <span class="kw">=</span> <span class="fl">3</span>:<span class="fl">6</span>, <span class="co"># optional highlighted wells</span>
-              <span class="kw">interactive</span> <span class="kw">=</span> <span class="fl">FALSE</span>
-)</pre></body></html></div>
-<style type="text/css">table.pcr-plate-tbl{  width: 100%;  border-collapse: separate;  border-spacing: 1px;}table.pcr-plate-tbl td, table.pcr-plate-tbl th{  width: 4rem;  height: 2rem;  border: 2px solid #ccc;  text-align: center;}table.pcr-plate-tbl td{  max-width: 4rem;  word-wrap: break-word;}table.pcr-plate-tbl th{  border-color: white;  color: white;}table.pcr-plate-tbl thead th:nth-child(even){  background-color: #3CA9E8;}table.pcr-plate-tbl thead th:nth-child(odd){  background-color: #178ACC;}th.odd-row{  background-color: #3CA9E8;}th.even-row{  background-color: #178ACC;}td.selected-well{  border: 2px solid black !important;}td.highlighted-well{  background-color: lightyellow !important;}th.toggle-all {  background: transparent !important;  position: relative;}th.toggle-all:after {    content: "";    position: absolute;    bottom: 0;    right: 0;	width: 0;	height: 0;    display: block;	border-left: 1em solid transparent;	border-bottom: 1em solid transparent;	border-bottom: 1em solid grey;}</style>
+<div class="section level3">
+<h3 id="wells-highlighting">Wells Highlighting<a class="anchor" aria-label="anchor" href="#wells-highlighting"></a>
+</h3>
+<p>Some PCR plate wells can be marked as highlighted by
+<code>highlightning = c(TO_HIGHLIGHT)</code> (<code>TO_HIGHLIGHT</code>
+can be <em>position</em> or <em>react.id</em>)</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/pcrPlateInput.html">pcrPlateInput</a></span><span class="op">(</span>inputId <span class="op">=</span> <span class="st">"testPlateHl"</span>, </span>
+<span>              label <span class="op">=</span> <span class="st">"Highlight"</span>,</span>
+<span>              plateDescription <span class="op">=</span> <span class="va">rdml</span><span class="op">$</span><span class="fu">AsTable</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>              selection <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">12</span>, <span class="co"># optional preselected wells</span></span>
+<span>              highlighting <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">6</span>, <span class="co"># optional highlighted wells</span></span>
+<span>              interactive <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span> </span></code></pre></div>
+<style type="text/css">table.pcr-plate-tbl{  width: 100%;  border-collapse: separate;  border-spacing: 1px;}table.pcr-plate-tbl td, table.pcr-plate-tbl th{  width: 4rem;  height: 2rem;  border: 2px solid #ccc;  text-align: center;}table.pcr-plate-tbl td{  max-width: 4rem;  word-wrap: break-word;}table.pcr-plate-tbl th{  border-color: white;  color: white;}table.pcr-plate-tbl thead th:nth-child(even){  background-color: #3CA9E8;}table.pcr-plate-tbl thead th:nth-child(odd){  background-color: #178ACC;}th.odd-row{  background-color: #3CA9E8;}th.even-row{  background-color: #178ACC;}td.selected-well{  border: 2px solid black !important;}td.highlighted-well{  background-color: lightyellow !important;}th.toggle-all {  background: transparent !important;  position: relative;}th.toggle-all:after {    content: "";    position: absolute;    bottom: 0;    right: 0;  width: 0;   height: 0;    display: block;   border-left: 1em solid transparent; border-bottom: 1em solid transparent;   border-bottom: 1em solid grey;}</style>
 <div id="testPlateHl" class="pcr-plate">
 <label for="testPlateHl">Highlight</label>
-<table class="table pcr-plate-tbl">
+<table id="testPlateHl-pcrPlateTbl" class="table pcr-plate-tbl">
 <thead><tr>
 <th id="testPlateHl-toggleall" class="toggle-all"></th>
 <th id="testPlateHl-col_01">1</th>
@@ -718,99 +724,109 @@ RNase P" group="STDRNase P6250RNase P" class="" style="">STD_RNase P_625.0</td>
 </table>
 </div>
 </div>
-<div id="css" class="section level2">
-<h2 class="hasAnchor">
-<a href="#css" class="anchor"></a>CSS</h2>
-<p>All visualion of PCR plate can be modified by custom CSS. This CSS can be loaded as file or as text and can be global or plate instance specific.</p>
+<div class="section level3">
+<h3 id="css">CSS<a class="anchor" aria-label="anchor" href="#css"></a>
+</h3>
+<p>All visualion of PCR plate can be modified by custom CSS. This CSS
+can be loaded as file or as text and can be global or plate instance
+specific.</p>
 <p>Description of the default CSS file:</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r">/* Global plate style */
-  table.pcr-plate-tbl{
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 1px;
-  }
-/* Global plate style */
-  table.pcr-plate-tbl td, table.pcr-plate-tbl th{
-    width: 4rem;
-    height: 2rem;
-    border: 2px solid #ccc;
-    text-align: center;
-  }
-/* Plate well style */
-  table.pcr-plate-tbl td{
-    max-width: 4rem;
-    word-wrap: break-word;
-  }
-/* Plate header */
-  table.pcr-plate-tbl th{
-    border-color: white;
-    color: white;
-  }
-/* Plate header even column*/
-  table.pcr-plate-tbl thead th:nth-child(even){
-    background-color: #3CA9E8;
-  }
-/* Plate header odd column */
-  table.pcr-plate-tbl thead th:nth-child(odd){
-    background-color: #178ACC;
-  }
-/* Plate header odd row */
-  th.odd-row{
-    background-color: #3CA9E8;
-  }
-/* Plate header even row */
-  th.even-row{
-    background-color: #178ACC;
-  }
-/* Selected well */
-  td.selected-well{
-    border: 2px solid black !important;
-  }
-/* Toggle all sign */
-  th.toggle-all {
-    background: transparent !important;
-    position: relative;
-  }
-/* Toggle all sign */
-  th.toggle-all:after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 0;
-    height: 0;
-    display: block;
-    border-left: 1em solid transparent;
-    border-bottom: 1em solid transparent;
-    border-bottom: 1em solid grey;
-  }</pre></body></html></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="sc">/</span><span class="er">*</span> Global plate style <span class="sc">*</span><span class="er">/</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  table.pcr<span class="sc">-</span>plate<span class="sc">-</span>tbl{</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>    width<span class="sc">:</span> <span class="dv">100</span>%;</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>    border<span class="sc">-</span>collapse<span class="sc">:</span> separate;</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>    border<span class="sc">-</span>spacing<span class="sc">:</span> <span class="dv">1</span>px;</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>  }</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="sc">/</span><span class="er">*</span> Global plate style <span class="sc">*</span><span class="er">/</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>  table.pcr<span class="sc">-</span>plate<span class="sc">-</span>tbl td, table.pcr<span class="sc">-</span>plate<span class="sc">-</span>tbl th{</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>    width<span class="sc">:</span> <span class="dv">4</span>rem;</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>    height<span class="sc">:</span> <span class="dv">2</span>rem;</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>    border<span class="sc">:</span> <span class="dv">2</span>px solid <span class="co">#ccc;</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>    text<span class="sc">-</span>align<span class="sc">:</span> center;</span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>  }</span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="sc">/</span><span class="er">*</span> Plate well style <span class="sc">*</span><span class="er">/</span></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a>  table.pcr<span class="sc">-</span>plate<span class="sc">-</span>tbl td{</span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a>    max<span class="sc">-</span>width<span class="sc">:</span> <span class="dv">4</span>rem;</span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a>    word<span class="sc">-</span>wrap<span class="sc">:</span> <span class="cf">break</span><span class="sc">-</span>word;</span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a>  }</span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a><span class="sc">/</span><span class="er">*</span> Plate header <span class="sc">*</span><span class="er">/</span></span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a>  table.pcr<span class="sc">-</span>plate<span class="sc">-</span>tbl th{</span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a>    border<span class="sc">-</span>color<span class="sc">:</span> white;</span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a>    color<span class="sc">:</span> white;</span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a>  }</span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a><span class="sc">/</span><span class="er">*</span> Plate header even column<span class="sc">*</span><span class="er">/</span></span>
+<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a>  table.pcr<span class="sc">-</span>plate<span class="sc">-</span>tbl thead th<span class="sc">:</span>nth<span class="sc">-</span><span class="fu">child</span>(even){</span>
+<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a>    background<span class="sc">-</span>color<span class="sc">:</span> <span class="co">#3CA9E8;</span></span>
+<span id="cb5-27"><a href="#cb5-27" tabindex="-1"></a>  }</span>
+<span id="cb5-28"><a href="#cb5-28" tabindex="-1"></a><span class="sc">/</span><span class="er">*</span> Plate header odd column <span class="sc">*</span><span class="er">/</span></span>
+<span id="cb5-29"><a href="#cb5-29" tabindex="-1"></a>  table.pcr<span class="sc">-</span>plate<span class="sc">-</span>tbl thead th<span class="sc">:</span>nth<span class="sc">-</span><span class="fu">child</span>(odd){</span>
+<span id="cb5-30"><a href="#cb5-30" tabindex="-1"></a>    background<span class="sc">-</span>color<span class="sc">:</span> <span class="co">#178ACC;</span></span>
+<span id="cb5-31"><a href="#cb5-31" tabindex="-1"></a>  }</span>
+<span id="cb5-32"><a href="#cb5-32" tabindex="-1"></a><span class="sc">/</span><span class="er">*</span> Plate header odd row <span class="sc">*</span><span class="er">/</span></span>
+<span id="cb5-33"><a href="#cb5-33" tabindex="-1"></a>  th.odd<span class="sc">-</span>row{</span>
+<span id="cb5-34"><a href="#cb5-34" tabindex="-1"></a>    background<span class="sc">-</span>color<span class="sc">:</span> <span class="co">#3CA9E8;</span></span>
+<span id="cb5-35"><a href="#cb5-35" tabindex="-1"></a>  }</span>
+<span id="cb5-36"><a href="#cb5-36" tabindex="-1"></a><span class="sc">/</span><span class="er">*</span> Plate header even row <span class="sc">*</span><span class="er">/</span></span>
+<span id="cb5-37"><a href="#cb5-37" tabindex="-1"></a>  th.even<span class="sc">-</span>row{</span>
+<span id="cb5-38"><a href="#cb5-38" tabindex="-1"></a>    background<span class="sc">-</span>color<span class="sc">:</span> <span class="co">#178ACC;</span></span>
+<span id="cb5-39"><a href="#cb5-39" tabindex="-1"></a>  }</span>
+<span id="cb5-40"><a href="#cb5-40" tabindex="-1"></a><span class="sc">/</span><span class="er">*</span> Selected well <span class="sc">*</span><span class="er">/</span></span>
+<span id="cb5-41"><a href="#cb5-41" tabindex="-1"></a>  td.selected<span class="sc">-</span>well{</span>
+<span id="cb5-42"><a href="#cb5-42" tabindex="-1"></a>    border<span class="sc">:</span> <span class="dv">2</span>px solid black <span class="sc">!</span>important;</span>
+<span id="cb5-43"><a href="#cb5-43" tabindex="-1"></a>  }</span>
+<span id="cb5-44"><a href="#cb5-44" tabindex="-1"></a><span class="sc">/</span><span class="er">*</span> Toggle all sign <span class="sc">*</span><span class="er">/</span></span>
+<span id="cb5-45"><a href="#cb5-45" tabindex="-1"></a>  th.toggle<span class="sc">-</span>all {</span>
+<span id="cb5-46"><a href="#cb5-46" tabindex="-1"></a>    background<span class="sc">:</span> transparent <span class="sc">!</span>important;</span>
+<span id="cb5-47"><a href="#cb5-47" tabindex="-1"></a>    position<span class="sc">:</span> relative;</span>
+<span id="cb5-48"><a href="#cb5-48" tabindex="-1"></a>  }</span>
+<span id="cb5-49"><a href="#cb5-49" tabindex="-1"></a><span class="sc">/</span><span class="er">*</span> Toggle all sign <span class="sc">*</span><span class="er">/</span></span>
+<span id="cb5-50"><a href="#cb5-50" tabindex="-1"></a>  th.toggle<span class="sc">-</span>all<span class="sc">:</span>after {</span>
+<span id="cb5-51"><a href="#cb5-51" tabindex="-1"></a>    content<span class="sc">:</span> <span class="st">""</span>;</span>
+<span id="cb5-52"><a href="#cb5-52" tabindex="-1"></a>    position<span class="sc">:</span> absolute;</span>
+<span id="cb5-53"><a href="#cb5-53" tabindex="-1"></a>    bottom<span class="sc">:</span> <span class="dv">0</span>;</span>
+<span id="cb5-54"><a href="#cb5-54" tabindex="-1"></a>    right<span class="sc">:</span> <span class="dv">0</span>;</span>
+<span id="cb5-55"><a href="#cb5-55" tabindex="-1"></a>    width<span class="sc">:</span> <span class="dv">0</span>;</span>
+<span id="cb5-56"><a href="#cb5-56" tabindex="-1"></a>    height<span class="sc">:</span> <span class="dv">0</span>;</span>
+<span id="cb5-57"><a href="#cb5-57" tabindex="-1"></a>    display<span class="sc">:</span> block;</span>
+<span id="cb5-58"><a href="#cb5-58" tabindex="-1"></a>    border<span class="sc">-</span>left<span class="sc">:</span> <span class="dv">1</span>em solid transparent;</span>
+<span id="cb5-59"><a href="#cb5-59" tabindex="-1"></a>    border<span class="sc">-</span>bottom<span class="sc">:</span> <span class="dv">1</span>em solid transparent;</span>
+<span id="cb5-60"><a href="#cb5-60" tabindex="-1"></a>    border<span class="sc">-</span>bottom<span class="sc">:</span> <span class="dv">1</span>em solid grey;</span>
+<span id="cb5-61"><a href="#cb5-61" tabindex="-1"></a>  }</span></code></pre></div>
 <p>So if you want to set your own style of plate you can do it by:</p>
 <ul>
 <li>providing your CSS file <code>cssFile = YOUR_FILE</code>
 </li>
-<li>setting CSS file to NULL and providing CSS as text <code>cssFile = "", cssText = YOUR_TEXT</code>
+<li>setting CSS file to NULL and providing CSS as text
+<code>cssFile = "", cssText = YOUR_TEXT</code>
 </li>
-<li>extend default file with your text <code>cssText = YOUR_TEXT</code>
+<li>extend default file with your text
+<code>cssText = YOUR_TEXT</code>
 </li>
 </ul>
-<p>Note that inside Shiny app CSS loads as singleton (once for all plates) but in <strong>Rmd</strong> file it loads for every plate but works globally too - you can prevent such loading by setting <code>cssFile = ""</code></p>
-<p>To make CSS rule only for current plate add <code>#{{id}}</code> before CSS rule. For example if you want set selection border to red and well color to light green</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="../reference/pcrPlateInput.html">pcrPlateInput</a></span>(<span class="kw">inputId</span> <span class="kw">=</span> <span class="st">"customCSS"</span>, <span class="co"># Shiny input ID</span>
-              <span class="kw">label</span> <span class="kw">=</span> <span class="st">"Custom CSS: red selection and light green plate background"</span>,
-              <span class="kw">plateDescription</span> <span class="kw">=</span> <span class="no">rdml</span>$<span class="fu"><a href="https://rdrr.io/pkg/RDML/man/astable-function.html">AsTable</a></span>(),
-              <span class="kw">selection</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A01"</span>, <span class="st">"C08"</span>), <span class="co"># optional preselected wells</span>
-              <span class="kw">cssFile</span> <span class="kw">=</span> <span class="st">""</span>,
-              <span class="kw">cssText</span> <span class="kw">=</span> <span class="st">"#{{id}} td.selected-well{border: 2px solid red !important;}
-                        #{{id}} table.pcr-plate-tbl td{background-color: #ebffe0;}
-              "</span>,
-              <span class="kw">interactive</span> <span class="kw">=</span> <span class="fl">FALSE</span>
-)</pre></body></html></div>
+<p>Note that inside Shiny app CSS loads as singleton (once for all
+plates) but in <strong>Rmd</strong> file it loads for every plate but
+works globally too - you can prevent such loading by setting
+<code>cssFile = ""</code></p>
+<p>To make CSS rule only for current plate add <code>#{{id}}</code>
+before CSS rule. For example if you want set selection border to red and
+well color to light green</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/pcrPlateInput.html">pcrPlateInput</a></span><span class="op">(</span>inputId <span class="op">=</span> <span class="st">"customCSS"</span>, <span class="co"># Shiny input ID</span></span>
+<span>              label <span class="op">=</span> <span class="st">"Custom CSS: red selection and light green plate background"</span>,</span>
+<span>              plateDescription <span class="op">=</span> <span class="va">rdml</span><span class="op">$</span><span class="fu">AsTable</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>              selection <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A01"</span>, <span class="st">"C08"</span><span class="op">)</span>, <span class="co"># optional preselected wells</span></span>
+<span>              cssFile <span class="op">=</span> <span class="st">""</span>,</span>
+<span>              cssText <span class="op">=</span> <span class="st">"#{{id}} td.selected-well{border: 2px solid red !important;}</span></span>
+<span><span class="st">                        #{{id}} table.pcr-plate-tbl td{background-color: #ebffe0;}</span></span>
+<span><span class="st">              "</span>,</span>
+<span>              interactive <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span> </span></code></pre></div>
 <style type="text/css">#customCSS td.selected-well{border: 2px solid red !important;}
                         #customCSS table.pcr-plate-tbl td{background-color: #ebffe0;}
               </style>
 <div id="customCSS" class="pcr-plate">
 <label for="customCSS">Custom CSS: red selection and light green plate background</label>
-<table class="table pcr-plate-tbl">
+<table id="customCSS-pcrPlateTbl" class="table pcr-plate-tbl">
 <thead><tr>
 <th id="customCSS-toggleall" class="toggle-all"></th>
 <th id="customCSS-col_01">1</th>
@@ -999,81 +1015,99 @@ RNase P" group="STDRNase P6250RNase P" class=" selected-well" style="">STD_RNase
 </table>
 </div>
 </div>
-<div id="wells-labels-and-marks" class="section level2">
-<h2 class="hasAnchor">
-<a href="#wells-labels-and-marks" class="anchor"></a>Wells Labels and Marks</h2>
-<p>Well label, on hover text and other marks can be setted by templates. To do this <strong>pcrPlateInput</strong> use <strong>whisker</strong> package - so you can provide column names of plate description as shortcuts inside templates <code>{{COLUMN}}</code> (or <code>{{{COLUMN}}}</code> - without escaping basic HTML characters).</p>
+<div class="section level3">
+<h3 id="wells-labels-and-marks">Wells Labels and Marks<a class="anchor" aria-label="anchor" href="#wells-labels-and-marks"></a>
+</h3>
+<p>Well label, on hover text and other marks can be setted by templates.
+To do this <strong>pcrPlateInput</strong> use <strong>whisker</strong>
+package - so you can provide column names of plate description as
+shortcuts inside templates <code>{{COLUMN}}</code> (or
+<code>{{{COLUMN}}}</code> - without escaping basic HTML characters).</p>
 <ul>
 <li>
-<code>wellLabelTemplate = "{{sample}}"</code> - text inside well (label)</li>
+<code>wellLabelTemplate = "{{sample}}"</code> - text inside well
+(label)</li>
 <li>
-<code>onHoverWellTextTemplate = "{{position}}\u000A{{sample}}\u000A{{target}}"</code> - on hover text</li>
+<code>onHoverWellTextTemplate = "{{position}}\u000A{{sample}}\u000A{{target}}"</code>
+- on hover text</li>
 <li>
-<code>wellClassTemplate = NULL</code> - specific class for current well</li>
+<code>wellClassTemplate = NULL</code> - specific class for current
+well</li>
 <li>
-<code>wellStyleTemplate = NULL</code> - specific CSS style for current well</li>
+<code>wellStyleTemplate = NULL</code> - specific CSS style for
+current well</li>
 </ul>
-<p>For example we want to show <em>sample name</em>, <em>Cq</em> and <em>Cq &lt; 30</em> or <em>Cq &gt; 35</em> with colored circle as label; <em>target name</em> and <em>dye</em> as on hover text; mark <em>sample type</em> with border color by class; set different background color for each <em>sample name</em>. Also legend will be added by <code>legend = YOUR_HTML_LEGEND</code>.</p>
-<p>Note: if your plate description contains several rows with the same position - only the first will be used! So for example to print all targets for one well combine them to the new column like this <code>tbl %&gt;% group_by(position) %&gt;% mutate(targets = paste(target, collapse = ", "))</code>.</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">shiny</span>) <span class="co"># to use tags</span></pre></body></html></div>
-<pre><code>## 
-## Attaching package: 'shiny'</code></pre>
-<pre><code>## The following object is masked from 'package:shinyMolBio':
-## 
-##     runExample</code></pre>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">plateDescription</span> <span class="kw">&lt;-</span> <span class="no">rdml</span>$<span class="fu"><a href="https://rdrr.io/pkg/RDML/man/astable-function.html">AsTable</a></span>(<span class="kw">cq</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="no">data</span>$<span class="no">cq</span>)) <span class="kw">%&gt;%</span>
-  <span class="fu">group_by</span>(<span class="no">fdata.name</span>) <span class="kw">%&gt;%</span>
-  <span class="fu">mutate</span>(<span class="kw">sampleType</span> <span class="kw">=</span> <span class="no">sample.type</span>,  <span class="co"># whisker does not support dots!</span>
-         <span class="kw">dyeId</span> <span class="kw">=</span> <span class="no">target.dyeId</span>,   <span class="co"># whisker does not support dots!</span>
-         <span class="kw">mark</span> <span class="kw">=</span> {
-           <span class="kw">if</span> (<span class="no">cq</span> <span class="kw">&lt;</span> <span class="fl">30</span>) <span class="st">"&lt;span class='filled-circle1'&gt;&lt;/span&gt;"</span>
-           <span class="kw">else</span> <span class="kw">if</span> (<span class="no">cq</span> <span class="kw">&gt;</span> <span class="fl">35</span>) <span class="st">"&lt;span class='filled-circle2'&gt;&lt;/span&gt;"</span>
-           <span class="kw">else</span> <span class="st">""</span>
-           })
-
-<span class="no">uniqSamples</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">plateDescription</span>$<span class="no">sample</span>)
-<span class="no">sampleColors</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/palettes.html">topo.colors</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">uniqSamples</span>), <span class="kw">alpha</span> <span class="kw">=</span> <span class="fl">0.3</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="no">sampleColors</span>) <span class="kw">&lt;-</span> <span class="no">uniqSamples</span>
-<span class="no">plateDescription</span> <span class="kw">&lt;-</span> <span class="no">plateDescription</span> <span class="kw">%&gt;%</span>
-  <span class="fu">group_by</span>(<span class="no">sample</span>) <span class="kw">%&gt;%</span>
-  <span class="fu">mutate</span>(<span class="kw">color</span> <span class="kw">=</span> <span class="no">sampleColors</span>[<span class="no">sample</span>] <span class="kw">%&gt;%</span>
-           <span class="fu"><a href="https://rdrr.io/r/grDevices/col2rgb.html">col2rgb</a></span>() <span class="kw">%&gt;%</span>
-           <span class="no">.</span>[,<span class="fl">1</span>] <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.2</span>) <span class="kw">%&gt;%</span>
-           <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="kw">collapse</span> <span class="kw">=</span> <span class="st">","</span>))
-
-<span class="fu"><a href="../reference/pcrPlateInput.html">pcrPlateInput</a></span>(<span class="st">"customLabel"</span>, <span class="st">"Custom labels and marks"</span>,
-              <span class="no">plateDescription</span>,
-              <span class="kw">wellLabelTemplate</span> <span class="kw">=</span> <span class="st">"{{{mark}}}{{sample}} Cq={{cq}}"</span>,
-              <span class="kw">onHoverWellTextTemplate</span> <span class="kw">=</span> <span class="st">"{{target}}: {{dyeId}}"</span>,
-              <span class="kw">wellClassTemplate</span> <span class="kw">=</span> <span class="st">"{{sampleType}}"</span>,
-              <span class="kw">wellStyleTemplate</span> <span class="kw">=</span> <span class="st">"background-color:rgba({{color}});"</span>,
-              <span class="kw">cssFile</span> <span class="kw">=</span> <span class="st">""</span>,
-              <span class="kw">cssText</span> <span class="kw">=</span> <span class="st">"#{{id}} td.selected-well{border: 2px solid red !important;}
-               #{{id}} .ntc{border: 3px solid Plum;}
-               #{{id}} .unkn{border: 3px solid Salmon;}
-               #{{id}} .pos{border: 3px solid PaleGreen ;}
-               #{{id}} .neg{border: 3px solid LightGrey ;}
-               #{{id}} .std{border: 3px solid DeepSkyBlue ;}
-               #{{id}} .filled-circle1 {padding: 2px 11px;
-                  border-radius: 100%; background-color: Maroon;}
-               #{{id}} .filled-circle2 {padding: 2px 11px;
-                  border-radius: 100%; background-color: Orange;}"</span>,
-              <span class="kw">legend</span> <span class="kw">=</span>
-                <span class="no">tags</span>$<span class="fu"><a href="https://rdrr.io/pkg/shiny/man/builder.html">div</a></span>(
-                  <span class="no">tags</span>$<span class="fu"><a href="https://rdrr.io/pkg/shiny/man/builder.html">span</a></span>(<span class="kw">class</span> <span class="kw">=</span> <span class="st">"filled-circle1"</span>), <span class="st">"Cq &lt; 30"</span>,
-                  <span class="no">tags</span>$<span class="fu"><a href="https://rdrr.io/pkg/shiny/man/builder.html">br</a></span>(),
-                  <span class="no">tags</span>$<span class="fu"><a href="https://rdrr.io/pkg/shiny/man/builder.html">span</a></span>(<span class="kw">class</span> <span class="kw">=</span> <span class="st">"filled-circle2"</span>), <span class="st">"Cq &gt; 35"</span>,
-                  <span class="no">tags</span>$<span class="fu"><a href="https://rdrr.io/pkg/shiny/man/builder.html">br</a></span>(),
-                  <span class="no">tags</span>$<span class="fu"><a href="https://rdrr.io/pkg/shiny/man/builder.html">span</a></span>(
-                    <span class="no">tags</span>$<span class="fu"><a href="https://rdrr.io/pkg/shiny/man/builder.html">span</a></span>(<span class="kw">class</span> <span class="kw">=</span> <span class="st">"ntc"</span>, <span class="st">"NTC"</span>),
-                    <span class="no">tags</span>$<span class="fu"><a href="https://rdrr.io/pkg/shiny/man/builder.html">span</a></span>(<span class="kw">class</span> <span class="kw">=</span> <span class="st">"unkn"</span>, <span class="st">"Unknown"</span>),
-                    <span class="no">tags</span>$<span class="fu"><a href="https://rdrr.io/pkg/shiny/man/builder.html">span</a></span>(<span class="kw">class</span> <span class="kw">=</span> <span class="st">"pos"</span>, <span class="st">"Positive"</span>),
-                    <span class="no">tags</span>$<span class="fu"><a href="https://rdrr.io/pkg/shiny/man/builder.html">span</a></span>(<span class="kw">class</span> <span class="kw">=</span> <span class="st">"neg"</span>, <span class="st">"Negative"</span>),
-                    <span class="no">tags</span>$<span class="fu"><a href="https://rdrr.io/pkg/shiny/man/builder.html">span</a></span>(<span class="kw">class</span> <span class="kw">=</span> <span class="st">"std"</span>, <span class="st">"Standard"</span>)
-                  )
-                ),
-              <span class="kw">interactive</span> <span class="kw">=</span> <span class="fl">FALSE</span>
-)</pre></body></html></div>
+<p>For example we want to show <em>sample name</em>, <em>Cq</em> and
+<em>Cq &lt; 30</em> or <em>Cq &gt; 35</em> with colored circle as label;
+<em>target name</em> and <em>dye</em> as on hover text; mark <em>sample
+type</em> with border color by class; set different background color for
+each <em>sample name</em>. Also legend will be added by
+<code>legend = YOUR_HTML_LEGEND</code>.</p>
+<p>Note: if your plate description contains several rows with the same
+position - only the first will be used! So for example to print all
+targets for one well combine them to the new column like this
+<code>tbl %&gt;% group_by(position) %&gt;% mutate(targets = paste(target, collapse = ", "))</code>.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/" class="external-link">shiny</a></span><span class="op">)</span> <span class="co"># to use tags</span></span></code></pre></div>
+<pre><code><span><span class="co">## </span></span>
+<span><span class="co">## Attaching package: 'shiny'</span></span></code></pre>
+<pre><code><span><span class="co">## The following object is masked from 'package:shinyMolBio':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     runExample</span></span></code></pre>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">plateDescription</span> <span class="op">&lt;-</span> <span class="va">rdml</span><span class="op">$</span><span class="fu">AsTable</span><span class="op">(</span>cq <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">cq</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">fdata.name</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>sampleType <span class="op">=</span> <span class="va">sample.type</span>,  <span class="co"># whisker does not support dots!</span></span>
+<span>         dyeId <span class="op">=</span> <span class="va">target.dyeId</span>,   <span class="co"># whisker does not support dots!</span></span>
+<span>         mark <span class="op">=</span> <span class="op">{</span></span>
+<span>           <span class="kw">if</span> <span class="op">(</span><span class="va">cq</span> <span class="op">&lt;</span> <span class="fl">30</span><span class="op">)</span> <span class="st">"&lt;span class='filled-circle1'&gt;&lt;/span&gt;"</span></span>
+<span>           <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="va">cq</span> <span class="op">&gt;</span> <span class="fl">35</span><span class="op">)</span> <span class="st">"&lt;span class='filled-circle2'&gt;&lt;/span&gt;"</span></span>
+<span>           <span class="kw">else</span> <span class="st">""</span></span>
+<span>           <span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">uniqSamples</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">plateDescription</span><span class="op">$</span><span class="va">sample</span><span class="op">)</span></span>
+<span><span class="va">sampleColors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/palettes.html" class="external-link">topo.colors</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">uniqSamples</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">sampleColors</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">uniqSamples</span></span>
+<span><span class="va">plateDescription</span> <span class="op">&lt;-</span> <span class="va">plateDescription</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">sample</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>color <span class="op">=</span> <span class="va">sampleColors</span><span class="op">[</span><span class="va">sample</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>           <span class="fu"><a href="https://rdrr.io/r/grDevices/col2rgb.html" class="external-link">col2rgb</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>           <span class="va">.</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>           <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span>collapse <span class="op">=</span> <span class="st">","</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/pcrPlateInput.html">pcrPlateInput</a></span><span class="op">(</span><span class="st">"customLabel"</span>, <span class="st">"Custom labels and marks"</span>,</span>
+<span>              <span class="va">plateDescription</span>,</span>
+<span>              wellLabelTemplate <span class="op">=</span> <span class="st">"{{{mark}}}{{sample}} Cq={{cq}}"</span>,</span>
+<span>              onHoverWellTextTemplate <span class="op">=</span> <span class="st">"{{target}}: {{dyeId}}"</span>,</span>
+<span>              wellClassTemplate <span class="op">=</span> <span class="st">"{{sampleType}}"</span>,</span>
+<span>              wellStyleTemplate <span class="op">=</span> <span class="st">"background-color:rgba({{color}});"</span>,</span>
+<span>              cssFile <span class="op">=</span> <span class="st">""</span>,</span>
+<span>              cssText <span class="op">=</span> <span class="st">"#{{id}} td.selected-well{border: 2px solid red !important;}</span></span>
+<span><span class="st">               #{{id}} .ntc{border: 3px solid Plum;}</span></span>
+<span><span class="st">               #{{id}} .unkn{border: 3px solid Salmon;}</span></span>
+<span><span class="st">               #{{id}} .pos{border: 3px solid PaleGreen ;}</span></span>
+<span><span class="st">               #{{id}} .neg{border: 3px solid LightGrey ;}</span></span>
+<span><span class="st">               #{{id}} .std{border: 3px solid DeepSkyBlue ;}</span></span>
+<span><span class="st">               #{{id}} .filled-circle1 {padding: 2px 11px;</span></span>
+<span><span class="st">                  border-radius: 100%; background-color: Maroon;}</span></span>
+<span><span class="st">               #{{id}} .filled-circle2 {padding: 2px 11px;</span></span>
+<span><span class="st">                  border-radius: 100%; background-color: Orange;}"</span>,</span>
+<span>              legend <span class="op">=</span></span>
+<span>                <span class="va">tags</span><span class="op">$</span><span class="fu">div</span><span class="op">(</span></span>
+<span>                  <span class="va">tags</span><span class="op">$</span><span class="fu">span</span><span class="op">(</span>class <span class="op">=</span> <span class="st">"filled-circle1"</span><span class="op">)</span>, <span class="st">"Cq &lt; 30"</span>,</span>
+<span>                  <span class="va">tags</span><span class="op">$</span><span class="fu">br</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>                  <span class="va">tags</span><span class="op">$</span><span class="fu">span</span><span class="op">(</span>class <span class="op">=</span> <span class="st">"filled-circle2"</span><span class="op">)</span>, <span class="st">"Cq &gt; 35"</span>,</span>
+<span>                  <span class="va">tags</span><span class="op">$</span><span class="fu">br</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>                  <span class="va">tags</span><span class="op">$</span><span class="fu">span</span><span class="op">(</span></span>
+<span>                    <span class="va">tags</span><span class="op">$</span><span class="fu">span</span><span class="op">(</span>class <span class="op">=</span> <span class="st">"ntc"</span>, <span class="st">"NTC"</span><span class="op">)</span>,</span>
+<span>                    <span class="va">tags</span><span class="op">$</span><span class="fu">span</span><span class="op">(</span>class <span class="op">=</span> <span class="st">"unkn"</span>, <span class="st">"Unknown"</span><span class="op">)</span>,</span>
+<span>                    <span class="va">tags</span><span class="op">$</span><span class="fu">span</span><span class="op">(</span>class <span class="op">=</span> <span class="st">"pos"</span>, <span class="st">"Positive"</span><span class="op">)</span>,</span>
+<span>                    <span class="va">tags</span><span class="op">$</span><span class="fu">span</span><span class="op">(</span>class <span class="op">=</span> <span class="st">"neg"</span>, <span class="st">"Negative"</span><span class="op">)</span>,</span>
+<span>                    <span class="va">tags</span><span class="op">$</span><span class="fu">span</span><span class="op">(</span>class <span class="op">=</span> <span class="st">"std"</span>, <span class="st">"Standard"</span><span class="op">)</span></span>
+<span>                  <span class="op">)</span></span>
+<span>                <span class="op">)</span>,</span>
+<span>              interactive <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <style type="text/css">#customLabel td.selected-well{border: 2px solid red !important;}
                #customLabel .ntc{border: 3px solid Plum;}
                #customLabel .unkn{border: 3px solid Salmon;}
@@ -1086,7 +1120,7 @@ RNase P" group="STDRNase P6250RNase P" class=" selected-well" style="">STD_RNase
                   border-radius: 100%; background-color: Orange;}</style>
 <div id="customLabel" class="pcr-plate">
 <label for="customLabel">Custom labels and marks</label>
-<table class="table pcr-plate-tbl">
+<table id="customLabel-pcrPlateTbl" class="table pcr-plate-tbl">
 <thead><tr>
 <th id="customLabel-toggleall" class="toggle-all"></th>
 <th id="customLabel-col_01">1</th>
@@ -1259,48 +1293,59 @@ Cq &gt; 35
 </div>
 </div>
 </div>
-<div id="interactive-pcr-plate" class="section level1">
-<h1 class="hasAnchor">
-<a href="#interactive-pcr-plate" class="anchor"></a>Interactive PCR Plate</h1>
-<p>Run <code><a href="../reference/runExample.html">shinyMolBio::runExample("pcrPlateInput")</a></code> to see interactive PCR plate in action. This demo <strong>Shiny App</strong> allows you to open PCR plate via <strong>RDML</strong> package and view in two independent plates: one with default style and second with custom. You can click on wells and see which of them are selected after that. Available click targets are:</p>
+<div class="section level2">
+<h2 id="interactive-pcr-plate">Interactive PCR Plate<a class="anchor" aria-label="anchor" href="#interactive-pcr-plate"></a>
+</h2>
+<p>Run <code>shinyMolBio::runExample("pcrPlateInput")</code> to see
+interactive PCR plate in action. This demo <strong>Shiny App</strong>
+allows you to open PCR plate via <strong>RDML</strong> package and view
+in two independent plates: one with default style and second with
+custom. You can click on wells and see which of them are selected after
+that. Available click targets are:</p>
 <ul>
 <li>Click-Well - toggle selection of the well</li>
 <li>Dbl-Click-Well - select only this well (deselect other)</li>
-<li>Ctrl-Click-Well - select group of wells defined by <code>wellGroupTemplate</code>
+<li>Ctrl-Click-Well - select group of wells defined by
+<code>wellGroupTemplate</code>
 </li>
 <li>Click-TopLeftCorner - toggle selection of the total plate</li>
 <li>Click-ColumnHeader - toggle selection of the column</li>
-<li>Dbl-Click-ColumnHeader - select only this column (deselect other)</li>
+<li>Dbl-Click-ColumnHeader - select only this column (deselect
+other)</li>
 <li>Click-RowHeader - toggle selection of the row</li>
 <li>Dbl-Click-RowHeader - select only this row (deselect other)</li>
 <li>Hover - highlights well</li>
 </ul>
-<p>Also this app shows action of <code>updatePcrPlateInput</code> function. Clicking on <em>Select Random Well</em> button selects well on the second plate.</p>
+<p>Also this app shows action of <code>updatePcrPlateInput</code>
+function. Clicking on <em>Select Random Well</em> button selects well on
+the second plate.</p>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
+      </div>
 
 </div>
 
 
 
       <footer><div class="copyright">
-  <p>Developed by Konstantin A. Blagodatskikh.</p>
+  <p></p>
+<p>Developed by Konstantin A. Blagodatskikh.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
       </footer>
 </div>
 
-  
+
+
+
 
 
   </body>
