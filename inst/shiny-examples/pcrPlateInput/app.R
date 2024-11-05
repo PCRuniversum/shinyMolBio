@@ -37,7 +37,10 @@ server <- function(input, output, session) {
   values <- reactiveValues()
 
   observeEvent(input$exmplFile, {
-    values$path <- system.file("/extdata/test.rdml", package = "shinyMolBio")
+    values$path <-
+      system.file("/extdata/BioRad_qPCR_melt.rdml",
+                  package = "RDML")
+      #system.file("/extdata/test.rdml", package = "shinyMolBio")
   })
 
   observeEvent(input$rdmlFile$datapath, {
@@ -76,15 +79,13 @@ server <- function(input, output, session) {
     isolate({
       pcrPlateInput("pcrPlate2", "Plate 2",
                     rdmlFile()$table %>%
-                      filter(target.dyeId == rdmlFile()$table$target.dyeId[1]) %>%
-                      group_by(fdata.name) %>%
+                      group_by(position) %>%
                       mutate(sampleType = sample.type,  #whisker does not support dots!
                              cq = {
-                               if (is.na(cq)) 100
-                               else cq },
+                               ifelse(is.na(cq), 100, cq) },
                              mark = {
-                               if (cq < 30) "<span class='filled-circle1'></span>"
-                               else if (cq > 35) "<span class='filled-circle2'></span>"
+                               if (any(cq <= 30)) "<span class='filled-circle1'></span>"
+                               else if (any(cq >= 35)) "<span class='filled-circle2'></span>"
                                else ""
                              }),
                     pcrFormat = rdmlFile()$format,
@@ -104,9 +105,9 @@ server <- function(input, output, session) {
                     # tags$div(tags$span(class = ".filled-circle1"), "Sdsf")
                     legend =
                       tags$div(
-                        tags$span(class = "filled-circle1"), "Cq < 30",
+                        tags$span(class = "filled-circle1"), "Cq <= 30",
                         tags$br(),
-                        tags$span(class = "filled-circle2"), "Cq > 35",
+                        tags$span(class = "filled-circle2"), "Cq >= 35",
                         tags$br(),
                         tags$span(
                           tags$span(class = "ntc", "NTC"),
@@ -146,11 +147,12 @@ server <- function(input, output, session) {
   output$mcurves1 <- renderUI({
     req(rdmlFile())#, input$pcrPlate2)
     renderMeltCurves("meltCurves1", "curves1",
-                     rdmlFile()$rdml$GetFData(rdmlFile()$table,
-                                              dp.type = "mdp",
-                                              long.table = TRUE) %>%
-                       group_by(fdata.name) %>%
-                       mutate(fluor = c(NA, diff(fluor))),
+                     rdmlFile()$rdml$GetFData(
+                       rdmlFile()$table,
+                       dp.type = "mdp",
+                       long.table = TRUE) [,
+                                           fluor := c(NA, diff(fluor)),
+                                           by = fdata.name],
                      # plotlyCode = plotly::layout(yaxis = list(title = "Fluorescence")),
                      colorBy = "sample",
                      linetypeBy = "target.dyeId")

@@ -5,7 +5,7 @@ output:
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{renderAmpCurves and renderMeltCurves overview}
+  %\VignetteIndexEntry{renderAmpCurves and renderMeltCurves}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -79,7 +79,8 @@ dataType$set("public", "Process",
                      self$adp$fpoints$fluor,
                      bg.range = c(10,20))$y.norm
                # Calc Cq by threshold method
-               self$cq <- th.cyc(self$adp$fpoints$cyc, self$adp$fpoints$fluor, r = thValue)[1, 1]
+               cq <- th.cyc(self$adp$fpoints$cyc, self$adp$fpoints$fluor, r = thValue)[1, 1]
+               self$cq <- if(!is.na(cq)) cq else NULL
                # Write threshold value
                self$quantFluor <- thValue
              },
@@ -104,6 +105,7 @@ renderAmpCurves("th",
                 "Show Thershold Lines", 
                 rdml$GetFData(tbl, long.table = TRUE), 
                 colorBy = "target",
+                showCq = TRUE,
                 thBy = "target", # Add threshold lines (separated by targets)
                 interactive = FALSE) 
 ```
@@ -176,7 +178,11 @@ renderMeltCurves("melt",
 
 # Hiding and highlighting curves
 
-Individual curves can be hidden without plot redraw. Use *updateCurves* function with *fdata.name* as *hideCurves* param. Or highlighted with *fdata.name* as *highlightCurves* param.
+Individual curves can be hidden without plot redraw. Use *updateCurves* function
+with *fdata.name* as *hideCurves* param. Or highlighted with *fdata.name* as *highlightCurves* param.
 Run `shinyMolBio::runExample("pcrPlateInput")` to see this in action. 
 Curves hiding occures after wells selection at PCR plate and higlighting after 
 mouse hovering above PCR plate or details table.
+
+Also curves can be hided or highlighted at the plot creation passing table with 
+columns *hideCurve* and *highlightCurve* respectively.
