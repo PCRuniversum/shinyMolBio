@@ -270,36 +270,6 @@ renderCurves <- function(inputId,
                    yaxis = list(title = yAxisTitle,
                                 type = if (logScale) "log" else "linear"))
 
-  if (showMarkers) {
-    assertNames(colnames(curves),
-                must.include = c("markers"))
-    # prepare markers
-    maxX <- max(curves$x, na.rm = TRUE)
-    # replace all NA cq with max cycle
-    curves[is.na(markers), markers := maxX]
-    curves[
-      ,
-      isMarker := replace(
-        rep(FALSE, length(x)),
-        sapply(unique(markers), # set TRUE to closest cyc
-               function(marker)
-                 which.min(abs(x - marker))), TRUE),
-      by = "fdata.name"]
-    cqs <- curves[isMarker == TRUE, ]
-    p <- add_trace(p,
-                   data = cqs,
-                   split = ~fdata.name,
-                   name = ~curveName,
-                   customdata = ~fdata.name,
-                   hoverinfo = "x+y+name",
-                   legendgroup = ~legendGroup,
-                   x = ~x, y = ~y,
-                   color = ~I(color),
-                   marker = list(size = 7),
-                   type = "scatter", mode = "markers",
-                   showlegend = FALSE
-    )
-  }
 
   if (!is.null(thBy)) {
     assertNames(colnames(curves),
@@ -325,6 +295,30 @@ renderCurves <- function(inputId,
                       color = ~I(color),
                       hoverinfo = "y+name")
 
+  }
+
+  if (showMarkers) {
+    assertNames(colnames(curves),
+                must.include = c("markers", "quantFluor"))
+    cqs <- curves[, .(curveName = curveName[1],
+                      legendGroup = legendGroup[1],
+                      markers = markers[1],
+                      quantFluor = quantFluor[1],
+                      color = color[1]),
+                  .(fdata.name)]
+    p <- add_trace(p,
+                   data = cqs,
+                   split = ~fdata.name,
+                   name = ~curveName,
+                   customdata = ~fdata.name,
+                   hoverinfo = "x+y+name",
+                   legendgroup = ~legendGroup,
+                   x = ~markers, y = ~quantFluor,
+                   color = ~I(color),
+                   marker = list(size = 7),
+                   type = "scatter", mode = "markers",
+                   showlegend = FALSE
+    )
   }
 
   css <-
