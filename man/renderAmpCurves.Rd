@@ -23,7 +23,7 @@ renderAmpCurves(inputId, label = NULL, ampCurves, colorBy = NULL,
 
 \item{logScale}{Converts plot to \code{log(RFU)}.}
 
-\item{showCq}{Shows Cq with dots (\code{cq} column have to be provided!).}
+\item{showCq}{Shows Cq with dots (\code{cq} and \code{quantFluor} columns have to be provided!).}
 
 \item{showLegend}{Show plot legend.}
 

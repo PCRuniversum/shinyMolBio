@@ -42,7 +42,7 @@
 #'
 #' @author Konstantin A. Blagodatskikh <k.blag@@yandex.ru>
 #' @keywords PCR RDML Shiny Input
-#' @import RDML shiny dplyr stringr checkmate
+#' @import RDML shiny stringr checkmate
 #' @importFrom purrr map
 #' @importFrom  whisker whisker.render
 #'
@@ -106,12 +106,12 @@ pcrPlateInput <- function(inputId,
 
   ns <- NS(inputId)
 
-
-  plateDescription <- plateDescription %>%
-    group_by(.data$position) %>%
-    mutate(targets = paste(.data$target, collapse = "; "),
-           target.dyeIds = paste(.data$target.dyeId, collapse = "; ")) %>%
-    distinct(.data$react.id, .keep_all = TRUE)
+  plateDescription <- as.data.table(plateDescription)[,
+                   c("targets", "target.dyeIds") :=
+                     list(paste(target, collapse = "; "),
+                          paste(target.dyeId, collapse = "; ")),
+                   by = "position"][
+                     rowid(position) == 1,]
 
   selectionColumn <- {
     if (is.numeric(selection))
@@ -149,7 +149,7 @@ pcrPlateInput <- function(inputId,
         function(col) {
           sprintf("<th id='%s'>%s</th>",
                   ns(sprintf("col_%02i", col)),
-                  col)}) %>%
+                  col)}) |>
       paste(collapse = ""),
     map(LETTERS[1:pcrFormat$rows],
         function(row){
@@ -185,14 +185,14 @@ pcrPlateInput <- function(inputId,
                                 whisker.render(wellLabelTemplate,
                                                trow)
                         )
-                      }) %>%
+                      }) |>
                     paste(collapse = ""))
-        }) %>%
-      paste(collapse = "")) %>%
+        }) |>
+      paste(collapse = "")) |>
     HTML()
   css <- tags$style(type = "text/css",
                     paste0(whisker.render(
-                      suppressWarnings(readLines(cssFile, warn = FALSE, encoding = "UTF-8")) %>%
+                      suppressWarnings(readLines(cssFile, warn = FALSE, encoding = "UTF-8")) |>
                         paste0( collapse = ""),
                       list(id = inputId)
                     ),

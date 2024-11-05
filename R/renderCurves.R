@@ -15,7 +15,7 @@
 #' @param colorBy Column name that contains color levels data.
 #' @param linetypeBy Column name that contains linetype levels data.
 #' @param logScale Converts plot to \code{log(RFU)}.
-#' @param showCq Shows Cq with dots (\code{cq} column have to be provided!).
+#' @param showCq Shows Cq with dots (\code{cq} and \code{quantFluor} columns have to be provided!).
 #' @param showLegend Show plot legend.
 #' @param thBy Column name that separates threshold values (\code{quantFluor}
 #'   column have to be provided!).
@@ -57,9 +57,8 @@ renderAmpCurves <- function(inputId,
   setnames(ampCurves, c("cyc", "fluor"), c("x", "y"))
   if (showCq) {
     assertNames(colnames(ampCurves),
-                must.include = c("cq"))
-    ampCurves <- ampCurves %>%
-      rename(markers = .data$cq)
+                must.include = c("cq", "quantFluor"))
+    setnames(ampCurves, "cq", "markers")
   }
 
   renderCurves(inputId,
@@ -97,7 +96,7 @@ renderAmpCurves <- function(inputId,
 #' (can be \code{diffFluor} for derivative curves).
 #' @param colorBy Column name that contains color levels data.
 #' @param linetypeBy Column name that contains linetype levels data.
-#' @param showTm Shows Tm with dots (\code{tm} column have to be provided!)
+#' @param showTm Shows Tm with dots (\code{tm} and \code{quantFluor} columns have to be provided!)
 #' @param showLegend Show plot legend.
 #' @param plotlyCode Your quoted custom plotly code.
 #' @param cssFile Path to the css styles file.
@@ -131,12 +130,11 @@ renderMeltCurves <- function(inputId,
                              interactive = TRUE) {
   assertNames(colnames(meltCurves),
               must.include = c("fdata.name", "tmp", fluorColumn))
-  setnames(ampCurves, c("tmp", fluorColumn), c("x", "y"))
+  setnames(meltCurves, c("tmp", fluorColumn), c("x", "y"))
   if (showTm) {
     assertNames(colnames(meltCurves),
-                must.include = c("tm"))
-    meltCurves <- meltCurves %>%
-      rename(markers = .data$tm)
+                must.include = c("tm", "quantFluor"))
+    setnames(meltCurves, "tm", "markers")
   }
 
   renderCurves(inputId,

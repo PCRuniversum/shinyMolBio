@@ -80,12 +80,17 @@ renderADplot <- function(inputId,
   assertString(cssText, null.ok = TRUE)
   assertLogical(interactive)
 
-  adData <- adData %>%
-    filter(get(targetColumn) == xAxisTarget |
-             get(targetColumn) == yAxisTarget) %>%
-    mutate(pointName = sprintf("%s %s %s", .data$position,
-                               .data$sample,
-                               .data$sample.type))
+  # adData <- adData %>%
+  #   filter(get(targetColumn) == xAxisTarget |
+  #            get(targetColumn) == yAxisTarget) %>%
+  #   mutate(pointName = sprintf("%s %s %s", .data$position,
+  #                              .data$sample,
+  #                              .data$sample.type))
+  adData <- as.data.table(adData)[targetColumn == xAxisTarget |
+                     targetColumn == yAxisTarget,
+                   pointName := sprintf("%s %s %s", position,
+                                       sample,
+                                       sample.type)]
 
   adData2 <- data.frame(
     position = adData$position,

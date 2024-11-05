@@ -24,7 +24,7 @@ renderMeltCurves(inputId, label = NULL, meltCurves,
 
 \item{linetypeBy}{Column name that contains linetype levels data.}
 
-\item{showTm}{Shows Tm with dots (\code{tm} column have to be provided!)}
+\item{showTm}{Shows Tm with dots (\code{tm} and \code{quantFluor} columns have to be provided!)}
 
 \item{showLegend}{Show plot legend.}
 
