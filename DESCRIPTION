@@ -1,8 +1,8 @@
 Package: shinyMolBio
 Type: Package
 Title: Molecular Biology Visualization Tools for 'Shiny' Apps
-Version: 0.5
-Date: 2024-09-26
+Version: 0.6
+Date: 2024-11-05
 Authors@R: c(
   person("Konstantin A.", "Blagodatskikh",
   email = "k.blag@yandex.ru", role = c("cre", "aut")))
