@@ -1,5 +1,5 @@
 library(shiny)
-library(RDML)
+library(RDML7)
 library(shinyMolBio)
 library(tidyverse)
 library(DT)
@@ -39,7 +39,7 @@ server <- function(input, output, session) {
   observeEvent(input$exmplFile, {
     values$path <-
       system.file("/extdata/BioRad_qPCR_melt.rdml",
-                  package = "RDML")
+                  package = "RDML7")
       #system.file("/extdata/test.rdml", package = "shinyMolBio")
   })
 
@@ -49,15 +49,15 @@ server <- function(input, output, session) {
 
   rdmlFile <- reactive({
     req(values$path)
-    rdml <- RDML$new(values$path)
-    expId <- as.character(rdml$experiment[[1]]$id)
+    rdml <- readRDML(values$path)
+    expId <- as.character(rdml@experiment[[1]]@id)
     # runId <- as.character(rdml$experiment[[expId]]$run[[1]]$id)
-    list(table =  rdml$AsTable(cq = data$cq) %>%
-           filter(exp.id == expId
+    list(table =  asTable(rdml, cq = data$cq) %>%
+           filter(.data$expId == .env$expId
                   # &
                   # run.id == runId
            ),
-         format = rdml$experiment[[expId]]$run[[1]]$pcrFormat,
+         format = rdml@experiment[[expId]]@run[[1]]@pcrFormat,
          rdml = rdml)
   })
 
@@ -80,7 +80,7 @@ server <- function(input, output, session) {
       pcrPlateInput("pcrPlate2", "Plate 2",
                     rdmlFile()$table %>%
                       group_by(position) %>%
-                      mutate(sampleType = sample.type,  #whisker does not support dots!
+                      mutate(sampleType = sampleType,
                              cq = {
                                ifelse(is.na(cq), 100, cq) },
                              mark = {
@@ -133,12 +133,12 @@ server <- function(input, output, session) {
   output$curves1 <- renderUI({
     req(rdmlFile())#, input$pcrPlate2)
     renderAmpCurves("pcrCurves1", "curves1",
-                    rdmlFile()$rdml$GetFData(rdmlFile()$table,
-                                             long.table = TRUE) %>%
+                    getFData(rdmlFile()$rdml, rdmlFile()$table,
+                                             longTable = TRUE) %>%
                       mutate(quantFluor = 150),
                     # plotlyCode = plotly::layout(yaxis = list(title = "Fluorescence")),
                     colorBy = "sample",
-                    linetypeBy = "target.dyeId",
+                    linetypeBy = "targetDyeId",
                     showCq = TRUE,
                     showLegend = TRUE,
                     logScale = input$logScale)
@@ -147,22 +147,22 @@ server <- function(input, output, session) {
   output$mcurves1 <- renderUI({
     req(rdmlFile())#, input$pcrPlate2)
     renderMeltCurves("meltCurves1", "curves1",
-                     rdmlFile()$rdml$GetFData(
-                       rdmlFile()$table,
-                       dp.type = "mdp",
-                       long.table = TRUE) [,
+                     getFData(
+                       rdmlFile()$rdml, rdmlFile()$table,
+                       dpType = "mdp",
+                       longTable = TRUE) [,
                                            fluor := c(NA, diff(fluor)),
-                                           by = fdata.name],
+                                           by = fdataName],
                      # plotlyCode = plotly::layout(yaxis = list(title = "Fluorescence")),
                      colorBy = "sample",
-                     linetypeBy = "target.dyeId")
+                     linetypeBy = "targetDyeId")
   })
 
   output$showDyesUI <- renderUI({
     req(rdmlFile())
     selectInput("showDyes", "Dyes",
-                choices = rdmlFile()$table$target.dyeId %>% unique(),
-                selected = rdmlFile()$table$target.dyeId %>% unique(),
+                choices = rdmlFile()$table$targetDyeId %>% unique(),
+                selected = rdmlFile()$table$targetDyeId %>% unique(),
                 multiple = TRUE)
   })
 
@@ -173,8 +173,8 @@ server <- function(input, output, session) {
       toHideCurves <-
         rdmlFile()$table %>%
         filter(!(position %in% input$pcrPlate2) |
-                 !(target.dyeId %in% input$showDyes)) %>%
-        .$fdata.name
+                 !(targetDyeId %in% input$showDyes)) %>%
+        .$fdataName
       updateCurves(session,
                    "pcrCurves1",
                    hideCurves = toHideCurves)
@@ -206,7 +206,7 @@ server <- function(input, output, session) {
     {
       fdataNames <- rdmlFile()$table %>%
         filter(position %in% input$pcrPlate2_hover) %>%
-        .$fdata.name
+        .$fdataName
       updateCurves(session,
                    "pcrCurves1",
                    highlightCurves = fdataNames)

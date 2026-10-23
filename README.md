@@ -7,6 +7,10 @@
 # shinyMolBio
 Molecular biology visualization tools for Shiny apps
 
+Version 0.7.0 uses the S7-based `RDML7` package for reading and manipulating
+RDML data. The visualization functions continue to accept the legacy column
+names returned by `RDML7::asTable()` and `RDML7::getFData()`.
+
 # Manual
 
 The manual is available [online](https://pcruniversum.github.io/shinyMolBio/)

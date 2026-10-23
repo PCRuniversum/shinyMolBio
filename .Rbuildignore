@@ -1,0 +1,6 @@
+^shinyMolBio\.Rcheck$
+^shinyMolBio_[0-9.]+\.tar\.gz$
+^.*\.Rproj$
+^\.Rproj\.user$
+^\.git$
+^\.travis\.yml$

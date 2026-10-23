@@ -1,3 +1,10 @@
+Changes from Version 0.6 to 0.7.0 [October 23 2026]
+* migrated from the R6-based RDML package to the S7-based RDML7 package
+* added native RDML7 1.0.2 camelCase table support while retaining legacy aliases
+* updated examples, demo applications, documentation, and vignettes for RDML7
+* added integration tests for PCR plates, amplification curves, and AD plots
+* fixed channel filtering in allelic discrimination plots
+* corrected package dependency declarations and S3 method signatures for CRAN
 Changes from Version 0.5 to 0.6 [November 05 2024]
 * Cq and Tm on plots algorithm updated
 Changes from Version 0.4 to 0.5 [September 26 2024]

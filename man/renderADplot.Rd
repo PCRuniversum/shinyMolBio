@@ -17,7 +17,7 @@ renderADplot(inputId, label = NULL, adData,
 \item{label}{Display label for the control, or \code{NULL} for no label.}
 
 \item{adData}{Allelic descrimination data with
-\code{RDML$AsTable()} format.}
+\code{RDML7::asTable()} format.}
 
 \item{targetColumn}{Column name that contains axis splitting (dye or target).}
 
@@ -46,25 +46,23 @@ Renders a reactive allelic discrimination plot that is suitable for
 assigning to an \code{UI output} slot.
 }
 \examples{
-library(RDML)
-rdml <- RDML$new(system.file("/extdata/test.rdml", package = "shinyMolBio"))
-tbl <- rdml$AsTable(endPointRFU = mean(tail(data$adp$fpoints$fluor, 5)))
-tbl <- group_by(tbl, position)
-tbl <- mutate(tbl,
-              genotype = paste(
+library(RDML7)
+rdml <- readRDML(system.file("extdata", "test.rdml", package = "shinyMolBio"))
+tbl <- asTable(rdml, endPointRFU = mean(tail(data$adp$fpoints$fluor, 5)))
+tbl[, genotype := paste(
                 if (endPointRFU[1] > 400 && endPointRFU[2] > 400) "AG"
                 else if (endPointRFU[1] > 400) "AA"
                 else if (endPointRFU[2] > 400) "GG"
                 else "NA"
-              ))
+              ), by = position]
 renderADplot("f", "aa", tbl, polar = TRUE, showLegend = TRUE)
 }
 \seealso{
 \code{\link{updateADplot}}
 
-Other render elements: 
-\code{\link{renderAmpCurves}()},
-\code{\link{renderMeltCurves}()}
+Other render elements:
+\code{\link[=renderAmpCurves]{renderAmpCurves()}},
+\code{\link[=renderMeltCurves]{renderMeltCurves()}}
 }
 \author{
 Konstantin A. Blagodatskikh <k.blag@yandex.ru>

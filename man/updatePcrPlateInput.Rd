@@ -28,14 +28,16 @@ Change the value of a PCR plate input control on the client
 }
 \examples{
 ## Only run examples in interactive R sessions
-library(RDML)
+library(RDML7)
 if (interactive()) {
+rdml <- readRDML(system.file("extdata", "test.rdml",
+                             package = "shinyMolBio"))
 ui <- fluidPage(
     pcrPlateInput("plate1",
                    "Plate 1",
-                   RDML$new(system.file("/extdata/stepone_std.rdml", package = "RDML"))$AsTable(),
-                  pcrFormatType$new(8,12,labelFormatType$new("ABC"),
-                                         labelFormatType$new("123"))),
+                   asTable(rdml),
+                  pcrFormatType(8L, 12L, labelFormatType("ABC"),
+                                          labelFormatType("123"))),
    verbatimTextOutput("selected"),
    actionButton("selectWellBtn",
                 "Select Well A01-A03")

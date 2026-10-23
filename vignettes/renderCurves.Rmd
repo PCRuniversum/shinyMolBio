@@ -12,20 +12,22 @@ vignette: >
 # Introduction
 
 **renderAmpCurves** and **renderMeltCurves** function represents amplification and melting data from real-time PCR experiments as curves based on **plotly** package.
-Main advantage of using this functions instead of regular plot renders is that it glued with **RDML** package. Minimal usage recures only `GetFData(long.table = TRUE)` function output. Also it has interactive feature - fast curves hiding without total plot redraw.
+The main advantage over regular plot rendering is direct integration with
+**RDML7** data. Minimal usage requires only the output of
+`getFData(longTable = TRUE)`. Curves can also be hidden without redrawing the
+whole plot.
 
 ```{r, results='hide', message=FALSE, warning=FALSE}
 library(shinyMolBio)
 library(tidyverse)
-library(RDML)
-library(chipPCR)
+library(RDML7)
 # load RDML file
-rdml <- RDML$new(system.file("/extdata/stepone_std.rdml", package = "RDML"))
+rdml <- readRDML(system.file("extdata", "stepone_std.rdml", package = "RDML7"))
 ```
 ```{r, results='asis'}
 renderAmpCurves(inputId = "firstLook", # Shiny input ID
               label = "First Look", # optional plot label 
-              ampCurves = rdml$GetFData(long.table = TRUE), # Amplification curves
+              ampCurves = getFData(rdml, longTable = TRUE), # Amplification curves
               interactive = FALSE
 ) 
 ```
@@ -39,14 +41,14 @@ Curve color can be directly provided by adding column **color** to **ampCurves**
 ```{r, results='asis'}
 renderAmpCurves(inputId = "color1",
                 "Color by Sample Name",
-              ampCurves = rdml$GetFData(long.table = TRUE),
+              ampCurves = getFData(rdml, longTable = TRUE),
               colorBy = "sample", # sample name will define color
               interactive = FALSE
 ) 
 
 renderAmpCurves(inputId = "color2",
                 "All 'red'",
-              ampCurves = rdml$GetFData(long.table = TRUE) %>% 
+              ampCurves = getFData(rdml, longTable = TRUE) %>%
                 mutate(color = "red"), # All curves will be red
               interactive = FALSE
 )
@@ -59,8 +61,8 @@ Curve linetype can be setted by choosing column that defines linetype with **lin
 ```{r, results='asis'}
 renderAmpCurves(inputId = "linetype",
                 "Different Linetypes",
-              ampCurves = rdml$GetFData(long.table = TRUE),
-              linetypeBy = "sample.type", # sample.type will define color
+              ampCurves = getFData(rdml, longTable = TRUE),
+              linetypeBy = "sampleType", # sampleType will define line type
               interactive = FALSE
 ) 
 ```
@@ -70,40 +72,17 @@ renderAmpCurves(inputId = "linetype",
 Threshold lines can be shown by choosing column that splits different threshold values with **thBy** param. Then input table have to contain *quantFluor* column.
 
 ```{r, results='asis'}
-# Create function for curves preprocessing
-dataType$set("public", "Process",
-             function(thValue) {
-               # Subtract background
-               private$.adp$fpoints$fluor <- 
-                 CPP(self$adp$fpoints$cyc,
-                     self$adp$fpoints$fluor,
-                     bg.range = c(10,20))$y.norm
-               # Calc Cq by threshold method
-               cq <- th.cyc(self$adp$fpoints$cyc, self$adp$fpoints$fluor, r = thValue)[1, 1]
-               self$cq <- if(!is.na(cq)) cq else NULL
-               # Write threshold value
-               self$quantFluor <- thValue
-             },
-             overwrite = TRUE)
-
-rdml <- RDML$new(system.file("/extdata/lc96_bACTXY.rdml", package = "RDML"))
+rdml <- readRDML(system.file("extdata", "lc96_bACTXY.rdml", package = "RDML7"))
 
 # Manual threshold values for different targets
 thValues <- c("bACT" = 0.03, "X" = 0.05, "Y" = 0.04, "IPC" = 0.01)
 
-# Preprocess every curve
-for (react in rdml$experiment[[1]]$run[[1]]$react) {
-  for (fdata in react$data) {
-    fdata$Process(thValues[fdata$tar$id])
-  }
-}
-
-
-tbl <- rdml$AsTable(quantFluor = data$quantFluor, # Add threshold values to table
-                    cq = data$cq)
+tbl <- asTable(rdml,
+               quantFluor = unname(thValues[as.character(data$targetId)]),
+               cq = data$cq)
 renderAmpCurves("th", 
                 "Show Thershold Lines", 
-                rdml$GetFData(tbl, long.table = TRUE), 
+                getFData(rdml, tbl, longTable = TRUE),
                 colorBy = "target",
                 showCq = TRUE,
                 thBy = "target", # Add threshold lines (separated by targets)
@@ -117,10 +96,10 @@ You can show *Cq* or *Tm* values on curves as markers setting `showCq = TRUE` or
 ```{r, results='asis'}
 renderAmpCurves(inputId = "cq",
                 "Show Cq Values",
-              ampCurves = rdml$GetFData(tbl, 
+              ampCurves = getFData(rdml, tbl,
               # Cq and quantFluor values are obtained
               # from file on previous step
-                long.table = TRUE), 
+                longTable = TRUE),
               showCq = TRUE, # Add Cq markers to curves
               colorBy = "sample",
               interactive = FALSE
@@ -139,7 +118,7 @@ markTbl <- tbl %>%
 
 renderAmpCurves("th", 
                 "Show Thershold Lines", 
-                rdml$GetFData(tbl, long.table = TRUE), 
+                getFData(rdml, tbl, longTable = TRUE),
                 colorBy = "target",
                 plotlyCode = quote(
                   # Add Cq values for tubes D03 and D07 for target bACT as blue points
@@ -163,10 +142,10 @@ renderAmpCurves("th",
 
 ```{r, results='asis'}
 # load RDML file
-rdml <- RDML$new(system.file("/extdata/BioRad_qPCR_melt.rdml",
-                             package = "RDML"))
-mdps <- rdml$GetFData(dp.type = "mdp", long.table = TRUE)
-mdps[, diffFluor := c(0, diff(fluor)) * -1, by = fdata.name]
+rdml <- readRDML(system.file("extdata", "BioRad_qPCR_melt.rdml",
+                             package = "RDML7"))
+mdps <- getFData(rdml, dpType = "mdp", longTable = TRUE)
+mdps[, diffFluor := c(0, diff(fluor)) * -1, by = fdataName]
 
 renderMeltCurves("melt", 
                 "Show melting curves",
@@ -179,7 +158,7 @@ renderMeltCurves("melt",
 # Hiding and highlighting curves
 
 Individual curves can be hidden without plot redraw. Use *updateCurves* function
-with *fdata.name* as *hideCurves* param. Or highlighted with *fdata.name* as *highlightCurves* param.
+with *fdataName* as *hideCurves* param. Or highlighted with *fdataName* as *highlightCurves* param.
 Run `shinyMolBio::runExample("pcrPlateInput")` to see this in action. 
 Curves hiding occures after wells selection at PCR plate and higlighting after 
 mouse hovering above PCR plate or details table.

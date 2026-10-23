@@ -13,7 +13,7 @@
 #' @param inputId The \code{input} slot that will be used to modify plot.
 #' @param label Display label for the control, or \code{NULL} for no label.
 #' @param adData Allelic descrimination data with
-#'   \code{RDML$AsTable()} format.
+#'   \code{RDML7::asTable()} format.
 #' @param targetColumn Column name that contains axis splitting (dye or target).
 #' @param xAxisTarget X axis target (dye) name.
 #' @param yAxisTarget X axis target (dye) name.
@@ -35,17 +35,15 @@
 #'
 #' @export
 #' @examples
-#' library(RDML)
-#' rdml <- RDML$new(system.file("/extdata/test.rdml", package = "shinyMolBio"))
-#' tbl <- rdml$AsTable(endPointRFU = mean(tail(data$adp$fpoints$fluor, 5)))
-#' tbl <- group_by(tbl, position)
-#' tbl <- mutate(tbl,
-#'               genotype = paste(
+#' library(RDML7)
+#' rdml <- readRDML(system.file("extdata", "test.rdml", package = "shinyMolBio"))
+#' tbl <- asTable(rdml, endPointRFU = mean(tail(data$adp$fpoints$fluor, 5)))
+#' tbl[, genotype := paste(
 #'                 if (endPointRFU[1] > 400 && endPointRFU[2] > 400) "AG"
 #'                 else if (endPointRFU[1] > 400) "AA"
 #'                 else if (endPointRFU[2] > 400) "GG"
 #'                 else "NA"
-#'               ))
+#'               ), by = position]
 #' renderADplot("f", "aa", tbl, polar = TRUE, showLegend = TRUE)
 
 renderADplot <- function(inputId,
@@ -65,6 +63,7 @@ renderADplot <- function(inputId,
   assertString(inputId)
   assertString(label, null.ok = TRUE)
   assertDataFrame(adData)
+  adData <- .normaliseRDML7Columns(as.data.table(adData))
   assertString(xAxisTarget)
   assertString(yAxisTarget)
   assertString(colorBy, null.ok = TRUE)
@@ -86,8 +85,8 @@ renderADplot <- function(inputId,
   #   mutate(pointName = sprintf("%s %s %s", .data$position,
   #                              .data$sample,
   #                              .data$sample.type))
-  adData <- as.data.table(adData)[targetColumn == xAxisTarget |
-                     targetColumn == yAxisTarget,
+  adData <- as.data.table(adData)[get(targetColumn) %in%
+                                    c(xAxisTarget, yAxisTarget),
                    pointName := sprintf("%s %s %s", position,
                                        sample,
                                        sample.type)]
@@ -205,10 +204,8 @@ renderADplot <- function(inputId,
 #'
 #' Print a \code{adPlot}
 #'
-#' @usage ## S3 method for class 'adPlot'
-#' print(x)
-#'
 #' @param x object of class \code{adPlot}
+#' @param ... Additional arguments (currently ignored).
 #'
 #' @author Konstantin A. Blagodatskikh <k.blag@@yandex.ru>
 #' @keywords PCR RDML Shiny Input
@@ -216,8 +213,8 @@ renderADplot <- function(inputId,
 #' @seealso \code{\link{renderAmpCurves}}, \code{\link{renderMeltCurves}}
 #'
 #' @export
-print.adPlot <- function(curves)
-  print(curves[[2]][[3]][[2]])
+print.adPlot <- function(x, ...)
+  print(x[[2]][[3]][[2]])
 
 #' Change the value of a render ADplot control on the client
 #'
@@ -248,4 +245,3 @@ updateADplot <- function(session, inputId,
                              highlightPoints = highlightPoints))
   session$sendInputMessage(inputId, message)
 }
-

@@ -14,8 +14,8 @@ renderMeltCurves(inputId, label = NULL, meltCurves,
 
 \item{label}{Display label for the control, or \code{NULL} for no label.}
 
-\item{meltCurves}{Melting curves data with \code{RDML$GetFData(dp.type =
-"mdp", long.table = TRUE)} format.
+\item{meltCurves}{Melting curves data with \code{RDML7::getFData(rdml, dpType =
+"mdp", longTable = TRUE)} format.
 Columns \code{hideCurve} and \code{highlightCurve} defines which curve will
  be hidden or highlighted respectively.}
 
@@ -43,18 +43,18 @@ Renders a reactive melting plot that is suitable for assigning to an \code{UI
 output} slot.
 }
 \examples{
-library(RDML)
-rdml <- RDML$new(system.file("/extdata/test.rdml", package = "shinyMolBio"))
-curves <- renderMeltCurves("curves1", meltCurves = rdml$GetFData(dp.type = "mdp",
- long.table = TRUE))
+library(RDML7)
+rdml <- readRDML(system.file("extdata", "test.rdml", package = "shinyMolBio"))
+curves <- renderMeltCurves("curves1", meltCurves = getFData(rdml, dpType = "mdp",
+ longTable = TRUE))
 curves
 }
 \seealso{
 \code{\link{updateCurves}}
 
-Other render elements: 
-\code{\link{renderADplot}()},
-\code{\link{renderAmpCurves}()}
+Other render elements:
+\code{\link[=renderADplot]{renderADplot()}},
+\code{\link[=renderAmpCurves]{renderAmpCurves()}}
 }
 \author{
 Konstantin A. Blagodatskikh <k.blag@yandex.ru>

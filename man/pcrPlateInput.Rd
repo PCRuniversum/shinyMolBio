@@ -7,8 +7,8 @@
 pcrPlateInput(inputId,
        label = NULL,
        plateDescription,
-       pcrFormat = pcrFormatType$new(8, 12, labelFormatType$new("ABC"),
-        labelFormatType$new("123")),
+       pcrFormat = RDML7::pcrFormatType(8L, 12L,
+        RDML7::labelFormatType("ABC"), RDML7::labelFormatType("123")),
        selection = NULL,
        highlighting = NULL,
        wellLabelTemplate = "{{sample}}",
@@ -28,8 +28,8 @@ wells positions.}
 
 \item{label}{Display label for the control, or \code{NULL} for no label.}
 
-\item{plateDescription}{Plate description - basicly output from \code{RDML
-AsTable()} function.}
+\item{plateDescription}{Plate description, typically the output from
+\code{RDML7::asTable()}.}
 
 \item{pcrFormat}{PCR plate parametrs. Should be \code{pcrFormatType}.}
 
@@ -64,14 +64,16 @@ wells inside it.
 }
 \examples{
 ## Only run examples in interactive R sessions
-library(RDML)
+library(RDML7)
 if (interactive()) {
+rdml <- readRDML(system.file("extdata", "test.rdml",
+                             package = "shinyMolBio"))
 ui <- fluidPage(
     pcrPlateInput("plate1",
                    "Plate 1",
-                   RDML$new(system.file("/extdata/stepone_std.rdml", package = "RDML"))$AsTable(),
-                  pcrFormatType$new(8,12,labelFormatType$new("ABC"),
-                                         labelFormatType$new("123"))),
+                   asTable(rdml),
+                   pcrFormatType(8L, 12L, labelFormatType("ABC"),
+                                            labelFormatType("123"))),
    verbatimTextOutput("selected")
  )
  server <- function(input, output) {

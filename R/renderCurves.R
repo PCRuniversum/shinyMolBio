@@ -11,7 +11,7 @@
 #' @param inputId The \code{input} slot that will be used to modify plot.
 #' @param label Display label for the control, or \code{NULL} for no label.
 #' @param ampCurves Amplification curves data with
-#'   \code{RDML$GetFData(long.table = TRUE)} format.
+#'   \code{RDML7::getFData(rdml, longTable = TRUE)} format.
 #'   Columns \code{hideCurve} and \code{highlightCurve} defines which curve will
 #'    be hidden or highlighted respectively.
 #' @param colorBy Column name that contains color levels data.
@@ -36,9 +36,9 @@
 #'
 #' @export
 #' @examples
-#' library(RDML)
-#' rdml <- RDML$new(system.file("/extdata/test.rdml", package = "shinyMolBio"))
-#' curves <- renderAmpCurves("curves1", ampCurves = rdml$GetFData(long.table = TRUE))
+#' library(RDML7)
+#' rdml <- readRDML(system.file("extdata", "test.rdml", package = "shinyMolBio"))
+#' curves <- renderAmpCurves("curves1", ampCurves = getFData(rdml, longTable = TRUE))
 #' curves
 renderAmpCurves <- function(inputId,
                             label = NULL,
@@ -53,6 +53,7 @@ renderAmpCurves <- function(inputId,
                             cssFile = NULL,
                             cssText = NULL,
                             interactive = TRUE) {
+  ampCurves <- .normaliseRDML7Columns(as.data.table(ampCurves))
   assertNames(colnames(ampCurves),
               must.include = c("fdata.name", "cyc", "fluor"))
   assertLogical(logScale)
@@ -93,8 +94,8 @@ renderAmpCurves <- function(inputId,
 #'
 #' @param inputId The \code{input} slot that will be used to modify plot.
 #' @param label Display label for the control, or \code{NULL} for no label.
-#' @param meltCurves Melting curves data with \code{RDML$GetFData(dp.type =
-#'   "mdp", long.table = TRUE)} format.
+#' @param meltCurves Melting curves data with \code{RDML7::getFData(rdml, dpType =
+#'   "mdp", longTable = TRUE)} format.
 #'   Columns \code{hideCurve} and \code{highlightCurve} defines which curve will
 #'    be hidden or highlighted respectively.
 #' @param fluorColumn Column name that contains fluorescence values
@@ -116,10 +117,10 @@ renderAmpCurves <- function(inputId,
 #'
 #' @export
 #' @examples
-#' library(RDML)
-#' rdml <- RDML$new(system.file("/extdata/test.rdml", package = "shinyMolBio"))
-#' curves <- renderMeltCurves("curves1", meltCurves = rdml$GetFData(dp.type = "mdp",
-#'  long.table = TRUE))
+#' library(RDML7)
+#' rdml <- readRDML(system.file("extdata", "test.rdml", package = "shinyMolBio"))
+#' curves <- renderMeltCurves("curves1", meltCurves = getFData(rdml, dpType = "mdp",
+#'  longTable = TRUE))
 #' curves
 renderMeltCurves <- function(inputId,
                              label = NULL,
@@ -133,6 +134,7 @@ renderMeltCurves <- function(inputId,
                              cssFile = NULL,
                              cssText = NULL,
                              interactive = TRUE) {
+  meltCurves <- .normaliseRDML7Columns(as.data.table(meltCurves))
   assertNames(colnames(meltCurves),
               must.include = c("fdata.name", "tmp", fluorColumn))
   meltCurves <- copy(meltCurves)
@@ -382,10 +384,8 @@ renderCurves <- function(inputId,
 #'
 #' Print a \code{pcrCurves}
 #'
-#' @usage ## S3 method for class 'pcrCurves'
-#' print(x)
-#'
 #' @param x object of class \code{pcrCurves}
+#' @param ... Additional arguments (currently ignored).
 #'
 #' @author Konstantin A. Blagodatskikh <k.blag@@yandex.ru>
 #' @keywords PCR RDML Shiny Input
@@ -394,13 +394,13 @@ renderCurves <- function(inputId,
 #'
 #' @export
 #' @examples
-#' library(RDML)
-#' rdml <- RDML$new(system.file("/extdata/test.rdml", package = "shinyMolBio"))
-#' curves <- renderMeltCurves("curves1", meltCurves = rdml$GetFData(dp.type = "mdp",
-#'  long.table = TRUE))
+#' library(RDML7)
+#' rdml <- readRDML(system.file("extdata", "test.rdml", package = "shinyMolBio"))
+#' curves <- renderMeltCurves("curves1", meltCurves = getFData(rdml, dpType = "mdp",
+#'  longTable = TRUE))
 #' curves
-print.pcrCurves <- function(curves)
-  print(curves[[2]][[3]][[2]])
+print.pcrCurves <- function(x, ...)
+  print(x[[2]][[3]][[2]])
 
 #' Change the value of a render PCR curves control on the client
 #'

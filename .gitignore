@@ -2,6 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
-.Rbuildignore
+*.Rcheck/
+*.tar.gz
 *.DS_Store
 docs

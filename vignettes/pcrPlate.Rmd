@@ -21,15 +21,15 @@ Propose of **pcrPlateInput** shiny control is to view runs as a PCR plate like a
 ```{r, results='hide', message=FALSE, warning=FALSE}
 library(shinyMolBio)
 library(tidyverse)
-library(RDML)
+library(RDML7)
 # load RDML file
-rdml <- RDML$new(system.file("/extdata/stepone_std.rdml", package = "RDML"))
+rdml <- readRDML(system.file("extdata", "stepone_std.rdml", package = "RDML7"))
 ```
 ```{r, results='asis'}
 # create Shiny control
 pcrPlateInput(inputId = "firstLook", # Shiny input ID
               label = "Example", # optional plate label 
-              plateDescription = rdml$AsTable(), # plate description (wells content)
+              plateDescription = asTable(rdml), # plate description (wells content)
               interactive = FALSE
 ) 
 ```
@@ -46,11 +46,11 @@ There are several parameters that can be changed:
 
 ## Wells Selection
 
-Some PCR plate wells can be marked as selected by `selection = c(TO_SELECT)` (`TO_SELECT` can be *position* or *react.id*)
+Some PCR plate wells can be marked as selected by `selection = c(TO_SELECT)` (`TO_SELECT` can be *position* or *reactId*)
 ```{r, results='asis'}
 pcrPlateInput(inputId = "testPlateSel", 
               label = "Selection",
-              plateDescription = rdml$AsTable(),
+              plateDescription = asTable(rdml),
               selection = 1:12, # optional preselected wells
               interactive = FALSE
 ) 
@@ -58,11 +58,11 @@ pcrPlateInput(inputId = "testPlateSel",
 
 ## Wells Highlighting
 
-Some PCR plate wells can be marked as highlighted by `highlightning = c(TO_HIGHLIGHT)` (`TO_HIGHLIGHT` can be *position* or *react.id*)
+Some PCR plate wells can be marked as highlighted by `highlightning = c(TO_HIGHLIGHT)` (`TO_HIGHLIGHT` can be *position* or *reactId*)
 ```{r, results='asis'}
 pcrPlateInput(inputId = "testPlateHl", 
               label = "Highlight",
-              plateDescription = rdml$AsTable(),
+              plateDescription = asTable(rdml),
               selection = 1:12, # optional preselected wells
               highlighting = 3:6, # optional highlighted wells
               interactive = FALSE
@@ -150,7 +150,7 @@ To make CSS rule only for current plate add `#{{id}}` before CSS rule. For examp
 ```{r, results='asis'}
 pcrPlateInput(inputId = "customCSS", # Shiny input ID
               label = "Custom CSS: red selection and light green plate background",
-              plateDescription = rdml$AsTable(),
+              plateDescription = asTable(rdml),
               selection = c("A01", "C08"), # optional preselected wells
               cssFile = "",
               cssText = "#{{id}} td.selected-well{border: 2px solid red !important;}
@@ -176,10 +176,9 @@ Note: if your plate description contains several rows with the same position - o
 ```{r, results='asis'}
 library(shiny) # to use tags
 
-plateDescription <- rdml$AsTable(cq = round(data$cq)) %>%
-  group_by(fdata.name) %>%
-  mutate(sampleType = sample.type,  # whisker does not support dots!
-         dyeId = target.dyeId,   # whisker does not support dots!
+plateDescription <- asTable(rdml, cq = round(data$cq)) %>%
+  group_by(fdataName) %>%
+  mutate(dyeId = targetDyeId,
          mark = {
            if (cq < 30) "<span class='filled-circle1'></span>"
            else if (cq > 35) "<span class='filled-circle2'></span>"

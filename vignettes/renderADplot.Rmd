@@ -12,17 +12,19 @@ vignette: >
 # Introduction
 
 **renderADplot** function visualizes standard allelic discrimination plot based on **plotly** package.
-Main advantage of using this functions instead of regular plot renders is that it glued with **RDML** package. Minimal usage recures only `GetFData(long.table = TRUE)` function output. Also it has interactive features.
+The main advantage over regular plot rendering is direct integration with
+**RDML7** data. Minimal usage requires only the output of
+`getFData(longTable = TRUE)`. The plot also supports interactive updates.
 
 Standard allelic discrimination plot is a plot with two axis: one is signal for allele 1 and second is signal for allele 2. Signal can be end point RFU, Cq or another countable parametr. Column name that contains axis splitting is determined by **targetColumn** argument. Column name that contains signal level is determined by **valueColumn** argument. If **targetColumn** contains more than two unique values you can specify which to use by **xAxisTarget** and **yAxisTarget**.
 
 ```{r, results='hide', message=FALSE, warning=FALSE}
 library(shinyMolBio)
 library(tidyverse)
-library(RDML)
+library(RDML7)
 # load RDML file
-rdml <- RDML$new(system.file("/extdata/test.rdml", package = "shinyMolBio"))
-tbl <- rdml$AsTable(endPointRFU = mean(tail(data$adp$fpoints$fluor, 5)))
+rdml <- readRDML(system.file("extdata", "test.rdml", package = "shinyMolBio"))
+tbl <- asTable(rdml, endPointRFU = mean(tail(data$adp$fpoints$fluor, 5)))
 tbl <- group_by(tbl, position)
 # generate genotypes by simple rule based on end point RFU signal:
 # Reaction1 > 400 - AA
@@ -40,7 +42,7 @@ tbl <- mutate(tbl,
 renderADplot(inputId = "firstLook", 
              label = "AD plot with default arguments", 
              adData = tbl,
-             targetColumn = "target.dyeId",
+             targetColumn = "targetDyeId",
              xAxisTarget = "FAM",
              yAxisTarget = "HEX", 
              valueColumn = "endPointRFU",
@@ -91,9 +93,9 @@ have to add value **p** inside your quoted code to link it with render output.
 
 ```{r, results='asis'}
 centers <- tbl %>% 
-  group_by(target.dyeId, genotype) %>% 
+  group_by(targetDyeId, genotype) %>%
   summarise(endPointRFU = mean(endPointRFU)) %>% 
-  spread(target.dyeId, endPointRFU) %>% 
+  spread(targetDyeId, endPointRFU) %>%
   filter(genotype != "NA")
 
 renderADplot("th", 
@@ -120,7 +122,9 @@ renderADplot("th",
 
 # Hiding and highlighting curves
 
-Individual points can be hidden without plot redraw. Use *updateADplot* function with *fdata.name* as *hidePoints* param. Or highlighted with *fdata.name* as *highlightPoints* param.
+Individual points can be hidden without redrawing the plot. Use
+*updateADplot* with a *position* as the *hidePoints* parameter, or highlight
+them with *position* values in *highlightPoints*.
 Run `shinyMolBio::runExample("pcrPlateInput")` to see this in action. 
 Points hiding occures after wells selection at PCR plate and higlighting after 
 mouse hovering above PCR plate or details table.

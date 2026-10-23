@@ -4,11 +4,12 @@
 \alias{print.pcrPlate}
 \title{Printing PCR plate input control}
 \usage{
-## S3 method for class 'pcrPlate'
-print(x)
+\method{print}{pcrPlate}(x, ...)
 }
 \arguments{
 \item{x}{object of class \code{pcrPlate}}
+
+\item{...}{Additional arguments (currently ignored).}
 }
 \description{
 Print a \code{pcrPlate}

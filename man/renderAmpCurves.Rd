@@ -15,7 +15,7 @@ renderAmpCurves(inputId, label = NULL, ampCurves, colorBy = NULL,
 \item{label}{Display label for the control, or \code{NULL} for no label.}
 
 \item{ampCurves}{Amplification curves data with
-\code{RDML$GetFData(long.table = TRUE)} format.
+\code{RDML7::getFData(rdml, longTable = TRUE)} format.
 Columns \code{hideCurve} and \code{highlightCurve} defines which curve will
  be hidden or highlighted respectively.}
 
@@ -45,17 +45,17 @@ Renders a reactive PCR amplification plot that is suitable for assigning to
 an \code{UI output} slot.
 }
 \examples{
-library(RDML)
-rdml <- RDML$new(system.file("/extdata/test.rdml", package = "shinyMolBio"))
-curves <- renderAmpCurves("curves1", ampCurves = rdml$GetFData(long.table = TRUE))
+library(RDML7)
+rdml <- readRDML(system.file("extdata", "test.rdml", package = "shinyMolBio"))
+curves <- renderAmpCurves("curves1", ampCurves = getFData(rdml, longTable = TRUE))
 curves
 }
 \seealso{
 \code{\link{updateCurves}}
 
-Other render elements: 
-\code{\link{renderADplot}()},
-\code{\link{renderMeltCurves}()}
+Other render elements:
+\code{\link[=renderADplot]{renderADplot()}},
+\code{\link[=renderMeltCurves]{renderMeltCurves()}}
 }
 \author{
 Konstantin A. Blagodatskikh <k.blag@yandex.ru>

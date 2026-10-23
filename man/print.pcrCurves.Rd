@@ -4,20 +4,21 @@
 \alias{print.pcrCurves}
 \title{Printing pcrCurves}
 \usage{
-## S3 method for class 'pcrCurves'
-print(x)
+\method{print}{pcrCurves}(x, ...)
 }
 \arguments{
 \item{x}{object of class \code{pcrCurves}}
+
+\item{...}{Additional arguments (currently ignored).}
 }
 \description{
 Print a \code{pcrCurves}
 }
 \examples{
-library(RDML)
-rdml <- RDML$new(system.file("/extdata/test.rdml", package = "shinyMolBio"))
-curves <- renderMeltCurves("curves1", meltCurves = rdml$GetFData(dp.type = "mdp",
- long.table = TRUE))
+library(RDML7)
+rdml <- readRDML(system.file("extdata", "test.rdml", package = "shinyMolBio"))
+curves <- renderMeltCurves("curves1", meltCurves = getFData(rdml, dpType = "mdp",
+ longTable = TRUE))
 curves
 }
 \seealso{

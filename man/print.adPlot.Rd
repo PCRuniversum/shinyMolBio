@@ -4,11 +4,12 @@
 \alias{print.adPlot}
 \title{Printing adPlot}
 \usage{
-## S3 method for class 'adPlot'
-print(x)
+\method{print}{adPlot}(x, ...)
 }
 \arguments{
 \item{x}{object of class \code{adPlot}}
+
+\item{...}{Additional arguments (currently ignored).}
 }
 \description{
 Print a \code{adPlot}

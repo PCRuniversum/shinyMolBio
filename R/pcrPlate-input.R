@@ -6,8 +6,8 @@
 #' @usage pcrPlateInput(inputId,
 #'        label = NULL,
 #'        plateDescription,
-#'        pcrFormat = pcrFormatType$new(8, 12, labelFormatType$new("ABC"),
-#'         labelFormatType$new("123")),
+#'        pcrFormat = RDML7::pcrFormatType(8L, 12L,
+#'         RDML7::labelFormatType("ABC"), RDML7::labelFormatType("123")),
 #'        selection = NULL,
 #'        highlighting = NULL,
 #'        wellLabelTemplate = "{{sample}}",
@@ -24,8 +24,8 @@
 #' @param inputId The \code{input} slot that will be used to access the selected
 #'   wells positions.
 #' @param label Display label for the control, or \code{NULL} for no label.
-#' @param plateDescription Plate description - basicly output from \code{RDML
-#'   AsTable()} function.
+#' @param plateDescription Plate description, typically the output from
+#'   \code{RDML7::asTable()}.
 #' @param pcrFormat PCR plate parametrs. Should be \code{pcrFormatType}.
 #' @param selection Set preselected wells (e.g. \code{c("A01", "A02")} or \code{c(1, 2)})
 #' @param highlighting Set highlighted wells (e.g. \code{c("A01", "A02")} or \code{c(1, 2)})
@@ -42,7 +42,7 @@
 #'
 #' @author Konstantin A. Blagodatskikh <k.blag@@yandex.ru>
 #' @keywords PCR RDML Shiny Input
-#' @import RDML shiny stringr checkmate
+#' @import shiny stringr checkmate
 #' @importFrom purrr map
 #' @importFrom  whisker whisker.render
 #'
@@ -51,14 +51,16 @@
 #'
 #' @examples
 #' ## Only run examples in interactive R sessions
-#' library(RDML)
+#' library(RDML7)
 #' if (interactive()) {
+#' rdml <- readRDML(system.file("extdata", "test.rdml",
+#'                              package = "shinyMolBio"))
 #' ui <- fluidPage(
 #'     pcrPlateInput("plate1",
 #'                    "Plate 1",
-#'                    RDML$new(system.file("/extdata/stepone_std.rdml", package = "RDML"))$AsTable(),
-#'                   pcrFormatType$new(8,12,labelFormatType$new("ABC"),
-#'                                          labelFormatType$new("123"))),
+#'                    asTable(rdml),
+#'                    pcrFormatType(8L, 12L, labelFormatType("ABC"),
+#'                                             labelFormatType("123"))),
 #'    verbatimTextOutput("selected")
 #'  )
 #'  server <- function(input, output) {
@@ -70,7 +72,10 @@
 pcrPlateInput <- function(inputId,
                           label = NULL,
                           plateDescription,
-                          pcrFormat = pcrFormatType$new(8, 12, labelFormatType$new("ABC"), labelFormatType$new("123")),
+                          pcrFormat = RDML7::pcrFormatType(
+                            8L, 12L, RDML7::labelFormatType("ABC"),
+                            RDML7::labelFormatType("123")
+                          ),
                           selection = NULL,
                           highlighting = NULL,
                           wellLabelTemplate = "{{sample}}",
@@ -86,7 +91,7 @@ pcrPlateInput <- function(inputId,
   assertString(inputId)
   assertString(label, null.ok = TRUE)
   assertDataFrame(plateDescription)
-  assertClass(pcrFormat, "pcrFormatType")
+  assert(S7::S7_inherits(pcrFormat, RDML7::pcrFormatType))
   assert(checkNull(selection),
          checkNumeric(selection),
          checkCharacter(selection))
@@ -106,7 +111,12 @@ pcrPlateInput <- function(inputId,
 
   ns <- NS(inputId)
 
-  plateDescription <- as.data.table(plateDescription)[,
+  plateDescription <- .normaliseRDML7Columns(as.data.table(plateDescription))
+  assertNames(
+    colnames(plateDescription),
+    must.include = c("fdata.name", "react.id", "position", "target", "target.dyeId")
+  )
+  plateDescription <- plateDescription[,
                    c("targets", "target.dyeIds") :=
                      list(paste(target, collapse = "; "),
                           paste(target.dyeId, collapse = "; ")),
@@ -145,13 +155,13 @@ pcrPlateInput <- function(inputId,
                    '<tbody>%s</tbody></table>'
                    # ,'<script>addOnClick("', ns("pcrPlateTbl"),'");</script>'
     ),
-    map(1:pcrFormat$columns,
+    map(seq_len(pcrFormat@columns),
         function(col) {
           sprintf("<th id='%s'>%s</th>",
                   ns(sprintf("col_%02i", col)),
                   col)}) |>
       paste(collapse = ""),
-    map(LETTERS[1:pcrFormat$rows],
+    map(LETTERS[seq_len(pcrFormat@rows)],
         function(row){
           sprintf("<tr><th id='%s' class='%s'>%s</th>%s</tr>",
                   ns(sprintf("row_%s", row)),
@@ -160,12 +170,11 @@ pcrPlateInput <- function(inputId,
                     else "odd-row"
                   },
                   row,
-                  map(1:pcrFormat$columns,
+                  map(seq_len(pcrFormat@columns),
                       function(col) {
                         well <- sprintf("%s%02i", row, col)
 
-                        trow <-
-                          filter(plateDescription, .data$position == well)
+                        trow <- plateDescription[position == well]
                         if (!length(trow$fdata.name))
                           return("<td class='empty-well'></td>")
                         # paste0(
@@ -225,10 +234,8 @@ pcrPlateInput <- function(inputId,
 #'
 #' Print a \code{pcrPlate}
 #'
-#' @usage ## S3 method for class 'pcrPlate'
-#' print(x)
-#'
 #' @param x object of class \code{pcrPlate}
+#' @param ... Additional arguments (currently ignored).
 #'
 #' @author Konstantin A. Blagodatskikh <k.blag@@yandex.ru>
 #' @keywords PCR RDML Shiny Input
@@ -236,9 +243,9 @@ pcrPlateInput <- function(inputId,
 #' @seealso \code{\link{pcrPlateInput}}
 #'
 #' @export
-print.pcrPlate <- function(plate) {
+print.pcrPlate <- function(x, ...) {
   tmpFile <- tempfile(fileext = ".html")
-  cat(as.character(plate), file = tmpFile)
+  cat(as.character(x), file = tmpFile)
   viewer <- getOption("viewer")
   viewer(tmpFile)
   # unlink(tmpFile)
@@ -259,14 +266,16 @@ print.pcrPlate <- function(plate) {
 #' @export
 #' @examples
 #' ## Only run examples in interactive R sessions
-#' library(RDML)
+#' library(RDML7)
 #' if (interactive()) {
+#' rdml <- readRDML(system.file("extdata", "test.rdml",
+#'                              package = "shinyMolBio"))
 #' ui <- fluidPage(
 #'     pcrPlateInput("plate1",
 #'                    "Plate 1",
-#'                    RDML$new(system.file("/extdata/stepone_std.rdml", package = "RDML"))$AsTable(),
-#'                   pcrFormatType$new(8,12,labelFormatType$new("ABC"),
-#'                                          labelFormatType$new("123"))),
+#'                    asTable(rdml),
+#'                   pcrFormatType(8L, 12L, labelFormatType("ABC"),
+#'                                           labelFormatType("123"))),
 #'    verbatimTextOutput("selected"),
 #'    actionButton("selectWellBtn",
 #'                 "Select Well A01-A03")

@@ -1,5 +1,5 @@
 library(shiny)
-library(RDML)
+library(RDML7)
 library(shinyMolBio)
 library(tidyverse)
 library(DT)
@@ -43,11 +43,11 @@ server <- function(input, output, session) {
 
   rdmlFile <- reactive({
     req(values$path)
-    rdml <- RDML$new(values$path)
+    rdml <- readRDML(values$path)
     # expId <- as.character(rdml$experiment[[1]]$id)
     # runId <- as.character(rdml$experiment[[expId]]$run[[1]]$id)
     list(table =
-           rdml$AsTable(
+           asTable(rdml,
              cq = data$cq,
              endPointRFU = round(mean(tail(data$adp$fpoints$fluor, 5)))) %>%
            mutate(cq = round(cq)) %>%
@@ -63,7 +63,7 @@ server <- function(input, output, session) {
          # &
          # run.id == runId
          # )
-         format = rdml$experiment[[1]]$run[[1]]$pcrFormat,
+         format = rdml@experiment[[1]]@run[[1]]@pcrFormat,
          rdml = rdml)
   })
 
@@ -77,8 +77,8 @@ server <- function(input, output, session) {
   output$ampCurvesUI <- renderUI({
     req(rdmlFile())#, input$pcrPlate2)
     renderAmpCurves("ampCurves", "Amplification Curves",
-                    rdmlFile()$rdml$GetFData(rdmlFile()$table,
-                                             long.table = TRUE) %>%
+                    getFData(rdmlFile()$rdml, rdmlFile()$table,
+                                             longTable = TRUE) %>%
                       mutate(quantFluor = 150),
                     # plotlyCode = plotly::layout(yaxis = list(title = "Fluorescence")),
                     # colorBy = "sample",
@@ -91,8 +91,8 @@ server <- function(input, output, session) {
   output$showDyesUI <- renderUI({
     req(rdmlFile())
     selectInput("showDyes", "Dyes",
-                choices = rdmlFile()$table$target.dyeId %>% unique(),
-                selected = rdmlFile()$table$target.dyeId %>% unique(),
+                choices = rdmlFile()$table$targetDyeId %>% unique(),
+                selected = rdmlFile()$table$targetDyeId %>% unique(),
                 multiple = TRUE)
   })
 
@@ -113,7 +113,7 @@ server <- function(input, output, session) {
       updateCurves(session,
                    "ampCurves",
                    hideCurves = toHideCurves %>%
-                     pull(fdata.name))
+                     pull(fdataName))
       updateADplot(session,
                    "adPlot",
                    hidePoints = toHideCurves %>%
@@ -125,7 +125,7 @@ server <- function(input, output, session) {
     {
       fdataNames <- rdmlFile()$table %>%
         filter(position %in% input$pcrPlate_hover) %>%
-        pull(fdata.name)
+        pull(fdataName)
       updateCurves(session,
                    "ampCurves",
                    highlightCurves = fdataNames)
@@ -139,7 +139,7 @@ server <- function(input, output, session) {
     req(rdmlFile())
     DT::datatable(
       rdmlFile()$table %>%
-        select(position, sample, dye = target.dyeId,
+        select(position, sample, dye = targetDyeId,
                cq, RFU = endPointRFU, genotype),
       rownames = FALSE,
       options = list(

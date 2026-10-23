@@ -1,8 +1,8 @@
 Package: shinyMolBio
 Type: Package
 Title: Molecular Biology Visualization Tools for 'Shiny' Apps
-Version: 0.6
-Date: 2024-11-05
+Version: 0.7.0
+Date: 2026-10-23
 Authors@R: c(
   person("Konstantin A.", "Blagodatskikh",
   email = "k.blag@yandex.ru", role = c("cre", "aut")))
@@ -13,18 +13,20 @@ Description: Interactive visualization of 'RDML' files via 'shiny' apps.
 License: MIT + file LICENSE
 URL: https://github.com/PCRuniversum/shinyMolBio, https://pcruniversum.github.io/shinyMolBio/
 Encoding: UTF-8
-LazyData: true
 Depends:
-  R (>= 3.4.0)
+  R (>= 4.1.0)
 Imports:
   purrr,
   checkmate,
-  RDML,
+  data.table,
+  RDML7 (>= 1.0.2),
   shiny,
   stringr,
+  tidyr,
   whisker,
   plotly,
-  RColorBrewer
+  RColorBrewer,
+  S7
 Collate:
   'global.R'
   'pcrPlate-input.R'
@@ -33,5 +35,10 @@ Collate:
   'runExample.R'
 Suggests:
   knitr,
-  chipPCR
-RoxygenNote: 7.3.2
+  DT,
+  rmarkdown,
+  testthat (>= 3.0.0),
+  tidyverse
+VignetteBuilder: knitr
+Config/testthat/edition: 3
+Config/roxygen2/version: 8.1.0
