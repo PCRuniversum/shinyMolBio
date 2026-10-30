@@ -235,6 +235,8 @@ pcrPlateInput("customLabel", "Custom labels and marks",
 Run `shinyMolBio::runExample("pcrPlateInput")` to see interactive PCR plate in action. This demo **Shiny App** allows you to open PCR plate via **RDML** package and view in two independent plates: one with default style and second with custom. You can click on wells and see which of them are selected after that. Available click targets are:
 
 * Click-Well - toggle selection of the well
+* Drag-Wells - select or deselect every well crossed while holding the left mouse button
+* Shift-Drag-Wells - select or deselect a rectangular range, as in a spreadsheet
 * Dbl-Click-Well - select only this well (deselect other)
 * Ctrl-Click-Well - select group of wells defined by `wellGroupTemplate`
 * Click-TopLeftCorner - toggle selection of the total plate

@@ -40,6 +40,13 @@
 #' @param interactive Should be this \code{pcrPlate} interactive or not.
 #' @return A PCR plate control that can be added to a UI definition.
 #'
+#' @details On interactive plates, dragging with the left mouse button paints
+#'   individual wells. Hold \code{Shift} while dragging to select or deselect
+#'   the rectangle between the initial and current wells. The action is chosen
+#'   from the initial well: starting on an unselected well selects, while
+#'   starting on a selected well deselects. \code{Ctrl+click} retains grouped
+#'   selection via \code{wellGroupTemplate}.
+#'
 #' @author Konstantin A. Blagodatskikh <k.blag@@yandex.ru>
 #' @keywords PCR RDML Shiny Input
 #' @import shiny stringr checkmate

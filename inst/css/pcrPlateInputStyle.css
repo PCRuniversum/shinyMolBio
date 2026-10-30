@@ -13,6 +13,10 @@ table.pcr-plate-tbl td{
   max-width: 4rem;
   word-wrap: break-word;
 }
+table.pcr-plate-tbl.interactive td:not(.empty-well){
+  cursor: pointer;
+  user-select: none;
+}
 table.pcr-plate-tbl th{
   border-color: white;
   color: white;

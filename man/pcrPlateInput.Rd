@@ -62,6 +62,14 @@ A PCR plate control that can be added to a UI definition.
 Create an input control for representing PCR plate and dynamically selecting
 wells inside it.
 }
+\details{
+On interactive plates, dragging with the left mouse button paints
+  individual wells. Hold \code{Shift} while dragging to select or deselect
+  the rectangle between the initial and current wells. The action is chosen
+  from the initial well: starting on an unselected well selects, while
+  starting on a selected well deselects. \code{Ctrl+click} retains grouped
+  selection via \code{wellGroupTemplate}.
+}
 \examples{
 ## Only run examples in interactive R sessions
 library(RDML7)

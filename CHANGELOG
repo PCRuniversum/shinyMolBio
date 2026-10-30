@@ -5,6 +5,7 @@ Changes from Version 0.6 to 0.7.0 [October 23 2026]
 * added integration tests for PCR plates, amplification curves, and AD plots
 * fixed channel filtering in allelic discrimination plots
 * corrected package dependency declarations and S3 method signatures for CRAN
+* added click-and-drag selection and deselection for PCR plate wells
 Changes from Version 0.5 to 0.6 [November 05 2024]
 * Cq and Tm on plots algorithm updated
 Changes from Version 0.4 to 0.5 [September 26 2024]
